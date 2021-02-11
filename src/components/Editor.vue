@@ -11,25 +11,34 @@
     >
       {{ item }}
     </v-tab>
-  <!-- <prism-editor -->
-  <!--   v-model="code" -->
-  <!--   line-numbers -->
-  <!-- /> -->
+
+    <v-tabs-items v-model="tab">
+      <v-tab-item
+        v-for="item in items"
+        :key="item"
+      >
+        <component
+          :is="`bach-${item}`"
+          keep-alive
+        />
+      </v-tab-item>
+    </v-tabs-items>
   </v-tabs>
 </template>
 
 <script>
-// import { PrismEditor } from 'vue-prism-editor'
+import BachCode from './editor/Code'
+import BachJson from './editor/Json'
 
 export default {
   components: {
-    // PrismEditor
+    BachCode,
+    BachJson
   },
 
   data: () => ({
     tab: null,
-    items: ['code', 'json'],
-    code: '@Meter = 4|4'
+    items: ['code', 'json']
   }),
 
   methods: {

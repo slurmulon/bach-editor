@@ -147,6 +147,7 @@ export default {
   data: () => ({
     drawer: null,
     links: [
+      { name: 'Showcase', href: '/showcase' },
       { name: 'Learn', href: 'https://slurmulon.github.io/bach/#/guide' },
       { name: 'Support', href: 'https://github.com/slurmulon/bach-editor/issues' }
     ]

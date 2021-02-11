@@ -1,18 +1,12 @@
 <template>
-  <layout>
-    <router-view />
-  </layout>
+  <router-view />
 </template>
 
 <script>
-import Layout from './components/Layout'
+// import Layout from './components/Layout'
 
 export default {
   name: 'BachEditor',
-
-  components: {
-    Layout
-  },
 
   data: () => ({
     //

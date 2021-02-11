@@ -1,14 +1,14 @@
 <template>
   <v-app id="inspire">
-    <v-system-bar app>
-      <v-spacer />
+    <!-- <v-system-bar app> -->
+    <!--   <v-spacer /> -->
 
-      <v-icon>mdi-square</v-icon>
+    <!--   <v-icon>mdi-square</v-icon> -->
 
-      <v-icon>mdi-circle</v-icon>
+    <!--   <v-icon>mdi-circle</v-icon> -->
 
-      <v-icon>mdi-triangle</v-icon>
-    </v-system-bar>
+    <!--   <v-icon>mdi-triangle</v-icon> -->
+    <!-- </v-system-bar> -->
 
     <v-app-bar
       app
@@ -30,21 +30,22 @@
         {{ link.name }}
       </v-btn>
 
-      <v-responsive max-width="156">
-        <v-text-field
-          dense
-          flat
-          hide-details
-          rounded
-          solo-inverted
-        />
-      </v-responsive>
+      <!-- <v-responsive max-width="156"> -->
+      <!--   <v-text-field -->
+      <!--     dense -->
+      <!--     flat -->
+      <!--     hide-details -->
+      <!--     rounded -->
+      <!--     solo-inverted -->
+      <!--   /> -->
+      <!-- </v-responsive> -->
     </v-app-bar>
 
     <v-navigation-drawer
       v-model="drawer"
       app
       clipped
+      permanent
       width="300"
       color="grey darken-4"
     >
@@ -52,6 +53,7 @@
         v-model="drawer"
         absolute
         mini-variant
+        color="grey darken-4"
       >
         <v-avatar
           class="d-block text-center mx-auto mt-4"
@@ -145,7 +147,8 @@ export default {
   data: () => ({
     drawer: null,
     links: [
-      { name: 'Guide', href: 'https://slurmulon.github.io/bach/#/guide' }
+      { name: 'Learn', href: 'https://slurmulon.github.io/bach/#/guide' },
+      { name: 'Support', href: 'https://github.com/slurmulon/bach-editor/issues' }
     ]
   })
 }

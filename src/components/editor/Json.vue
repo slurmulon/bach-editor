@@ -19,7 +19,7 @@ import 'vue-prism-editor/dist/prismeditor.min.css'
 
 import 'prismjs/components/prism-json'
 
-import 'prismjs/themes/prism-tomorrow.css'
+import 'prismjs/themes/prism-dark.css'
 
 import { highlight, languages } from 'prismjs/components/prism-core'
 

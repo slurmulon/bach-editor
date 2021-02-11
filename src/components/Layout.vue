@@ -15,6 +15,7 @@
       dense
       clipped-left
       clipped-right
+      color="grey darken-4"
     >
       <v-app-bar-title>
         <!-- bach sandbox -->
@@ -26,6 +27,7 @@
         v-for="link in links"
         :key="link.name"
         text
+        class="font-weight-light"
       >
         {{ link.name }}
       </v-btn>

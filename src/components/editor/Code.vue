@@ -4,7 +4,7 @@
     v-model="code"
     class="bach-editor"
     :highlight="highlighter"
-    language="markup"
+    language="bach"
     line-numbers
   />
   </div>
@@ -23,7 +23,8 @@ import 'prismjs/components/prism-javascript'
 import 'prismjs/components/prism-css'
 import 'prismjs/components/prism-elixir'
 
-import 'prismjs/themes/prism-tomorrow.css'
+// import 'prismjs/themes/prism-tomorrow.css'
+import 'prismjs/themes/prism-dark.css'
 
 import { highlight, languages } from 'prismjs/components/prism-core'
 
@@ -46,6 +47,10 @@ export default {
 
   methods: {
     highlighter (code) {
+      return highlight(code, Prism.languages.bach, 'bach')
+    },
+
+    highlighter_ORIG (code) {
       // TODO: Eventually write a real prism syntax highlighter for bach
       // return highlight(code, languages.ruby)
       return highlight(

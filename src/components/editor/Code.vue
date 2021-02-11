@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import template from '@/bach/template.bach'
 import Prism from 'prismjs'
 import { PrismEditor } from 'vue-prism-editor'
 import 'vue-prism-editor/dist/prismeditor.min.css'
@@ -26,8 +27,10 @@ import { highlight, languages } from 'prismjs/components/prism-core'
 
 global.Prism = Prism
 
-const CODE_TEMPLATE = `@Tempo = 120
-@Meter = 4|4`
+// const CODE_TEMPLATE = `@Tempo = 120
+// @Meter = 4|4`
+
+const CODE_TEMPLATE = template
 
 export default {
   components: {

@@ -1,0 +1,10 @@
+@Meter = 4|4
+@Tempo = 120
+
+!Play [
+  2 -> {
+    Scale('Bb mixolydian')
+    Chord('Bb')
+  }
+  2 -> Chord('Fm')
+]

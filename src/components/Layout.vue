@@ -47,13 +47,13 @@
       clipped
       permanent
       width="300"
-      color="grey darken-4"
+      color="transparent"
     >
       <v-navigation-drawer
         v-model="drawer"
         absolute
         mini-variant
-        color="grey darken-4"
+        color="transparent"
       >
         <v-avatar
           class="d-block text-center mx-auto mt-4"
@@ -79,7 +79,6 @@
       <!-- /> -->
 
       <v-list
-        color="grey darken-4"
         class="pl-14"
         shaped
       >
@@ -99,7 +98,7 @@
       app
       clipped
       right
-      color="grey darken-4"
+      color="transparent"
     >
       <v-list>
         <v-list-item

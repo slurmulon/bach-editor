@@ -66,7 +66,8 @@ export default {
     color: #95B4C5 !important
 
   .token.variable
-    color: #FACB92 !important
+    color: #FFE1BD !important
+    // color: #FACB92 !important
 
 //.bach-editor span.token.variable {
 //  color: #FFD9C3 !important;

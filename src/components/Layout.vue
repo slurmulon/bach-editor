@@ -1,0 +1,152 @@
+<template>
+  <v-app id="inspire">
+    <v-system-bar app>
+      <v-spacer />
+
+      <v-icon>mdi-square</v-icon>
+
+      <v-icon>mdi-circle</v-icon>
+
+      <v-icon>mdi-triangle</v-icon>
+    </v-system-bar>
+
+    <v-app-bar
+      app
+      dense
+      clipped-left
+      clipped-right
+    >
+      <v-app-bar-title>
+        <!-- bach sandbox -->
+        <logo />
+      </v-app-bar-title>
+      <v-spacer />
+
+      <v-btn
+        v-for="link in links"
+        :key="link.name"
+        text
+      >
+        {{ link.name }}
+      </v-btn>
+
+      <v-responsive max-width="156">
+        <v-text-field
+          dense
+          flat
+          hide-details
+          rounded
+          solo-inverted
+        />
+      </v-responsive>
+    </v-app-bar>
+
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      clipped
+      width="300"
+      color="grey darken-4"
+    >
+      <v-navigation-drawer
+        v-model="drawer"
+        absolute
+        mini-variant
+      >
+        <v-avatar
+          class="d-block text-center mx-auto mt-4"
+          color="grey darken-1"
+          size="36"
+        />
+
+        <v-divider class="mx-3 my-5" />
+
+        <v-avatar
+          v-for="n in 6"
+          :key="n"
+          class="d-block text-center mx-auto mb-9"
+          color="grey lighten-1"
+          size="28"
+        />
+      </v-navigation-drawer>
+
+      <!-- <v-sheet -->
+      <!--   color="grey" -->
+      <!--   height="128" -->
+      <!--   width="100%" -->
+      <!-- /> -->
+
+      <v-list
+        color="grey darken-4"
+        class="pl-14"
+        shaped
+      >
+        <v-list-item
+          v-for="n in 5"
+          :key="n"
+          link
+        >
+          <v-list-item-content>
+            <v-list-item-title>Item {{ n }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-navigation-drawer
+      app
+      clipped
+      right
+      color="grey darken-4"
+    >
+      <v-list>
+        <v-list-item
+          v-for="n in 5"
+          :key="n"
+          link
+        >
+          <v-list-item-content>
+            <v-list-item-title>Item {{ n }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-main>
+      <v-container fluid>
+        <slot />
+      </v-container>
+    </v-main>
+
+    <v-footer
+      app
+      color="transparent"
+      height="72"
+      inset
+    >
+      <v-text-field
+        background-color="grey lighten-1"
+        dense
+        flat
+        hide-details
+        rounded
+        solo
+      />
+    </v-footer>
+  </v-app>
+</template>
+
+<script>
+import Logo from './Logo'
+
+export default {
+  components: { Logo },
+
+  data: () => ({
+    drawer: null,
+    links: [
+      { name: 'Guide', href: 'https://slurmulon.github.io/bach/#/guide' }
+    ]
+  })
+}
+</script>

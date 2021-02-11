@@ -4,24 +4,26 @@
     v-model="code"
     class="bach-editor"
     :highlight="highlighter"
-    language="elixir"
+    language="markup"
     line-numbers
   />
   </div>
 </template>
 
 <script>
-import template from '@/bach/template.bach'
+import { draft } from '@/use/editor'
+// import template from '@/bach/template.bach'
 import Prism from 'prismjs'
 import { PrismEditor } from 'vue-prism-editor'
 import 'vue-prism-editor/dist/prismeditor.min.css'
-// import 'prismjs/themes/prism-tomorrow.css'
 // import 'prismjs/components/prism-clike'
 
-// import 'prismjs/components/prism-markup'
-// import 'prismjs/components/prism-javascript'
-// import 'prismjs/components/prism-css'
+import 'prismjs/components/prism-markup'
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-css'
 import 'prismjs/components/prism-elixir'
+
+import 'prismjs/themes/prism-tomorrow.css'
 
 import { highlight, languages } from 'prismjs/components/prism-core'
 
@@ -30,7 +32,7 @@ global.Prism = Prism
 // const CODE_TEMPLATE = `@Tempo = 120
 // @Meter = 4|4`
 
-const CODE_TEMPLATE = template
+// const CODE_TEMPLATE = template
 
 export default {
   components: {
@@ -38,7 +40,8 @@ export default {
   },
 
   data: () => ({
-    code: CODE_TEMPLATE
+    // code: CODE_TEMPLATE
+    code: draft.value.trim()
   }),
 
   methods: {
@@ -53,8 +56,8 @@ export default {
           ...languages.elixir,
           ...languages.css
         },
-        // 'markup'
-        'elixir'
+        'markup'
+        // 'elixir'
       )
     }
   }

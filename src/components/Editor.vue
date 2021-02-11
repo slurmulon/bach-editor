@@ -30,6 +30,11 @@
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
 
+import 'prismjs/components/prism-markup'
+
+import 'vue-prism-editor/dist/prismeditor.min.css'
+import 'prismjs/themes/prism-twilight.css'
+
 export default {
   components: {
     BachCode,
@@ -46,3 +51,22 @@ export default {
   }
 }
 </script>
+
+<style lang="css">
+ /* required class */
+.bach-editor {
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 5px;
+}
+
+.bach-editor span.token.play {
+  color: #AFEEEE;
+}
+
+/* optional class for removing the outline */
+.prism-editor__textarea:focus {
+  outline: none;
+}
+</style>

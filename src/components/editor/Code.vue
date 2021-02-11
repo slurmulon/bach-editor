@@ -15,16 +15,16 @@ import { draft } from '@/use/editor'
 // import template from '@/bach/template.bach'
 import Prism from 'prismjs'
 import { PrismEditor } from 'vue-prism-editor'
-import 'vue-prism-editor/dist/prismeditor.min.css'
-// import 'prismjs/components/prism-clike'
+// import 'vue-prism-editor/dist/prismeditor.min.css'
 
-import 'prismjs/components/prism-markup'
-import 'prismjs/components/prism-javascript'
-import 'prismjs/components/prism-css'
-import 'prismjs/components/prism-elixir'
+// import 'prismjs/components/prism-markup'
+// import 'prismjs/components/prism-javascript'
+// import 'prismjs/components/prism-css'
+// import 'prismjs/components/prism-elixir'
 
 // import 'prismjs/themes/prism-tomorrow.css'
-import 'prismjs/themes/prism-dark.css'
+// import 'prismjs/themes/prism-dark.css'
+// import 'prismjs/themes/prism-twilight.css'
 
 import { highlight, languages } from 'prismjs/components/prism-core'
 
@@ -68,18 +68,3 @@ export default {
   }
 }
 </script>
-
-<style>
-/* required class */
-.bach-editor {
-  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 5px;
-}
-
-/* optional class for removing the outline */
-.prism-editor__textarea:focus {
-  outline: none;
-}
-</style>

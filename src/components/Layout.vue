@@ -128,7 +128,6 @@
       inset
     >
       <v-text-field
-        background-color="grey lighten-1"
         dense
         flat
         hide-details

@@ -52,21 +52,27 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="sass">
  /* required class */
-.bach-editor {
-  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 5px;
-}
+.bach-editor
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace
+  font-size: 14px
+  line-height: 1.5
+  padding: 5px
 
-.bach-editor span.token.play {
-  color: #AFEEEE;
-}
+  .token.play,
+  .token.keyword
+    /* color: #AFEEEE; */
+    color: #95B4C5 !important
+
+  .token.variable
+    color: #FACB92 !important
+
+//.bach-editor span.token.variable {
+//  color: #FFD9C3 !important;
+//}
 
 /* optional class for removing the outline */
-.prism-editor__textarea:focus {
-  outline: none;
-}
+.prism-editor__textarea:focus
+  outline: none
 </style>

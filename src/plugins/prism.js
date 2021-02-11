@@ -6,13 +6,13 @@ const name = new RegExp(/[a-zA-Z_]+[a-zA-Z0-9_-]*/)
 const number = new RegExp(/[0-9]\d*(\.\d+)?/)
 
 Prism.languages.bach = {
-  // 'header': {
-  //   pattern: /@\w+/,
-  //   lookbehind: true,
-  //   // alias: 'attr-value'
-  //   // alias: ['tag', 'bold']
-  //   alias: ['bold', 'namespace']
-  // },
+  'header': {
+    pattern: /@\w+/,
+    lookbehind: true,
+    alias: 'keyword'
+    // alias: ['tag', 'bold']
+    // alias: ['bold', 'namespace']
+  },
   'constant': {
     pattern: /(^|[^:]):\w+/,
     lookbehind: true,
@@ -39,7 +39,7 @@ Prism.languages.bach = {
   },
   // 'builtin': /\!Play/i,
   'boolean': /\b(?:true|false)\b/,
-  'operator': /[-+%=]|\/|\*|\||[->]|@/,
+  'operator': /[-+%=]|\/|\*|\||!|[->]/,
   'punctuation': {
     pattern: /[{}[\](),.:]/,
     greedy: false

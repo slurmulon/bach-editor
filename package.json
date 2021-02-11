@@ -12,6 +12,7 @@
     "bach-js": "github:slurmulon/bach-js",
     "core-js": "^3.6.5",
     "gig": "github:slurmulon/gig",
+    "prismjs": "^1.23.0",
     "tone": "^14.7.77",
     "vue": "^2.6.11",
     "vue-prism-editor": "^1.2.2",

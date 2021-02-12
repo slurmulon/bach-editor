@@ -4,7 +4,8 @@ import { note, transpose } from '@tonaljs/tonal'
 import { enharmonic } from '@tonaljs/note'
 
 // export const all = expand('A0', 'C8')
-export const all = expand('A0', 'C6')
+// export const all = expand('A0', 'C6')
+export const all = expand('A0', 'C4')
 
 export function expand (from, to) {
   let fromNote = note(from)

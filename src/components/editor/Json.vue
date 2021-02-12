@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { jsonify, draft } from '@/use/editor'
+import { jsonify, track } from '@/use/editor'
 import { PrismEditor } from 'vue-prism-editor'
 
 import { highlight, languages } from 'prismjs/components/prism-core'
@@ -23,7 +23,9 @@ export default {
   },
 
   computed: {
-    json: () => jsonify(draft.value).value
+    json: () => {
+      return jsonify(track.value).value
+    }
   },
 
   methods: {

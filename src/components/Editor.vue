@@ -8,6 +8,7 @@
 
       <v-btn
         icon
+        @click="save"
       >
         <v-icon>mdi-content-save</v-icon>
       </v-btn>
@@ -54,6 +55,8 @@
 </template>
 
 <script>
+import { commit, track } from '@/use/editor'
+
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
 
@@ -75,7 +78,18 @@ export default {
   }),
 
   methods: {
+    save () {
+      commit()
+      console.log('code saved!!!', track.value)
+    },
 
+    copy () {
+
+    },
+
+    play () {
+
+    }
   }
 }
 </script>

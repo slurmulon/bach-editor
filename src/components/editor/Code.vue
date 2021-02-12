@@ -1,22 +1,5 @@
 <template>
   <div>
-    <!-- <v-toolbar -->
-    <!--   dense -->
-    <!-- > -->
-    <!--   <v-spacer /> -->
-
-    <!--   <v-btn icon> -->
-    <!--     <v-icon>mdi-clipboard-text-play</v-icon> -->
-    <!--   </v-btn> -->
-
-    <!--   <v-btn -->
-    <!--     icon -->
-    <!--     color="primary" -->
-    <!--   > -->
-    <!--     <1!-- <v-icon>play_arrow</v-icon> --1> -->
-    <!--     <v-icon>mdi-play-circle</v-icon> -->
-    <!--   </v-btn> -->
-    <!-- </v-toolbar> -->
     <prism-editor
       v-model="code"
       class="bach-editor"
@@ -59,8 +42,20 @@ export default {
 
   data: () => ({
     // code: CODE_TEMPLATE
-    code: draft.value.trim()
+    // code: draft.value.trim()
   }),
+
+  computed: {
+    code: {
+      get () {
+        return draft.value.trim()
+      },
+
+      set (code) {
+        draft.value = code
+      }
+    }
+  },
 
   methods: {
     highlighter (code) {

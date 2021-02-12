@@ -9,9 +9,9 @@
         <!-- :cols="colsOf(section)" -->
         <!-- :style="{ 'flex': `1 0 ${section.duration}` }" -->
         <v-card
-          color="transparent"
           class="pa-2"
-          :elevation="active($index) ? 8 : 0"
+          outlined
+          :raised="active($index)"
           :disabled="!active($index)"
         >
           <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
@@ -25,13 +25,15 @@
           </v-card-subtitle>
 
           <v-card-text v-if="section">
-            <span
+            <v-chip
               v-for="note in notesIn(section)"
               :key="note"
               class="mr-2"
+              pill
+              small
             >
               {{ note | numberless }}
-            </span>
+            </v-chip>
           </v-card-text>
         </v-card>
       </v-col>

@@ -6,28 +6,13 @@ import { Gig } from 'gig'
 import * as Tone from 'tone'
 import { Sampler, Transport } from 'tone'
 // import { Sampler, Transport } from 'tone'
-import { ref } from '@vue/composition-api'
+import { ref, computed } from '@vue/composition-api'
 
-const gig = ref(null)
-// const playing = ref(false)
-//
-// // EXPERIMENT (WORKS!)
-// export async function load (source) {
-//   const sampler = new Sampler({
-//     urls: {
-//       C4: 'C4.mp3',
-//       'D#4': 'Ds4.mp3',
-//       'F#4': 'Fs4.mp3',
-//       A4: 'A4.mp3'
-//     },
-//     release: 1,
-//     baseUrl: 'https://tonejs.github.io/audio/salamander/'
-//   }).toDestination()
+// export const gig = ref(null)
+export const gig = ref({})
+export const playing = ref(false)
 
-//   Tone.loaded().then(() => {
-//     sampler.triggerAttackRelease(['Eb4', 'G4', 'Bb4'], 4)
-//   })
-// }
+export const sections = computed(() => gig.value.sections || [])
 
 export async function load (source) {
   await Tone.loaded()
@@ -44,6 +29,7 @@ export async function load (source) {
   gig.value.on('play', () => {
     // sampler.release = 2
     // sampler.toMaster()
+    playing.value = true
   })
 
   gig.value.on('beat:play', () => {
@@ -70,35 +56,7 @@ export function play (section) {
   console.log('--- duration', duration, !!Tone, !!Transport)
   console.log('--- DA note URL MAP', urls)
 
-  // const synth = new Tone.FMSynth().toDestination()
-
-  // Tone.loaded().then(time => {
-  //   // synth.triggerAttackRelease(['Eb4', 'G4', 'Bb4'], 4, time)
-  //   // synth.triggerAttackRelease(['Eb4', 'G4', 'Bb4'], 4, time)
-  //   const notes = ['Eb4', 'G4', 'Bb4']
-
-  //   notes.forEach(note => {
-  //     synth.triggerAttackRelease(note, 4, time)
-  //   })
-  // })
-
-  // sampler.triggerAttackRelease(notes, duration, Tone.now())
-  //
-  const sampler = new Sampler({
-    urls,
-    // urls: {
-    //   C4: 'C4.mp3',
-    //   'D#4': 'Ds4.mp3',
-    //   'F#4': 'Fs4.mp3',
-    //   A4: 'A4.mp3'
-    // },
-    release: 1,
-    // baseUrl: 'https://tonejs.github.io/audio/salamander/'
-    baseUrl: 'http://127.0.0.1:8086/'
-  }).toDestination()
-
   Tone.loaded().then(() => {
-    // sampler.triggerAttackRelease(['Eb4', 'G4', 'Bb4'], 4)
     sampler.triggerAttackRelease(notes, duration)
   })
 
@@ -107,15 +65,13 @@ export function play (section) {
 
 export function stop () {
   gig.value.stop()
+
+  playing.value = false
 }
 
 export function sample (note) {
-  // const burl = 'https://tonejs.github.io/audio/salamander/'
-  // TODO: Append octave of 2 if missing
   const pitch = note.name.replace(/#/, 's')
-  // const url = `${burl}${pitch}.mp3`
   const url = `${pitch}.mp3`
-  console.log('sampling note!', url, note)
 
   return url
 }
@@ -123,6 +79,6 @@ export function sample (note) {
 // @see: https://github.com/sustained/sforzando/blob/master/src/library/instruments.js
 export const sampler = new Sampler({
   release: 1,
-  baseUrl: 'https://tonejs.github.io/audio/salamander/',
+  baseUrl: 'http://127.0.0.1:8086/',
   urls: notes.reduce((map, note) => ({ ...map, [note.name]: sample(note) }), {})
 }).toDestination()

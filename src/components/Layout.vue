@@ -17,7 +17,7 @@
       clipped-right
       color="grey darken-4"
     >
-      <v-app-bar-nav-icon />
+      <v-app-bar-nav-icon @click="drawer = !drawer" />
       <v-app-bar-title>
         <!-- bach sandbox -->
         <logo />
@@ -48,7 +48,6 @@
       v-model="drawer"
       app
       clipped
-      permanent
       width="300"
       color="transparent"
     >

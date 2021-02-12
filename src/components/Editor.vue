@@ -1,29 +1,56 @@
 <template>
-  <v-tabs
-    v-model="tab"
-    background-color="transparent"
-  >
-    <v-tabs-slider color="primary" />
+  <div>
+    <v-toolbar flat color="transparent">
+      <v-toolbar-title class="text-h4">
+        Track
+      </v-toolbar-title>
+      <v-spacer />
 
-    <v-tab
-      v-for="item in items"
-      :key="item"
+      <v-btn
+        icon
+      >
+        <v-icon>mdi-content-save</v-icon>
+      </v-btn>
+
+      <v-btn icon>
+        <v-icon>mdi-clipboard-text-play</v-icon>
+      </v-btn>
+
+      <v-btn
+        icon
+        color="primary"
+        x-large
+      >
+        <v-icon>mdi-play-circle</v-icon>
+      </v-btn>
+
+    </v-toolbar>
+    <v-tabs
+      v-model="tab"
+      background-color="transparent"
     >
-      {{ item }}
-    </v-tab>
+      <v-tabs-slider color="primary" />
 
-    <v-tabs-items v-model="tab">
-      <v-tab-item
+      <v-tab
         v-for="item in items"
         :key="item"
       >
-        <component
-          :is="`bach-${item}`"
-          keep-alive
-        />
-      </v-tab-item>
-    </v-tabs-items>
-  </v-tabs>
+        {{ item }}
+      </v-tab>
+
+      <v-tabs-items v-model="tab">
+        <v-tab-item
+          v-for="item in items"
+          :key="item"
+        >
+          <component
+            :is="`bach-${item}`"
+            keep-alive
+          />
+        </v-tab-item>
+      </v-tabs-items>
+    </v-tabs>
+  </div>
 </template>
 
 <script>
@@ -31,6 +58,7 @@ import BachCode from './editor/Code'
 import BachJson from './editor/Json'
 
 import 'prismjs/components/prism-markup'
+import 'prismjs/components/prism-json'
 
 import 'vue-prism-editor/dist/prismeditor.min.css'
 import 'prismjs/themes/prism-twilight.css'
@@ -66,7 +94,10 @@ export default {
     color: #95B4C5 !important
 
   .token.variable
-    color: #FFE1BD !important
+    // color: darken(whitesmoke, 30%) !important
+    // color: lighten(#95B4C5, 22%) !important
+    color: #60899F !important
+    // color: #FFE1BD !important
     // color: #FACB92 !important
 
 //.bach-editor span.token.variable {

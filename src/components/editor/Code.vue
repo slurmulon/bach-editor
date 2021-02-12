@@ -1,12 +1,29 @@
 <template>
   <div>
-  <prism-editor
-    v-model="code"
-    class="bach-editor"
-    :highlight="highlighter"
-    language="bach"
-    line-numbers
-  />
+    <!-- <v-toolbar -->
+    <!--   dense -->
+    <!-- > -->
+    <!--   <v-spacer /> -->
+
+    <!--   <v-btn icon> -->
+    <!--     <v-icon>mdi-clipboard-text-play</v-icon> -->
+    <!--   </v-btn> -->
+
+    <!--   <v-btn -->
+    <!--     icon -->
+    <!--     color="primary" -->
+    <!--   > -->
+    <!--     <1!-- <v-icon>play_arrow</v-icon> --1> -->
+    <!--     <v-icon>mdi-play-circle</v-icon> -->
+    <!--   </v-btn> -->
+    <!-- </v-toolbar> -->
+    <prism-editor
+      v-model="code"
+      class="bach-editor"
+      :highlight="highlighter"
+      language="bach"
+      line-numbers
+    />
   </div>
 </template>
 

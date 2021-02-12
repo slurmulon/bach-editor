@@ -17,6 +17,7 @@
       clipped-right
       color="grey darken-4"
     >
+      <v-app-bar-nav-icon />
       <v-app-bar-title>
         <!-- bach sandbox -->
         <logo />

@@ -1,0 +1,11 @@
+@Tempo = 130
+
+!Play [
+  3/8 -> {
+    Scale('G aeolian')
+    Chord('Gmin')
+  }
+  5/8 -> Chord('Eb')
+  3/8 -> Chord('Cmin7')
+  5/8 -> Chord('Bb')
+]

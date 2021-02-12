@@ -15,7 +15,7 @@
           :disabled="!active($index)"
         >
           <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
-            <!-- {{ section.parts.chord.value }} -->
+            {{ section.parts.chord.value }}
           </v-card-title>
 
           <v-card-subtitle>
@@ -43,7 +43,7 @@
 import { music, sections, index, part, playing, notesIn } from '@/use/player'
 
 // TODO: Probably make this reactive to device size, could use @vueuse for this
-const MAX_COLS = 3
+// const MAX_COLS = 3
 // const GRID_SIZE = 12
 
 export default {
@@ -64,7 +64,6 @@ export default {
     },
 
     ratioOf (section) {
-      console.log('ratio music', music.value)
       return music.value.ratio(section.duration)
     },
 
@@ -83,9 +82,12 @@ export default {
       // if not complex, use MAX_COLS
 
       // const cols = interpolate(section.duration)
-      const cols = section.duration * MAX_COLS
+      // LAST
+      // const cols = section.duration * MAX_COLS
+      // const cols = (section.duration / music.value.longest.duration) * 12
+      const cols = Math.round((section.duration / music.value.longest.duration) * 6)
 
-      console.log('cols of section', cols, section.duration)
+      console.log('cols of section', cols, section.duration, music.value.longest)
 
       return cols
     }

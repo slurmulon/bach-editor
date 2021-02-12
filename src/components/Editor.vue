@@ -23,7 +23,8 @@
         x-large
         @click="toggle"
       >
-        <v-icon>mdi-play-circle</v-icon>
+        <v-icon v-if="!playing">mdi-play-circle</v-icon>
+        <v-icon v-else>mdi-stop-circle</v-icon>
       </v-btn>
 
     </v-toolbar>
@@ -64,7 +65,7 @@
 <script>
 import { commit, track } from '@/use/editor'
 // import { load, stop, toggle, playing } from '@/use/player'
-import { load, toggle } from '@/use/player'
+import { load, toggle, playing } from '@/use/player'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
@@ -85,6 +86,10 @@ export default {
     tab: null,
     items: ['code', 'json']
   }),
+
+  computed: {
+    playing: () => playing.value
+  },
 
   methods: {
     save () {

@@ -10,11 +10,15 @@ import { Sampler } from 'tone'
 import { ref, computed } from '@vue/composition-api'
 
 export const gig = ref({})
+export const current = ref({})
 export const index = ref(0)
+export const part = ref('chord')
 export const playing = ref(false)
 
 // export const sections = computed(() => gig.value.sections || [])
 export const sections = computed(() => new Sections(track.value).all)
+
+// export const notes = computed(() => current.value && current.value.parts.chord.notes.map(note => `${note}2`)
 
 // export const cursor = computed(() => gig.value.cursor ? gig.value.cursor.section - 1 : 0)
 
@@ -41,6 +45,7 @@ export async function load (source) {
     // TODO: Push into `gig.current` getter
     const section = sections[cursor.section]
 
+    current.value = section
     index.value = cursor.section
 
     play(section)
@@ -49,10 +54,19 @@ export async function load (source) {
   return gig.value.play()
 }
 
+export function notesIn (section) {
+  const group = section.parts[part.value]
+  const all = group ? group.notes : []
+
+  return all.map(note => `${note}2`)
+}
+
 export function play (section) {
   // FIXME: Hard-coding chord for now, but probably auto-detect or allow user to specify this!
   // const { notes } = section.parts.chord
-  const notes = section.parts.chord.notes.map(note => `${note}2`)
+  // const notes = section.parts.chord.notes.map(note => `${note}2`)
+
+  const notes = notesIn(section)
   const duration = (section.duration * gig.value.interval) / 1000
 
   Tone.loaded().then(() => {
@@ -67,6 +81,8 @@ export function stop () {
   gig.value.kill()
   gig.value = {}
 
+  current.value = {}
+  index.value = 0
   playing.value = false
 }
 

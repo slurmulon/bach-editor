@@ -8,11 +8,7 @@ export const store = useStorage('bach-editor')
 
 export const track = ref(template)
 export const draft = ref(template)
-// export const draft = {
-//   code: ref(template)
-// }
-//
-// export const jsonify = reactify(compose)
+
 export const jsonify = reactify((bach) => JSON.stringify(compose(bach), null, 2))
 
 // TODO: Try to `compose`, catch errors, update list of errors if so

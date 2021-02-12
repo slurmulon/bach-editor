@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div :style="{ filter: disabled ? 'grayscale(1)' : null }">
     <prism-editor
       v-model="code"
       class="bach-editor"
       :highlight="highlighter"
+      :readonly="disabled"
       language="bach"
       line-numbers
-      :readonly="disabled"
     />
   </div>
 </template>

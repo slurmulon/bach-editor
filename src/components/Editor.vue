@@ -6,16 +6,16 @@
       </v-toolbar-title>
       <v-spacer />
 
+      <v-btn icon>
+        <v-icon>mdi-clipboard-text-play</v-icon>
+      </v-btn>
+
       <v-btn
         icon
         :disabled="!dirty"
         @click="save"
       >
         <v-icon>mdi-content-save</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-clipboard-text-play</v-icon>
       </v-btn>
 
       <v-btn
@@ -28,7 +28,6 @@
         <v-icon v-if="!playing">mdi-play-circle</v-icon>
         <v-icon v-else>mdi-stop-circle</v-icon>
       </v-btn>
-
     </v-toolbar>
 
     <v-divider />

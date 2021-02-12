@@ -9,8 +9,14 @@ export default new Vuetify({
     themes: {
       dark: {
         primary: '#FAA372',
+        // ice blue
         secondary: '#7C9EC3',
+        // mustard
+        // secondary: '#F9EE9A',
+        // light salmon
         accent: '#FFD89A',
+        // ice blue
+        // accent: '#7C9EC3',
         error: '#E57373'
       }
     }

@@ -24,5 +24,6 @@ module.exports = {
         jest: true
       }
     }
-  ]
+  ],
+  ignorePatterns: ["**/node_modules/*.js", "**/dist/*.js", "**/gig/dist/*.js"]
 }

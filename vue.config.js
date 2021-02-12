@@ -2,6 +2,9 @@ module.exports = {
   transpileDependencies: [
     'vuetify'
   ],
+  configureWebpack: {
+    resolve: { symlinks: false }
+  },
   chainWebpack: config => {
     config.module
       .rule('bach')

@@ -8,6 +8,7 @@ import { Sections } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { ref, computed } from '@vue/composition-api'
+// import { reactify } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
@@ -17,8 +18,16 @@ export const playing = ref(false)
 
 export const music = computed(() => new Sections(track.value))
 
+// export const api = reactify(Sections)
+
+// FIXME: Doesn't react to changing track/source data, it seems
 // export const sections = computed(() => gig.value.sections || [])
-export const sections = computed(() => new Sections(track.value).all)
+export const sections = computed(() => music.value.all || [])
+// LAST
+// export const sections = computed(() => new Sections(track.value).all)
+// export const sections = reactive(new Sections(track.value))
+// export const sections = reactive(music.all)
+
 // FIXME: This should work but doesn't. Must be using the reactivity API wrong
 // export const sections = computed(() => music.all)
 

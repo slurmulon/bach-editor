@@ -64,9 +64,31 @@ export function play (section) {
 }
 
 export function stop () {
-  gig.value.stop()
+  // gig.value.stop()
+  gig.value.kill()
+  gig.value = {}
 
   playing.value = false
+}
+
+export function resume () {
+}
+
+// TODO: Remvoe track, just for testing
+export function toggle (track) {
+  if (playing.value) {
+    console.log('toggle stopping')
+    stop()
+  } else if (!gig.value.source) {
+    console.log('toggle LoAding')
+    load(track)
+    // resume()
+  } else {
+    console.log('toggle replayinnnng')
+    // TOOD: Probably just call clear on load no matter what if gig object exists
+    gig.value.kill()
+    gig.value.play()
+  }
 }
 
 export function sample (note) {

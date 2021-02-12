@@ -21,7 +21,7 @@
         icon
         color="primary"
         x-large
-        @click="play"
+        @click="toggle"
       >
         <v-icon>mdi-play-circle</v-icon>
       </v-btn>
@@ -63,7 +63,8 @@
 
 <script>
 import { commit, track } from '@/use/editor'
-import { load } from '@/use/player'
+// import { load, stop, toggle, playing } from '@/use/player'
+import { load, toggle } from '@/use/player'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
@@ -94,6 +95,8 @@ export default {
     copy () {
 
     },
+
+    toggle: () => toggle(track.value),
 
     play () {
       load(track.value)

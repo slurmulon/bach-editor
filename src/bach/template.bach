@@ -1,10 +1,11 @@
 @Meter = 4|4
-@Tempo = 120
+@Tempo = 130
 
 !Play [
   1 -> {
-    Scale('Bb mixolydian')
-    Chord('Bb')
+    Scale('E lydian')
+    Chord('E')
   }
-  1 -> Chord('Fm')
+  1/2 -> Chord('G#min')
+  1/2 -> Chord('B')
 ]

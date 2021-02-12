@@ -4,8 +4,10 @@
       <v-col
         v-for="(section, $index) in sections"
         :key="$index"
-        :style="{ 'flex': `${section.duration} 0 100px` }"
+        :cols="colsOf(section)"
       >
+        <!-- :cols="colsOf(section)" -->
+        <!-- :style="{ 'flex': `1 0 ${section.duration}` }" -->
         <v-card
           color="transparent"
           class="pa-2"
@@ -13,7 +15,7 @@
           :disabled="!active($index)"
         >
           <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
-            {{ section.parts.chord.value }}
+            <!-- {{ section.parts.chord.value }} -->
           </v-card-title>
 
           <v-card-subtitle>
@@ -22,7 +24,7 @@
             </span>
           </v-card-subtitle>
 
-          <v-card-text>
+          <v-card-text v-if="section">
             <span
               v-for="note in notesIn(section)"
               :key="note"
@@ -38,19 +40,19 @@
 </template>
 
 <script>
-import { sections, index, part, playing, notesIn } from '@/use/player'
+import { music, sections, index, part, playing, notesIn } from '@/use/player'
+
+// TODO: Probably make this reactive to device size, could use @vueuse for this
+const MAX_COLS = 3
+// const GRID_SIZE = 12
 
 export default {
   computed: {
-    index: () => index.value,
     sections: () => sections.value,
+    index: () => index.value,
     part: () => part.value,
     playing: () => playing.value
   },
-
-  data: () => ({
-    max: 3
-  }),
 
   methods: {
     active (index) {
@@ -59,6 +61,33 @@ export default {
 
     notesIn (section) {
       return notesIn(section)
+    },
+
+    ratioOf (section) {
+      console.log('ratio music', music.value)
+      return music.value.ratio(section.duration)
+    },
+
+    colsOf (section) {
+      // const ratio = this.ratioOf(section)
+      // const { length } = music
+      // const wraps = length > MAX_COLS
+      // const interpolate = (duration) => Math.round(duration / 2) * 2
+      // const interpolate = (duration) => {
+      // }
+
+      // const { shortest, longest } = music
+      // const variance = (shortest / longest)// - ratio
+      // const complex = variance >
+
+      // if not complex, use MAX_COLS
+
+      // const cols = interpolate(section.duration)
+      const cols = section.duration * MAX_COLS
+
+      console.log('cols of section', cols, section.duration)
+
+      return cols
     }
   },
 

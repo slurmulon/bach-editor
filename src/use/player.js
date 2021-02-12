@@ -15,8 +15,12 @@ export const index = ref(0)
 export const part = ref('chord')
 export const playing = ref(false)
 
+export const music = computed(() => new Sections(track.value))
+
 // export const sections = computed(() => gig.value.sections || [])
 export const sections = computed(() => new Sections(track.value).all)
+// FIXME: This should work but doesn't. Must be using the reactivity API wrong
+// export const sections = computed(() => music.all)
 
 // export const notes = computed(() => current.value && current.value.parts.chord.notes.map(note => `${note}2`)
 
@@ -41,9 +45,11 @@ export async function load (source) {
   })
 
   gig.value.on('beat:play', () => {
+    // const { sections, cursor } = gig.value
     const { sections, cursor } = gig.value
     // TODO: Push into `gig.current` getter
     const section = sections[cursor.section]
+    console.log('play beat wut', sections)
 
     current.value = section
     index.value = cursor.section

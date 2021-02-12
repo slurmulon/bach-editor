@@ -1,10 +1,10 @@
 <template>
   <div>
-    Player! {{ sections.length }}
     <ul>
       <li
         v-for="(section, $index) in sections"
         :key="$index"
+        :style="{ color: index == $index ? $vuetify.theme.themes.dark.primary: null }"
       >
         {{ section.parts.chord.value }}
       </li>
@@ -13,12 +13,13 @@
 </template>
 
 <script>
-import { sections, playing } from '@/use/player'
+import { sections, index, playing } from '@/use/player'
 
 export default {
   computed: {
     playing: () => playing.value,
-    sections: () => sections.value
+    sections: () => sections.value,
+    index: () => index.value
   }
 }
 </script>

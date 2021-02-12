@@ -10,10 +10,13 @@ import { Sampler } from 'tone'
 import { ref, computed } from '@vue/composition-api'
 
 export const gig = ref({})
+export const index = ref(0)
 export const playing = ref(false)
 
 // export const sections = computed(() => gig.value.sections || [])
 export const sections = computed(() => new Sections(track.value).all)
+
+// export const cursor = computed(() => gig.value.cursor ? gig.value.cursor.section - 1 : 0)
 
 export async function load (source) {
   await Tone.loaded()
@@ -37,6 +40,8 @@ export async function load (source) {
     const { sections, cursor } = gig.value
     // TODO: Push into `gig.current` getter
     const section = sections[cursor.section]
+
+    index.value = cursor.section
 
     play(section)
   })

@@ -127,13 +127,13 @@
       height="72"
       inset
     >
-      <v-text-field
-        dense
-        flat
-        hide-details
-        rounded
-        solo
-      />
+      <!-- <v-text-field -->
+      <!--   dense -->
+      <!--   flat -->
+      <!--   hide-details -->
+      <!--   rounded -->
+      <!--   solo -->
+      <!-- /> -->
     </v-footer>
   </v-app>
 </template>

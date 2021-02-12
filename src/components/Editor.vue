@@ -21,11 +21,15 @@
         icon
         color="primary"
         x-large
+        @click="play"
       >
         <v-icon>mdi-play-circle</v-icon>
       </v-btn>
 
     </v-toolbar>
+
+    <v-divider />
+
     <v-tabs
       v-model="tab"
       background-color="transparent"
@@ -39,7 +43,10 @@
         {{ item }}
       </v-tab>
 
-      <v-tabs-items v-model="tab">
+      <v-tabs-items
+        v-model="tab"
+        class="mt-4"
+      >
         <v-tab-item
           v-for="item in items"
           :key="item"
@@ -56,6 +63,7 @@
 
 <script>
 import { commit, track } from '@/use/editor'
+import { load } from '@/use/player'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
@@ -88,7 +96,7 @@ export default {
     },
 
     play () {
-
+      load(track.value)
     }
   }
 }

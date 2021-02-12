@@ -48,6 +48,7 @@
       <v-tabs-items
         v-model="tab"
         class="mt-4"
+        background-color="transparent"
       >
         <v-tab-item
           v-for="item in items"
@@ -113,7 +114,12 @@ export default {
 </script>
 
 <style lang="sass">
- /* required class */
+// TODO: Move to main.css or the like
+.v-tabs-items
+  border: 1px solid #1e1e1e
+  background-color: transparent !important
+
+/* required class */
 .bach-editor
   font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace
   font-size: 14px
@@ -137,6 +143,6 @@ export default {
 //}
 
 /* optional class for removing the outline */
-.prism-editor__textarea:focus
-  outline: none
+//.prism-editor__textarea:focus
+  //outline: none
 </style>

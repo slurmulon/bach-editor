@@ -22,4 +22,8 @@ export default {
 .logo > span.brand {
   font-family: 'Aladin', cursive !important;
 }
+
+.v-tabs-items {
+  background-color: transparent !important;
+}
 </style>

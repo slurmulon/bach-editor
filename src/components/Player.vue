@@ -1,18 +1,19 @@
 <template>
-  <v-container class="mt-2">
+  <v-sheet outlined color="transparent" class="mt-4">
+  <!-- <v-container class="mt-4"> -->
+  <v-container>
     <v-row>
       <v-col
         v-for="(section, $index) in sections"
         :key="$index"
         :cols="colsOf(section)"
       >
-        <!-- :cols="colsOf(section)" -->
-        <!-- :style="{ 'flex': `1 0 ${section.duration}` }" -->
         <v-card
-          class="pa-2"
           outlined
+          class="pa-2"
           :raised="active($index)"
           :disabled="!active($index)"
+          :color="active($index) ? 'grey darken-3' : null"
         >
           <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
             {{ section.parts.chord.value }}
@@ -28,7 +29,7 @@
             <v-chip
               v-for="note in notesIn(section)"
               :key="note"
-              class="mr-2"
+              class="mr-2 mt-2"
               pill
               small
             >
@@ -39,6 +40,7 @@
       </v-col>
     </v-row>
   </v-container>
+  </v-sheet>
 </template>
 
 <script>
@@ -70,28 +72,7 @@ export default {
     },
 
     colsOf (section) {
-      // const ratio = this.ratioOf(section)
-      // const { length } = music
-      // const wraps = length > MAX_COLS
-      // const interpolate = (duration) => Math.round(duration / 2) * 2
-      // const interpolate = (duration) => {
-      // }
-
-      // const { shortest, longest } = music
-      // const variance = (shortest / longest)// - ratio
-      // const complex = variance >
-
-      // if not complex, use MAX_COLS
-
-      // const cols = interpolate(section.duration)
-      // LAST
-      // const cols = section.duration * MAX_COLS
-      // const cols = (section.duration / music.value.longest.duration) * 12
-      const cols = Math.round((section.duration / music.value.longest.duration) * 6)
-
-      console.log('cols of section', cols, section.duration, music.value.longest)
-
-      return cols
+      return Math.round((section.duration / music.value.longest.duration) * 6)
     }
   },
 

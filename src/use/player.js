@@ -1,18 +1,19 @@
+import { track } from '@/use/editor'
 import { all as notes } from '@/core/notes'
 
 import { Gig } from 'gig'
+import { Sections } from 'bach-js'
 // import { notesIn } from 'bach-js'
 // import Tone, { Sampler, Transport } from 'tone'
 import * as Tone from 'tone'
-import { Sampler, Transport } from 'tone'
-// import { Sampler, Transport } from 'tone'
+import { Sampler } from 'tone'
 import { ref, computed } from '@vue/composition-api'
 
-// export const gig = ref(null)
 export const gig = ref({})
 export const playing = ref(false)
 
-export const sections = computed(() => gig.value.sections || [])
+// export const sections = computed(() => gig.value.sections || [])
+export const sections = computed(() => new Sections(track.value).all)
 
 export async function load (source) {
   await Tone.loaded()
@@ -34,9 +35,8 @@ export async function load (source) {
 
   gig.value.on('beat:play', () => {
     const { sections, cursor } = gig.value
+    // TODO: Push into `gig.current` getter
     const section = sections[cursor.section]
-
-    console.log('beat played (section)', section)
 
     play(section)
   })
@@ -49,12 +49,6 @@ export function play (section) {
   // const { notes } = section.parts.chord
   const notes = section.parts.chord.notes.map(note => `${note}2`)
   const duration = (section.duration * gig.value.interval) / 1000
-  const urls = notes.reduce((map, note) => ({ ...map, [note]: sample({ name: note }) }), {})
-
-  console.log('PLAYING SECTION DUDE', section, notes)
-
-  console.log('--- duration', duration, !!Tone, !!Transport)
-  console.log('--- DA note URL MAP', urls)
 
   Tone.loaded().then(() => {
     sampler.triggerAttackRelease(notes, duration)
@@ -77,14 +71,11 @@ export function resume () {
 // TODO: Remvoe track, just for testing
 export function toggle (track) {
   if (playing.value) {
-    console.log('toggle stopping')
     stop()
   } else if (!gig.value.source) {
-    console.log('toggle LoAding')
     load(track)
     // resume()
   } else {
-    console.log('toggle replayinnnng')
     // TOOD: Probably just call clear on load no matter what if gig object exists
     gig.value.kill()
     gig.value.play()

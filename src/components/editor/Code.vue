@@ -11,39 +11,18 @@
 </template>
 
 <script>
-import { draft } from '@/use/editor'
-// import template from '@/bach/template.bach'
+import { input, draft } from '@/use/editor'
 import Prism from 'prismjs'
 import { PrismEditor } from 'vue-prism-editor'
-// import 'vue-prism-editor/dist/prismeditor.min.css'
-
-// import 'prismjs/components/prism-markup'
-// import 'prismjs/components/prism-javascript'
-// import 'prismjs/components/prism-css'
-// import 'prismjs/components/prism-elixir'
-
-// import 'prismjs/themes/prism-tomorrow.css'
-// import 'prismjs/themes/prism-dark.css'
-// import 'prismjs/themes/prism-twilight.css'
 
 import { highlight, languages } from 'prismjs/components/prism-core'
 
 global.Prism = Prism
 
-// const CODE_TEMPLATE = `@Tempo = 120
-// @Meter = 4|4`
-
-// const CODE_TEMPLATE = template
-
 export default {
   components: {
     PrismEditor
   },
-
-  data: () => ({
-    // code: CODE_TEMPLATE
-    // code: draft.value.trim()
-  }),
 
   computed: {
     code: {
@@ -52,7 +31,9 @@ export default {
       },
 
       set (code) {
-        draft.value = code
+        // draft.value = code
+        // dirty.value = true
+        input(code)
       }
     }
   },

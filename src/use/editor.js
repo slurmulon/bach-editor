@@ -16,10 +16,20 @@ export const draft = ref(template)
 export const jsonify = reactify((bach) => JSON.stringify(compose(bach), null, 2))
 
 // TODO: Try to `compose`, catch errors, update list of errors if so
-export const commit = () => { track.value = draft.value }
+export const commit = () => {
+  track.value = draft.value
+  dirty.value = false
+}
+
+export const input = (code) => {
+  draft.value = code
+  dirty.value = true
+}
 
 // export const dark = usePreferredDark()
 
 export const clipboard = useClipboard()
 
-export default { store, draft, jsonify, clipboard }
+export const dirty = ref(false)
+
+export default { store, draft, jsonify, clipboard, dirty }

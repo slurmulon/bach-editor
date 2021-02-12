@@ -8,6 +8,7 @@
 
       <v-btn
         icon
+        :disabled="!dirty"
         @click="save"
       >
         <v-icon>mdi-content-save</v-icon>
@@ -19,8 +20,8 @@
 
       <v-btn
         icon
-        color="primary"
         x-large
+        :color="playing ? 'primary' : 'secondary'"
         @click="toggle"
       >
         <v-icon v-if="!playing">mdi-play-circle</v-icon>
@@ -63,7 +64,7 @@
 </template>
 
 <script>
-import { commit, track } from '@/use/editor'
+import { commit, track, dirty } from '@/use/editor'
 // import { load, stop, toggle, playing } from '@/use/player'
 import { load, toggle, playing } from '@/use/player'
 
@@ -88,7 +89,8 @@ export default {
   }),
 
   computed: {
-    playing: () => playing.value
+    playing: () => playing.value,
+    dirty: () => dirty.value
   },
 
   methods: {

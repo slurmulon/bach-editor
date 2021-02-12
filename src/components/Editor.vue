@@ -21,6 +21,7 @@
       <v-btn
         icon
         x-large
+        :disabled="dirty"
         :color="playing ? 'primary' : 'secondary'"
         @click="toggle"
       >

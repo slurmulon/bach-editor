@@ -6,18 +6,18 @@
       :highlight="highlighter"
       language="bach"
       line-numbers
+      :readonly="disabled"
     />
   </div>
 </template>
 
 <script>
 import { input, draft } from '@/use/editor'
+import { playing } from '@/use/player'
 import Prism from 'prismjs'
 import { PrismEditor } from 'vue-prism-editor'
 
 import { highlight, languages } from 'prismjs/components/prism-core'
-
-global.Prism = Prism
 
 export default {
   components: {
@@ -31,11 +31,11 @@ export default {
       },
 
       set (code) {
-        // draft.value = code
-        // dirty.value = true
         input(code)
       }
-    }
+    },
+
+    disabled: () => playing.value
   },
 
   methods: {

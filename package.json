@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
+    "serve:audio": "http-server -p 8086 --cors public/audio/piano",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

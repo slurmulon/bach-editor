@@ -8,7 +8,6 @@ import { Sections } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { ref, computed } from '@vue/composition-api'
-// import { reactify } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
@@ -17,30 +16,10 @@ export const part = ref('chord')
 export const playing = ref(false)
 
 export const music = computed(() => new Sections(track.value))
-
-// export const api = reactify(Sections)
-
-// FIXME: Doesn't react to changing track/source data, it seems
-// export const sections = computed(() => gig.value.sections || [])
 export const sections = computed(() => music.value.all || [])
-// LAST
-// export const sections = computed(() => new Sections(track.value).all)
-// export const sections = reactive(new Sections(track.value))
-// export const sections = reactive(music.all)
-
-// FIXME: This should work but doesn't. Must be using the reactivity API wrong
-// export const sections = computed(() => music.all)
-
-// export const notes = computed(() => current.value && current.value.parts.chord.notes.map(note => `${note}2`)
-
-// export const cursor = computed(() => gig.value.cursor ? gig.value.cursor.section - 1 : 0)
 
 export async function load (source) {
   await Tone.loaded()
-
-  // Buffer.on('error', error => {
-  //   console.error(error)
-  // })
 
   gig.value = new Gig({
     source,
@@ -54,11 +33,9 @@ export async function load (source) {
   })
 
   gig.value.on('beat:play', () => {
-    // const { sections, cursor } = gig.value
     const { sections, cursor } = gig.value
     // TODO: Push into `gig.current` getter
     const section = sections[cursor.section]
-    console.log('play beat wut', sections)
 
     current.value = section
     index.value = cursor.section
@@ -77,10 +54,6 @@ export function notesIn (section) {
 }
 
 export function play (section) {
-  // FIXME: Hard-coding chord for now, but probably auto-detect or allow user to specify this!
-  // const { notes } = section.parts.chord
-  // const notes = section.parts.chord.notes.map(note => `${note}2`)
-
   const notes = notesIn(section)
   const duration = (section.duration * gig.value.interval) / 1000
 

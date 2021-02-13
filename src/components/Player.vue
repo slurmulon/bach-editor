@@ -48,7 +48,7 @@ import { music, sections, index, part, playing, notesIn } from '@/use/player'
 
 // TODO: Probably make this reactive to device size, could use @vueuse for this
 // const MAX_COLS = 3
-// const GRID_SIZE = 12
+const GRID_SIZE = 12
 
 export default {
   computed: {
@@ -72,7 +72,7 @@ export default {
     },
 
     colsOf (section) {
-      return Math.round((section.duration / music.value.longest.duration) * 6)
+      return Math.round((section.duration / music.value.longest.duration) * (GRID_SIZE / 2))
     }
   },
 

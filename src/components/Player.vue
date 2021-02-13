@@ -1,53 +1,54 @@
 <template>
-  <v-sheet outlined color="transparent" class="mt-4">
-  <!-- <v-container class="mt-4"> -->
-  <v-container>
-    <v-row>
-      <v-col
-        v-for="(section, $index) in sections"
-        :key="$index"
-        :cols="colsOf(section)"
-      >
-        <v-card
-          outlined
-          class="pa-2"
-          :raised="active($index)"
-          :disabled="!active($index)"
-          :color="active($index) ? 'grey darken-3' : null"
+  <v-sheet
+    outlined
+    color="transparent"
+    class="mt-4"
+  >
+    <v-container>
+      <v-row>
+        <v-col
+          v-for="(section, $index) in sections"
+          :key="$index"
+          :cols="colsOf(section)"
         >
-          <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
-            {{ section.parts.chord.value }}
-          </v-card-title>
+          <v-card
+            outlined
+            class="pa-2"
+            :raised="active($index)"
+            :disabled="!active($index)"
+            :color="active($index) ? 'grey darken-3' : null"
+          >
+            <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
+              {{ section.parts.chord.value }}
+            </v-card-title>
 
-          <v-card-subtitle>
-            <span class="text-capitalize">
-              {{ part }}
-            </span>
-          </v-card-subtitle>
+            <v-card-subtitle>
+              <span class="text-capitalize">
+                {{ part }}
+              </span>
+            </v-card-subtitle>
 
-          <v-card-text v-if="section">
-            <v-chip
-              v-for="note in notesIn(section)"
-              :key="note"
-              class="mr-2 mt-2"
-              pill
-              small
-            >
-              {{ note | numberless }}
-            </v-chip>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+            <v-card-text v-if="section">
+              <v-chip
+                v-for="note in notesIn(section)"
+                :key="note"
+                class="mr-2 mt-2"
+                pill
+                small
+              >
+                {{ note | numberless }}
+              </v-chip>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-sheet>
 </template>
 
 <script>
 import { music, sections, index, part, playing, notesIn } from '@/use/player'
 
-// TODO: Probably make this reactive to device size, could use @vueuse for this
-// const MAX_COLS = 3
 const GRID_SIZE = 12
 
 export default {
@@ -77,9 +78,7 @@ export default {
   },
 
   filters: {
-    numberless: text => {
-      return text.replace(/[0-9]+$/, '')
-    }
+    numberless: text => text.replace(/[0-9]+$/, '')
   }
 }
 </script>

@@ -2,7 +2,12 @@
   <div>
     <v-toolbar flat color="transparent">
       <v-toolbar-title class="text-h4">
-        {{ name }}
+        <!-- {{ name }} -->
+
+        <span @click="dialog.rename = true">{{ name }}</span>
+        <dialog-rename
+          :show.sync="dialog.rename"
+        />
       </v-toolbar-title>
       <v-spacer />
 
@@ -73,6 +78,7 @@ import { toggle, playing } from '@/use/player'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
+import DialogRename from './editor/dialog/Rename'
 
 import 'prismjs/components/prism-markup'
 import 'prismjs/components/prism-json'
@@ -83,12 +89,16 @@ import 'prismjs/themes/prism-twilight.css'
 export default {
   components: {
     BachCode,
-    BachJson
+    BachJson,
+    DialogRename
   },
 
   data: () => ({
     tab: null,
-    items: ['code', 'json']
+    items: ['code', 'json'],
+    dialog: {
+      rename: false
+    }
   }),
 
   computed: {

@@ -12,22 +12,34 @@ export const all = computed(() => get(store))
 
 // export const create = (track) => {
 export const create = ({ name, source }) => {
-  const id = nanoid()
+  const id = nanoid(6)
 
   // save(track, id)
   save({ id, name, source })
 }
 
-export const edit = (id) => {
-  const all = get(store)
-  const track = all[id]
+export const edit = (ref) => {
+  // const all = get(store)
+  // const track = all[id]
+  const track = resolve(ref)
 
   if (track) {
     // commit(track, id)
     commit(track)
   } else {
-    console.error('Track not found', id)
+    console.error('Track not found', ref)
   }
+}
+
+export const resolve = ref => {
+  if (typeof ref === 'string') {
+    const all = get(store)
+    const track = all[ref]
+
+    return track
+  }
+
+  return ref
 }
 
 // TODO: Probably move this into use/editor instead

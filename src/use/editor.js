@@ -9,8 +9,8 @@ import { nanoid } from 'nanoid'
 // TODO: Integrate into `input` function
 export const store = useStorage('bach-editor')
 
-export const id = ref(nanoid())
-export const name = ref('Starter Track')
+export const id = ref(nanoid(6))
+export const name = ref('Starter Track 2')
 export const track = ref(template)
 export const draft = ref(template)
 

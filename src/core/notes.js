@@ -6,7 +6,9 @@ import { enharmonic } from '@tonaljs/note'
 // export const all = expand('A0', 'C8')
 // export const all = expand('A0', 'C6')
 // export const all = expand('A0', 'C4')
-export const all = expand('G2', 'A2')
+// LAST (suddenly started returning only two notes)
+// export const all = expand('G2', 'A2')
+export const all = ['Ab2', 'A2', 'Bb2', 'B2', 'C2', 'Db2', 'D2', 'Eb2', 'E2', 'F2', 'Gb2', 'G2'].map(note)
 
 export function expand (from, to) {
   let fromNote = note(from)

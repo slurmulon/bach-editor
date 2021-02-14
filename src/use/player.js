@@ -98,9 +98,12 @@ export function sample (note) {
   return url
 }
 
+const urls = notes.reduce((map, note) => ({ ...map, [note.name]: sample(note) }), {})
+
 // @see: https://github.com/sustained/sforzando/blob/master/src/library/instruments.js
 export const sampler = new Sampler({
   release: 1,
   baseUrl: 'http://127.0.0.1:8086/',
-  urls: notes.reduce((map, note) => ({ ...map, [note.name]: sample(note) }), {})
+  // baseUrl: 'http://192.168.0.155:8086',
+  urls
 }).toDestination()

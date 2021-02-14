@@ -12,21 +12,149 @@
     </v-list-item>
 
     <v-divider />
-
+    <!-- {{ panel }} -->
     <v-expansion-panels
       accordion
+      multiple
       class="mb-6"
+      v-model="panel"
     >
       <v-expansion-panel
-        v-for="(item,i) in 5"
-        :key="i"
+        v-for="(group, key) in metrics"
+        :key="key"
         style="background: transparent"
       >
         <v-expansion-panel-header expand-icon="mdi-menu-down">
-          Item
+          <span class="text-capitalize">{{key}}</span>
         </v-expansion-panel-header>
-        <v-expansion-panel-content>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <v-list
+            subheader
+            two-line
+          >
+            <v-list-item
+              v-for="(metric, index) in group"
+              :key="index"
+            >
+              <v-list-item-content>
+                <v-list-item-title v-text="pretty(metric)" />
+                <v-list-item-subtitle v-text="metric.name" />
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn 
+                  icon
+                  x-small
+                  @click="copy(metric)"
+                >
+                  <v-icon>mdi-clipboard-text-play</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list>
+        </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
   </v-list>
 </template>
+
+<script>
+import { headers } from '@/use/player'
+import { clipboard } from '@/use/editor'
+
+export default {
+  data: () => ({
+    panel: [0, 1]
+  }),
+
+  computed: {
+    headers: () => headers.value,
+    metrics () {
+      return {
+        general: [
+          {
+            name: 'Meter',
+            header: 'meter',
+            filter: ''
+          },
+          {
+            name: 'Tempo',
+            header: 'tempo',
+            filter: ''
+          }
+        ],
+        details: [
+          {
+            name: 'ms/beat unit',
+            header: 'ms-per-beat-unit',
+            filter: 'round'
+          },
+          {
+            name: 'beat unit/measure',
+            header: 'beat-units-per-measure',
+            filter: ''
+          },
+          {
+            name: 'pulse beat',
+            header: 'pulse-beat',
+            filter: ''
+          },
+          {
+            name: 'ms/pulse beat',
+            header: 'ms-per-pulse-beat',
+            filter: 'round'
+          },
+          {
+            name: 'total beat(s)',
+            header: 'total-beats',
+            filter: ''
+          },
+          {
+            name: 'total pulse beat(s)',
+            header: 'total-pulse-beats',
+            filter: ''
+          },
+          {
+            name: 'beat unit',
+            header: 'beat-unit',
+            filter: ''
+          },
+          {
+            name: 'total beat unit(s)',
+            header: 'total-beat-units',
+            filter: ''
+          },
+          {
+            name: 'pulse beats/measure',
+            header: 'pulse-beats-per-measure',
+            filter: ''
+          }
+        ]
+      }
+    }
+  },
+
+  methods: {
+    valueOf (metric) {
+      return this.headers[metric.header]
+    },
+
+    pretty (metric) {
+      const value = this.valueOf(metric)
+      if (metric.filter) {
+        return this.$options.filters[metric.filter](value)
+      }
+      return value
+    },
+
+    copy (metric) {
+      if (clipboard.isSupported) {
+        clipboard.copy(this.valueOf(metric))
+      }
+    },
+  },
+
+  filters: {
+    round: value => !isNaN(value) ? value.toFixed(2) : value
+  }
+}
+</script>

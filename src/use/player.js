@@ -18,6 +18,15 @@ export const playing = ref(false)
 export const music = computed(() => new Sections(track.value))
 export const sections = computed(() => music.value.all || [])
 
+export const headers = computed(() => music.value.source.headers || {})
+
+// export const headers = computed(() => {
+//   console.log('getting headers:', gig.value.headers)
+
+//   return gig.value.headers || {}
+// })
+// export const headers = computed(() => get(gig).headers || {})
+
 export async function load (source) {
   await Tone.loaded()
 

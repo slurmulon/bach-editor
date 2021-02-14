@@ -6,7 +6,10 @@
       </v-toolbar-title>
       <v-spacer />
 
-      <v-btn icon>
+      <v-btn
+        icon
+        @click="copy"
+      >
         <v-icon>mdi-clipboard-text-play</v-icon>
       </v-btn>
 
@@ -65,9 +68,8 @@
 </template>
 
 <script>
-import { commit, track, dirty } from '@/use/editor'
-// import { load, stop, toggle, playing } from '@/use/player'
-import { load, toggle, playing } from '@/use/player'
+import { commit, track, dirty, clipboard } from '@/use/editor'
+import { toggle, playing } from '@/use/player'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
@@ -97,18 +99,15 @@ export default {
   methods: {
     save () {
       commit()
-      console.log('code saved!!!', track.value)
     },
 
     copy () {
-
+      if (clipboard.isSupported) {
+        clipboard.copy(track.value)
+      }
     },
 
-    toggle: () => toggle(track.value),
-
-    play () {
-      load(track.value)
-    }
+    toggle: () => toggle(track.value)
   }
 }
 </script>

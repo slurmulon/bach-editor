@@ -79,20 +79,22 @@
       <!--   width="100%" -->
       <!-- /> -->
 
-      <v-list
-        class="pl-14"
-        shaped
-      >
-        <v-list-item
-          v-for="n in 5"
-          :key="n"
-          link
-        >
-          <v-list-item-content>
-            <v-list-item-title>Item {{ n }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+      <!-- <v-list -->
+      <!--   class="pl-14" -->
+      <!--   shaped -->
+      <!-- > -->
+      <!--   <v-list-item -->
+      <!--     v-for="n in 5" -->
+      <!--     :key="n" -->
+      <!--     link -->
+      <!--   > -->
+      <!--     <v-list-item-content> -->
+      <!--       <v-list-item-title>Item {{ n }}</v-list-item-title> -->
+      <!--     </v-list-item-content> -->
+      <!--   </v-list-item> -->
+      <!-- </v-list> -->
+
+      <tracks />
     </v-navigation-drawer>
 
     <v-navigation-drawer
@@ -101,17 +103,18 @@
       right
       color="transparent"
     >
-      <v-list>
-        <v-list-item
-          v-for="n in 5"
-          :key="n"
-          link
-        >
-          <v-list-item-content>
-            <v-list-item-title>Item {{ n }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+      <info />
+      <!-- <v-list> -->
+      <!--   <v-list-item -->
+      <!--     v-for="n in 5" -->
+      <!--     :key="n" -->
+      <!--     link -->
+      <!--   > -->
+      <!--     <v-list-item-content> -->
+      <!--       <v-list-item-title>Item {{ n }}</v-list-item-title> -->
+      <!--     </v-list-item-content> -->
+      <!--   </v-list-item> -->
+      <!-- </v-list> -->
     </v-navigation-drawer>
 
     <v-main>
@@ -139,9 +142,15 @@
 
 <script>
 import Logo from './Logo'
+import Tracks from './drawer/Tracks'
+import Info from './drawer/Info'
 
 export default {
-  components: { Logo },
+  components: {
+    Logo,
+    Tracks,
+    Info
+  },
 
   data: () => ({
     drawer: null,

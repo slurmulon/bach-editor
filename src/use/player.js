@@ -26,6 +26,8 @@ export async function load (source) {
     loop: true
   })
 
+  console.log('gig', gig.value)
+
   gig.value.on('play', () => {
     // sampler.release = 2
     // sampler.toMaster()

@@ -2,7 +2,7 @@
   <div>
     <v-toolbar flat color="transparent">
       <v-toolbar-title class="text-h4">
-        Track
+        {{ name }}
       </v-toolbar-title>
       <v-spacer />
 
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { commit, track, dirty, clipboard } from '@/use/editor'
+import { commit, track, name, dirty, clipboard } from '@/use/editor'
 import { toggle, playing } from '@/use/player'
 
 import BachCode from './editor/Code'
@@ -93,7 +93,8 @@ export default {
 
   computed: {
     playing: () => playing.value,
-    dirty: () => dirty.value
+    dirty: () => dirty.value,
+    name: () => name.value
   },
 
   methods: {

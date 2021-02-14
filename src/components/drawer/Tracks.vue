@@ -17,13 +17,23 @@
     <v-divider />
 
     <v-list-item
-      v-for="n in 5"
-      :key="n"
+      v-for="track in all"
+      :key="track.id"
       link
     >
       <v-list-item-content>
-        <v-list-item-title>Item {{ n }}</v-list-item-title>
+        <v-list-item-title>{{ track.id }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
   </v-list>
 </template>
+
+<script>
+import { all } from '@/use/tracks'
+
+export default {
+  computed: {
+    all: () => all.value
+  }
+}
+</script>

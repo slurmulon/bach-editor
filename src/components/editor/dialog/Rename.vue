@@ -39,6 +39,7 @@
 
 <script>
 import { name } from '@/use/editor'
+import { update } from '@/use/tracks'
 
 export default {
   props: {
@@ -79,7 +80,10 @@ export default {
 
   methods: {
     save () {
-      name.value = this.inputs.name
+      // name.value = this.inputs.name
+      // update({ name: this.inputs.name })
+      update(this.inputs)
+
       this.open = false
     }
   }

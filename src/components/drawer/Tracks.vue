@@ -42,8 +42,9 @@
 </template>
 
 <script>
-import { id } from '@/use/editor'
-import { all, edit } from '@/use/tracks'
+// import { id } from '@/use/editor'
+import { all, current, edit } from '@/use/tracks'
+import { get } from '@vueuse/core'
 
 export default {
   computed: {
@@ -52,8 +53,8 @@ export default {
 
   methods: {
     active (track) {
-      console.log('active?', track, id.value, track.id === id.value)
-      return track.id === id.value
+      // return track.id === id.value
+      return track.id === get(current).id
     },
 
     edit

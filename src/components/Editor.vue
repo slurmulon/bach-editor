@@ -75,6 +75,7 @@
 <script>
 import { commit, track, name, dirty, clipboard } from '@/use/editor'
 import { toggle, playing } from '@/use/player'
+import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
@@ -119,6 +120,10 @@ export default {
     },
 
     toggle: () => toggle(track.value)
+  },
+
+  mounted () {
+    load()
   }
 }
 </script>

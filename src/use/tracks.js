@@ -40,7 +40,7 @@ export const find = reactify((id) => get(store)[id])
 // export const list = computed(() => Object.entries(all.value).map(([id, track]) => ({
 // }))
 
-export const current = computed(() => find(get(context).current))
+export const current = computed(() => find(get(context).current).value)
 
 export const select = ({ id }) => {
   console.log('@@@ selecting track', id)

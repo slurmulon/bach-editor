@@ -53,7 +53,6 @@ export default {
 
   methods: {
     active (track) {
-      // return track.id === id.value
       return track.id === get(current).id
     },
 

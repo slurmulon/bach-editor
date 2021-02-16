@@ -21,6 +21,12 @@ export const all = computed(() => {
     }, {})
 })
 
+export const head = computed(() => get(all)[0])
+export const tail = computed(() => {
+  const list = get(all)
+  return list[list.length - 1]
+})
+
 export const any = computed(() => Object.keys(get(store)).length)
 
 export const find = reactify((id) => get(store)[id])
@@ -30,12 +36,16 @@ export const current = computed(() => find(get(context).current).value)
 export const select = ({ id }) => set(context, { current: id })
 
 export const create = ({ name, source }) => {
+  console.log('CREATING TRACK!!!', name, source)
+  const template = starter()
   const track = {
     id: nid(),
-    name,
-    source,
+    name: name || template.name,
+    source: source || template.source,
     created: Date.now()
   }
+
+  console.log('--- creatd track source', track)
 
   save(track)
   select(track)
@@ -44,6 +54,8 @@ export const create = ({ name, source }) => {
 
 export const edit = (ref) => {
   const track = resolve(ref)
+
+  console.log('EDITING TRACK!', track)
 
   if (track) {
     select(track)
@@ -81,6 +93,8 @@ export const starter = () => ({ name: 'Starter Track', source: template })
 
 export function load () {
   const track = get(current)
+
+  console.log('loading track!', track)
 
   if (!track) {
     return create(starter())

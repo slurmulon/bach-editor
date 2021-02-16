@@ -12,9 +12,42 @@
           Your local tracks
         </v-list-item-subtitle>
       </v-list-item-content>
+      <v-list-item-action>
+        <dialog-create>
+          <!-- <v-btn -->
+          <!--   fab -->
+          <!--   small -->
+          <!--   color="secondary" -->
+          <!-- > -->
+          <!--   <v-icon>mdi-plus</v-icon> -->
+          <!-- </v-btn> -->
+        </dialog-create>
+      </v-list-item-action>
     </v-list-item>
 
     <v-divider />
+
+    <!-- <v-list-item> -->
+    <!--   <v-list-item-content> -->
+    <!--     <v-text-field -->
+    <!--       prepend-icon="mdi-search" -->
+    <!--       outlined -->
+    <!--     /> -->
+    <!--   </v-list-item-content> -->
+    <!-- </v-list-item> -->
+
+    <!-- <v-list-item> -->
+    <!--   <v-list-item-content> -->
+    <!--     <v-row no-gutters justify="center"> -->
+    <!--       <v-col cols="2"> -->
+    <!--         <v-icon>mdi-delete</v-icon> -->
+    <!--       </v-col> -->
+    <!--       <v-col cols="2"> -->
+    <!--         <v-icon>mdi-plus</v-icon> -->
+    <!--       </v-col> -->
+    <!--     </v-row> -->
+    <!--   </v-list-item-content> -->
+    <!-- </v-list-item> -->
 
     <v-list-item
       v-for="track in all"
@@ -41,11 +74,16 @@
 </template>
 
 <script>
-// import { id } from '@/use/editor'
 import { all, current, edit } from '@/use/tracks'
 import { get } from '@vueuse/core'
 
+import DialogCreate from '@/components/tracks/dialog/Create'
+
 export default {
+  components: {
+    DialogCreate
+  },
+
   computed: {
     all: () => all.value
   },

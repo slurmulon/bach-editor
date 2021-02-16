@@ -4,12 +4,20 @@ import { compose } from 'bach-js'
 import template from '@/bach/template.bach'
 
 import { ref, computed } from '@vue/composition-api'
-import { get, reactify, useStorage, useClipboard } from '@vueuse/core'
+import { get, set, reactify, useStorage, useClipboard } from '@vueuse/core'
 
 export const store = useStorage('bach-editor')
 
 export const draft = ref('')
-export const name = computed(() => get(current).name)
+export const code = computed(() => {
+  console.log('code wut', get(draft))
+  return get(draft).trim()
+})
+export const name = computed(() => {
+  const track = get(current)
+
+  return track ? track.name : ''
+})
 
 export const jsonify = reactify((bach) => JSON.stringify(compose(bach), null, 2))
 
@@ -17,15 +25,21 @@ export const jsonify = reactify((bach) => JSON.stringify(compose(bach), null, 2)
 // export const commit = (source, key) => {
 // export const commit = ({ id, name, source } = {}) => {
 export const commit = (state = {}) => {
+  console.log('COMIT', state)
   update({ source: draft.value })
 
-  dirty.value = false
+  // draft.value = state.source || draft.value
+  // dirty.value = false
+
+  set(draft, state.source || draft.value)
+  set(dirty, false)
 
   // TODO: Notification
 }
 
-export const input = (code) => {
-  draft.value = code
+export const input = (source) => {
+  console.log('inputting source', source)
+  draft.value = source
   dirty.value = true
 }
 

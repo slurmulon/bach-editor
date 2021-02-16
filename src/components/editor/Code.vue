@@ -1,7 +1,7 @@
 <template>
   <div :style="{ filter: disabled ? 'grayscale(1)' : null }">
     <prism-editor
-      v-model="code"
+      v-model="source"
       class="bach-editor"
       :highlight="highlighter"
       :readonly="disabled"
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { input, draft } from '@/use/editor'
+import { code, input } from '@/use/editor'
 import { playing } from '@/use/player'
 import Prism from 'prismjs'
 import { PrismEditor } from 'vue-prism-editor'
@@ -25,13 +25,14 @@ export default {
   },
 
   computed: {
-    code: {
+    source: {
       get () {
-        return draft.value.trim()
+        // return draft.value.trim()
+        return code.value
       },
 
-      set (code) {
-        input(code)
+      set (source) {
+        input(source)
       }
     },
 

@@ -33,10 +33,11 @@ export const find = reactify((id) => get(store)[id])
 
 export const current = computed(() => find(get(context).current).value)
 
+export const selected = computed(() => get(any) ? get(current) : starter())
+
 export const select = ({ id }) => set(context, { current: id })
 
 export const create = ({ name, source }) => {
-  console.log('CREATING TRACK!!!', name, source)
   const template = starter()
   const track = {
     id: nid(),
@@ -44,8 +45,6 @@ export const create = ({ name, source }) => {
     source: source || template.source,
     created: Date.now()
   }
-
-  console.log('--- creatd track source', track)
 
   save(track)
   select(track)
@@ -82,19 +81,13 @@ export const save = (track) => {
   const updated = Date.now()
   const changes = { id, ...stored, ...track, updated }
 
-  console.log('track save changes', track, changes, get(current))
-
   set(store, { ...get(all), [id]: changes })
 }
 
 export const update = (track) => save({ id: get(current).id, ...track })
 
-export const starter = () => ({ name: 'Starter Track', source: template })
-
 export function load () {
   const track = get(current)
-
-  console.log('loading track!', track)
 
   if (!track) {
     return create(starter())
@@ -102,5 +95,7 @@ export function load () {
 
   input(track.source, true)
 }
+
+export const starter = () => ({ name: 'Starter Track', source: template })
 
 export default { store }

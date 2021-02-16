@@ -1,4 +1,5 @@
-import { current as track } from '@/use/tracks'
+// import { current as track, any } from '@/use/tracks'
+import { selected as track, any } from '@/use/tracks'
 import { all as notes } from '@/core/notes'
 
 import { Gig } from 'gig'
@@ -8,6 +9,7 @@ import { Sections } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { ref, computed } from '@vue/composition-api'
+import { get } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
@@ -15,7 +17,9 @@ export const index = ref(0)
 export const part = ref('chord')
 export const playing = ref(false)
 
-// export const music = computed(() => new Sections(track.value))
+// export const music = computed(() => track.value ? new Sections(track.value.source) : null)
+// export const sections = computed(() => music.value ? music.value.all : [])
+
 export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
 

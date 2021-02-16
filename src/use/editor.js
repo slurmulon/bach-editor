@@ -1,19 +1,23 @@
 // import { save } from '@/use/tracks'
+import { current } from '@/use/tracks'
 import { compose } from 'bach-js'
 import template from '@/bach/template.bach'
 
-import { ref } from '@vue/composition-api'
-import { reactify, useStorage, useClipboard } from '@vueuse/core'
+import { ref, computed } from '@vue/composition-api'
+import { get, reactify, useStorage, useClipboard } from '@vueuse/core'
 // import { nanoid } from 'nanoid'
 
 // TODO: Integrate into `input` function
 export const store = useStorage('bach-editor')
 
 // export const id = ref(nanoid(6))
-export const name = ref('Starter Track')
+// export const name = ref('Starter Track')
 // TODO: Rename to `bach` or `source`
-export const track = ref(template)
-export const draft = ref(template)
+// export const track = ref(template)
+// export const source = ref('')
+// export const draft = ref(template)
+export const draft = ref('')
+export const name = computed(() => get(current).name)
 
 export const jsonify = reactify((bach) => JSON.stringify(compose(bach), null, 2))
 
@@ -22,8 +26,8 @@ export const jsonify = reactify((bach) => JSON.stringify(compose(bach), null, 2)
 // export const commit = ({ id, name, source } = {}) => {
 export const commit = (state = {}) => {
   // id.value = state.id || id.value
-  name.value = state.name || name.value
-  track.value = state.source || draft.value
+  // name.value = state.name || name.value
+  // track.value = state.source || draft.value
   dirty.value = false
 
   // console.log('saving track!', id.value, name.value, track.value)
@@ -46,4 +50,4 @@ export const clipboard = useClipboard()
 
 export const dirty = ref(false)
 
-export default { store, draft, jsonify, clipboard, dirty }
+export default { store, draft, name, jsonify, clipboard, dirty }

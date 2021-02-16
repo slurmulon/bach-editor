@@ -24,7 +24,6 @@
       link
       two-line
     >
-      <!-- {{ track.name }} ({{ track.id }}) {{ active(track) }} -->
       <v-list-item-content>
         <v-list-item-title>{{ track.name }}</v-list-item-title>
         <v-list-item-subtitle>{{ track.id }}</v-list-item-subtitle>

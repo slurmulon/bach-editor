@@ -1,4 +1,4 @@
-import { track } from '@/use/editor'
+import { current as track } from '@/use/tracks'
 import { all as notes } from '@/core/notes'
 
 import { Gig } from 'gig'
@@ -15,7 +15,8 @@ export const index = ref(0)
 export const part = ref('chord')
 export const playing = ref(false)
 
-export const music = computed(() => new Sections(track.value))
+// export const music = computed(() => new Sections(track.value))
+export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
 
 export async function load (source) {

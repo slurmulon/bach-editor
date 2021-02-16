@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { commit, track, name, dirty, clipboard } from '@/use/editor'
+import { commit, draft, name, dirty, clipboard } from '@/use/editor'
 import { toggle, playing } from '@/use/player'
 import { load } from '@/use/tracks'
 
@@ -115,11 +115,11 @@ export default {
 
     copy () {
       if (clipboard.isSupported) {
-        clipboard.copy(track.value)
+        clipboard.copy(draft.value)
       }
     },
 
-    toggle: () => toggle(track.value)
+    toggle: () => toggle(draft.value)
   },
 
   mounted () {

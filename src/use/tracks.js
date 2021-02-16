@@ -1,4 +1,5 @@
-import { commit } from '@/use/editor'
+// import { commit } from '@/use/editor'
+import { input } from '@/use/editor'
 import template from '@/bach/template.bach'
 
 import { computed } from '@vue/composition-api'
@@ -62,6 +63,7 @@ export const create = ({ name, source }) => {
 
   save(track)
   select(track)
+  input(track.source)
 }
 
 export const edit = (ref) => {
@@ -74,7 +76,8 @@ export const edit = (ref) => {
   if (track) {
     // commit(track, id)
     select(track)
-    commit(track)
+    // commit(track)
+    input(track.source)
 
     // console.log('--- selected track', get(current))
   } else {
@@ -138,7 +141,11 @@ export function load () {
     // TODO: select/commit
   }
 
-  return get(current)
+  // const { source } = get(current)
+  const track = get(current)
+
+  // return get(current)
+  input(track.source)
 }
 
 export default { store }

@@ -49,7 +49,7 @@ export const create = ({ name, source }) => {
 
   save(track)
   select(track)
-  input(track.source)
+  input(track.source, true)
 }
 
 export const edit = (ref) => {
@@ -59,7 +59,7 @@ export const edit = (ref) => {
 
   if (track) {
     select(track)
-    input(track.source)
+    input(track.source, true)
   } else {
     console.error('Track not found', ref)
   }
@@ -100,7 +100,7 @@ export function load () {
     return create(starter())
   }
 
-  input(track.source)
+  input(track.source, true)
 }
 
 export default { store }

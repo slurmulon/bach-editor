@@ -9,15 +9,10 @@ import { get, set, reactify, useStorage, useClipboard } from '@vueuse/core'
 export const store = useStorage('bach-editor')
 
 export const draft = ref('')
-export const code = computed(() => {
-  console.log('code wut', get(draft))
-  return get(draft).trim()
-})
-export const name = computed(() => {
-  const track = get(current)
+export const dirty = ref(false)
 
-  return track ? track.name : ''
-})
+export const code = computed(() => get(draft).trim())
+export const name = computed(() => current.value ? current.value.name : '')
 
 export const jsonify = reactify((bach) => JSON.stringify(compose(bach), null, 2))
 
@@ -25,11 +20,7 @@ export const jsonify = reactify((bach) => JSON.stringify(compose(bach), null, 2)
 // export const commit = (source, key) => {
 // export const commit = ({ id, name, source } = {}) => {
 export const commit = (state = {}) => {
-  console.log('COMIT', state)
   update({ source: draft.value })
-
-  // draft.value = state.source || draft.value
-  // dirty.value = false
 
   set(draft, state.source || draft.value)
   set(dirty, false)
@@ -37,16 +28,13 @@ export const commit = (state = {}) => {
   // TODO: Notification
 }
 
-export const input = (source) => {
-  console.log('inputting source', source)
-  draft.value = source
-  dirty.value = true
+export const input = (source, pristine) => {
+  set(draft, source)
+  set(dirty, !pristine)
 }
 
 // export const dark = usePreferredDark()
 
 export const clipboard = useClipboard()
-
-export const dirty = ref(false)
 
 export default { store, draft, name, jsonify, clipboard, dirty }

@@ -32,6 +32,31 @@ export const selected = computed(() => get(any) ? get(current) : starter())
 
 export const select = ({ id }) => set(context, { current: id })
 
+export const open = (track) => {
+  select(track)
+  input(track.source, true)
+}
+
+export const destroy = (ref) => {
+  console.log('destroying track', ref, track)
+  const track = resolve(ref)
+
+  if (track) {
+    const updated = get(all)
+
+    delete updated[track.id]
+
+    // set(store, { ...get(all), [track.id]: undefined })
+    set(store, updated)
+
+    // const next = get(all)[0]
+    const next = updated[0]
+
+    select(next)
+  }
+}
+
+// TODO: Enforce max of say 50 tracks due to basic monolithic storage mechanism
 export function create ({ name, source }) {
   const template = starter()
   const track = {
@@ -42,16 +67,14 @@ export function create ({ name, source }) {
   }
 
   save(track)
-  select(track)
-  input(track.source, true)
+  open(track)
 }
 
 export function edit (ref) {
   const track = resolve(ref)
 
   if (track) {
-    select(track)
-    input(track.source, true)
+    open(track)
   } else {
     console.error('Track not found', ref)
   }

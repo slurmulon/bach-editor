@@ -13,15 +13,7 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action>
-        <dialog-create>
-          <!-- <v-btn -->
-          <!--   fab -->
-          <!--   small -->
-          <!--   color="secondary" -->
-          <!-- > -->
-          <!--   <v-icon>mdi-plus</v-icon> -->
-          <!-- </v-btn> -->
-        </dialog-create>
+        <dialog-create />
       </v-list-item-action>
     </v-list-item>
 
@@ -65,6 +57,7 @@
         <v-btn
           icon
           small
+          @click="destroy(track)"
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
@@ -74,7 +67,7 @@
 </template>
 
 <script>
-import { all, current, edit } from '@/use/tracks'
+import { all, current, edit, destroy } from '@/use/tracks'
 import { get } from '@vueuse/core'
 
 import DialogCreate from '@/components/tracks/dialog/Create'
@@ -93,7 +86,8 @@ export default {
       return track.id === get(current).id
     },
 
-    edit
+    edit,
+    destroy
   }
 }
 </script>

@@ -23,6 +23,7 @@
           <v-sheet
             rounded
             elevation="6"
+            :color="active($index) ? 'grey darken-3' : 'transparent'"
             class="px-3 pt-3"
           >
           <!-- <v-row align="stretch"> -->
@@ -37,37 +38,32 @@
                 class="fill-height pa-2"
                 :raised="active($index)"
                 :disabled="!active($index)"
-                :color="active($index) ? 'grey darken-3' : null"
               >
                 <v-row>
                   <v-col align-content="start">
-                <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
-                  <!-- {{ section.parts.chord.value }} -->
-                  <!-- {{ valueOf(section) }} -->
-                  {{ part.value }}
-                </v-card-title>
+                    <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
+                      {{ part.value }}
+                    </v-card-title>
 
-                <v-card-subtitle>
-                  <span class="text-capitalize">
-                    {{ key }}
-                  </span>
-                </v-card-subtitle>
+                    <v-card-subtitle>
+                      <span class="text-capitalize">
+                        {{ key }}
+                      </span>
+                    </v-card-subtitle>
                   </v-col>
 
-                  <!-- <v-col>Duration: {{ durationOf(section) }}</v-col> -->
-
                   <v-col :cols="colsOf(section) < 4 ? 12 : null">
-                <v-card-text v-if="section">
-                  <v-chip
-                    v-for="note in notesIn(section, key)"
-                    :key="note"
-                    class="elevation-4 mr-2 my-1"
-                    pill
-                    small
-                  >
-                    {{ note | numberless }}
-                  </v-chip>
-                </v-card-text>
+                    <v-card-text v-if="section">
+                      <v-chip
+                        v-for="note in notesIn(section, key)"
+                        :key="note"
+                        class="elevation-4 mr-2 my-1"
+                        pill
+                        small
+                      >
+                        {{ note | numberless }}
+                      </v-chip>
+                    </v-card-text>
                   </v-col>
                 </v-row>
               </v-card>
@@ -112,18 +108,10 @@ export default {
     },
 
     colsOf (section) {
-      const bar = section.duration / this.durations.bar.pulse
-      const longest = music.value.longest.duration / this.durations.bar.pulse
-
-      console.log('colsOf bar', bar)
-
       return Math.round((section.duration / music.value.longest.duration) * (GRID_SIZE / 2))
-      // return Math.floor((bar / longest) * GRID_SIZE)
-      // return Math.round((bar / longest) * (GRID_SIZE / 2))
     },
 
     durationOf (section) {
-      // return this.durations.cast(section.duration, { as: 'beat' })
       const beats = this.durations.cast(section.duration)
       const bar = this.durations.bar.beat
       const kind = beats <  bar ? 'beat' : 'bar'
@@ -137,11 +125,7 @@ export default {
 
   filters: {
     numberless: text => text.replace(/[0-9]+$/, ''),
-    fractionize: text => {
-      if (!text) return
-
-      return new Fraction(text).toFraction(true).replace(/\s/, ' + ')
-    }
+    fractionize: text => new Fraction(text).toFraction(true).replace(/\s/, ' + ')
   }
 }
 </script>

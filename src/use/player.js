@@ -48,15 +48,16 @@ export async function load (source) {
   return gig.value.play()
 }
 
-export function notesIn (section) {
-  const group = section.parts[part.value]
+export function notesIn (section, part) {
+  const group = section.parts[part]
   const all = group ? group.notes : []
+  const notes = Array.isArray(all) ? all : [all]
 
-  return all.map(note => `${note}2`)
+  return notes.map(note => `${note}2`)
 }
 
 export function play (section) {
-  const notes = notesIn(section)
+  const notes = notesIn(section, part.value)
   const duration = (section.duration * gig.value.interval) / 1000
 
   Tone.loaded().then(() => {

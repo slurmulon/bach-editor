@@ -26,7 +26,7 @@ export const required = {
 export const rules = [
   {
     ref: 'musical',
-    message: `Playback requires at least one musical element (${required.parts.join(', ')})`,
+    message: `Playback requires every beat to contain at least one musical element (${required.parts.join(', ')})`,
     validator: sections => sections.musical,
   }
 ]

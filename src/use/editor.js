@@ -19,18 +19,19 @@ export const bach = computed(() => compose(current.value.source))
 // export const bach = computed(() => parse(current.value.source))
 export const name = computed(() => current.value ? current.value.name : '')
 
-// TODO: Also report warnings, such as the track only supporting chords (needs at least 1)
 export const validate = (source) => {
   try {
     const bach = compose(source)
 
-    return inspect(bach)
+    if (inspect(bach)) {
+      ok({ text: 'Track compiled successfully!' })
+
+      return true
+    }
   } catch (err) {
     fail({ text: 'Track compilation failed!' })
 
     console.error(err)
-
-    return false
   }
 }
 

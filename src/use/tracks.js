@@ -21,12 +21,6 @@ export const all = computed(() => {
     }, {})
 })
 
-export const head = computed(() => get(all)[0])
-export const tail = computed(() => {
-  const list = get(all)
-  return list[list.length - 1]
-})
-
 export const any = computed(() => Object.keys(get(store)).length)
 
 export const find = reactify((id) => get(store)[id])
@@ -37,7 +31,7 @@ export const selected = computed(() => get(any) ? get(current) : starter())
 
 export const select = ({ id }) => set(context, { current: id })
 
-export const create = ({ name, source }) => {
+export function create ({ name, source }) {
   const template = starter()
   const track = {
     id: nid(),
@@ -51,10 +45,8 @@ export const create = ({ name, source }) => {
   input(track.source, true)
 }
 
-export const edit = (ref) => {
+export function edit (ref) {
   const track = resolve(ref)
-
-  console.log('EDITING TRACK!', track)
 
   if (track) {
     select(track)
@@ -64,7 +56,7 @@ export const edit = (ref) => {
   }
 }
 
-export const resolve = ref => {
+export function resolve (ref) {
   if (typeof ref === 'string') {
     const all = get(store)
     const track = all[ref]
@@ -75,7 +67,7 @@ export const resolve = ref => {
   return ref
 }
 
-export const save = (track) => {
+export function save (track) {
   const id = track.id || nid()
   const stored = get(find(id))
   const updated = Date.now()
@@ -84,7 +76,9 @@ export const save = (track) => {
   set(store, { ...get(all), [id]: changes })
 }
 
-export const update = (track) => save({ id: get(current).id, ...track })
+export function update (track) {
+  save({ id: get(current).id, ...track })
+}
 
 export function load () {
   const track = get(current)

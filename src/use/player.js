@@ -17,9 +17,6 @@ export const index = ref(0)
 export const part = ref('chord')
 export const playing = ref(false)
 
-// export const music = computed(() => track.value ? new Sections(track.value.source) : null)
-// export const sections = computed(() => music.value ? music.value.all : [])
-
 export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
 

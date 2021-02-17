@@ -1,11 +1,12 @@
 import { input } from '@/use/editor'
 import template from '@/bach/template.bach'
+import lib from '../../package'
 
 import { computed } from '@vue/composition-api'
 import { get, set, reactify, useStorage } from '@vueuse/core'
 import { nanoid } from 'nanoid'
 
-// export const version = useStorage('bach-editor-version', '1.0')
+export const version = useStorage('bach-editor-version', lib.version)
 export const store = useStorage('bach-editor-tracks', {})
 export const context = useStorage('bach-editor-tracks-context', { current: null })
 
@@ -80,6 +81,7 @@ export function update (track) {
   save({ id: get(current).id, ...track })
 }
 
+// TODO: Determine if major version change, if so clear out the user's data after offering a way to export everything
 export function load () {
   const track = get(current)
 

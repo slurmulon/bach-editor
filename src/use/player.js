@@ -1,11 +1,9 @@
-// import { current as track, any } from '@/use/tracks'
-import { selected as track, any } from '@/use/tracks'
+import { selected as track } from '@/use/tracks'
+import { bach } from '@/use/editor'
 import { all as notes } from '@/core/notes'
 
 import { Gig } from 'gig'
 import { Sections } from 'bach-js'
-// import { notesIn } from 'bach-js'
-// import Tone, { Sampler, Transport } from 'tone'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { ref, computed } from '@vue/composition-api'
@@ -81,12 +79,11 @@ export function stop () {
 export function resume () {
 }
 
-// TODO: Remvoe track, just for testing
-export function toggle (track) {
+export function toggle () {
   if (playing.value) {
     stop()
   } else if (!gig.value.source) {
-    load(track)
+    load(bach.value)
     // resume()
   } else {
     // TOOD: Probably just call clear on load no matter what if gig object exists

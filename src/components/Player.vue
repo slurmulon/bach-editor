@@ -4,6 +4,7 @@
     color="transparent"
     class="mt-8"
   >
+    <!-- <v-divider /> -->
     <v-container>
       <!-- TODO: Probably put a header with a legend to show measurement of one bar/measure -->
       <v-row justify="center">
@@ -55,12 +56,12 @@
 
                   <!-- <v-col>Duration: {{ durationOf(section) }}</v-col> -->
 
-                  <v-col>
+                  <v-col :cols="colsOf(section) < 4 ? 12 : null">
                 <v-card-text v-if="section">
                   <v-chip
                     v-for="note in notesIn(section, key)"
                     :key="note"
-                    class="elevation-4 mr-2 mt-2"
+                    class="elevation-4 mr-2 my-1"
                     pill
                     small
                   >
@@ -111,7 +112,14 @@ export default {
     },
 
     colsOf (section) {
+      const bar = section.duration / this.durations.bar.pulse
+      const longest = music.value.longest.duration / this.durations.bar.pulse
+
+      console.log('colsOf bar', bar)
+
       return Math.round((section.duration / music.value.longest.duration) * (GRID_SIZE / 2))
+      // return Math.floor((bar / longest) * GRID_SIZE)
+      // return Math.round((bar / longest) * (GRID_SIZE / 2))
     },
 
     durationOf (section) {

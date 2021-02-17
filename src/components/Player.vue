@@ -2,9 +2,10 @@
   <v-sheet
     outlined
     color="transparent"
-    class="mt-4"
+    class="mt-8"
   >
     <v-container>
+      <!-- TODO: Probably put a header with a legend to show measurement of one bar/measure -->
       <v-row justify="center">
         <v-col
           v-for="(section, $index) in sections"
@@ -12,7 +13,17 @@
           :cols="colsOf(section)"
           align-self="center"
         >
-          <!-- <v-sheet> -->
+          <div class="text-h5 text-center my-4">
+            <span :class="active($index) ? 'white--text' : 'grey--text text--lighten-1'">
+              {{ durationOf(section) }}
+            </span>
+          </div>
+
+          <v-sheet
+            rounded
+            elevation="6"
+            class="px-3 pt-3"
+          >
           <!-- <v-row align="stretch"> -->
           <v-row justify="center" class="mb-4">
             <v-col
@@ -27,6 +38,8 @@
                 :disabled="!active($index)"
                 :color="active($index) ? 'grey darken-3' : null"
               >
+                <v-row>
+                  <v-col align-content="start">
                 <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
                   <!-- {{ section.parts.chord.value }} -->
                   <!-- {{ valueOf(section) }} -->
@@ -38,22 +51,28 @@
                     {{ key }}
                   </span>
                 </v-card-subtitle>
+                  </v-col>
 
+                  <!-- <v-col>Duration: {{ durationOf(section) }}</v-col> -->
+
+                  <v-col>
                 <v-card-text v-if="section">
                   <v-chip
                     v-for="note in notesIn(section, key)"
                     :key="note"
-                    class="mr-2 mt-2"
+                    class="elevation-4 mr-2 mt-2"
                     pill
                     small
                   >
                     {{ note | numberless }}
                   </v-chip>
                 </v-card-text>
+                  </v-col>
+                </v-row>
               </v-card>
             </v-col>
           </v-row>
-          <!-- </v-sheet> -->
+          </v-sheet>
         </v-col>
       </v-row>
     </v-container>
@@ -62,6 +81,10 @@
 
 <script>
 import { music, sections, index, part, playing, notesIn } from '@/use/player'
+import { bach } from '@/use/editor'
+
+import { Durations } from 'bach-js'
+import Fraction from 'fraction.js'
 
 const GRID_SIZE = 12
 
@@ -70,7 +93,8 @@ export default {
     sections: () => sections.value,
     index: () => index.value,
     part: () => part.value,
-    playing: () => playing.value
+    playing: () => playing.value,
+    durations: () => new Durations(bach.value)
   },
 
   methods: {
@@ -88,11 +112,28 @@ export default {
 
     colsOf (section) {
       return Math.round((section.duration / music.value.longest.duration) * (GRID_SIZE / 2))
+    },
+
+    durationOf (section) {
+      // return this.durations.cast(section.duration, { as: 'beat' })
+      const beats = this.durations.cast(section.duration)
+      const bar = this.durations.bar.beat
+      const kind = beats <  bar ? 'beat' : 'bar'
+      const value = beats < bar ? beats : (beats / bar)
+      const pretty = this.$options.filters.fractionize(value)
+
+      return `${pretty} ${kind}` + (value > 1 ? 's' : '')
+
     }
   },
 
   filters: {
-    numberless: text => text.replace(/[0-9]+$/, '')
+    numberless: text => text.replace(/[0-9]+$/, ''),
+    fractionize: text => {
+      if (!text) return
+
+      return new Fraction(text).toFraction(true).replace(/\s/, ' + ')
+    }
   }
 }
 </script>

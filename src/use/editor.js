@@ -11,14 +11,11 @@ export const store = useStorage('bach-editor')
 export const draft = ref('')
 export const dirty = ref(false)
 
-export const code = computed(() => get(draft).trim())
+export const code = computed(() => draft.value.trim())
+export const bach = computed(() => compose(current.value.source))
 export const name = computed(() => current.value ? current.value.name : '')
 
-export const jsonify = reactify((bach) => JSON.stringify(compose(bach), null, 2))
-
 // TODO: Try to `compose`, catch errors, update list of errors if so
-// export const commit = (source, key) => {
-// export const commit = ({ id, name, source } = {}) => {
 export const commit = (state = {}) => {
   update({ source: draft.value })
 
@@ -37,4 +34,4 @@ export const input = (source, pristine) => {
 
 export const clipboard = useClipboard()
 
-export default { store, draft, name, jsonify, clipboard, dirty }
+export default { store, draft, name, clipboard, dirty }

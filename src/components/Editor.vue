@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { commit, draft, name, dirty, clipboard } from '@/use/editor'
+import { commit as save, draft, name, dirty, copy } from '@/use/editor'
 import { toggle, playing } from '@/use/player'
 import { load } from '@/use/tracks'
 
@@ -113,17 +113,10 @@ export default {
   },
 
   methods: {
-    save () {
-      commit()
-    },
+    save,
+    copy,
+    toggle
 
-    copy () {
-      if (clipboard.isSupported) {
-        clipboard.copy(draft.value)
-      }
-    },
-
-    toggle: () => toggle(draft.value)
   },
 
   mounted () {
@@ -144,6 +137,7 @@ export default {
   font-size: 14px
   line-height: 1.5
   padding: 5px
+  max-height: 300px
 
   .token.play,
   .token.keyword

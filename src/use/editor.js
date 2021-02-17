@@ -52,6 +52,16 @@ export const input = (source, pristine) => {
   set(dirty, !pristine)
 }
 
+export const copy = () => {
+  if (clipboard.isSupported) {
+    clipboard.copy(draft.value)
+
+    ok({ text: 'Code copied to clipboard!' })
+  } else {
+    fail({ text: 'Copying not supported or permitted on device!' })
+  }
+}
+
 // export const dark = usePreferredDark()
 
 export const clipboard = useClipboard()

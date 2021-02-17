@@ -30,9 +30,11 @@ export const current = computed(() => find(get(context).current).value)
 
 export const selected = computed(() => get(any) ? get(current) : starter())
 
-export const select = ({ id }) => set(context, { current: id })
+export function select ({ id }) {
+  set(context, { current: id })
+}
 
-export const open = (track) => {
+export function open (track) {
   select(track)
   input(track.source, true)
 }
@@ -119,5 +121,3 @@ export function load () {
 }
 
 export const starter = () => ({ name: 'Starter Track', source: template })
-
-export default { store }

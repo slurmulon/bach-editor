@@ -19,7 +19,8 @@
             :color="active($index) ? 'grey darken-3' : null"
           >
             <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
-              {{ section.parts.chord.value }}
+              <!-- {{ section.parts.chord.value }} -->
+              {{ section }}
             </v-card-title>
 
             <v-card-subtitle>

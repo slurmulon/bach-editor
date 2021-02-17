@@ -16,7 +16,7 @@ export const all = computed(() => {
   const stored = get(store)
 
   return Object.entries(stored)
-    .sort((left, right) => left[1].created - right[1].created)
+    .sort((left, right) => right[1].created - left[1].created)
     .reduce((acc, [key, value]) => {
       return { ...acc, [key]: value }
     }, {})
@@ -37,23 +37,26 @@ export const open = (track) => {
   input(track.source, true)
 }
 
-export const destroy = (ref) => {
-  console.log('destroying track', ref, track)
+export function shift (ref) {
   const track = resolve(ref)
+  const next = Object.values(get(all))
+    .sort((left, right) => right.updated - left.updated)
+    .find(({ id }) => track.id !== id)
 
-  if (track) {
-    const updated = get(all)
+  select(next)
+}
 
-    delete updated[track.id]
+export function destroy (ref) {
+  const track = resolve(ref)
+  const updated = get(all)
 
-    // set(store, { ...get(all), [track.id]: undefined })
-    set(store, updated)
+  delete updated[track.id]
 
-    // const next = get(all)[0]
-    const next = updated[0]
-
-    select(next)
+  if (get(current).id === track.id) {
+    shift(track)
   }
+
+  set(store, updated)
 }
 
 // TODO: Enforce max of say 50 tracks due to basic monolithic storage mechanism

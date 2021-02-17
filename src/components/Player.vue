@@ -23,9 +23,10 @@
           <v-sheet
             rounded
             elevation="6"
-            :color="active($index) ? 'grey darken-3' : 'transparent'"
+            color="transparent"
             class="px-3 pt-3"
           >
+            <!-- :color="active($index) ? 'grey darken-3' : 'transparent'" -->
           <!-- <v-row align="stretch"> -->
           <v-row justify="center" class="mb-4">
             <v-col

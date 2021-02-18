@@ -1,5 +1,5 @@
-import { ref, watch } from '@vue/composition-api'
-import { set, useDebounceFn } from '@vueuse/core'
+import { ref } from '@vue/composition-api'
+import { set } from '@vueuse/core'
 
 export const open = ref(false)
 export const then = ref(null)
@@ -38,9 +38,3 @@ export function reset () {
   set(text, '')
   set(icon, 'mdi-alert-box')
 }
-
-// watch(open, (next) => {
-//   if (!next) {
-//     reset()
-//   }
-// })

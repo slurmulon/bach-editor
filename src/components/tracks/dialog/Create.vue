@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="open"
-    max-width="300"
+    max-width="400"
   >
     <template #activator="{ on, attrs }">
       <v-btn
@@ -16,11 +16,11 @@
     </template>
 
     <v-card>
-      <v-card-title>
-        <span class="headline">New Track</span>
-      </v-card-title>
+      <v-toolbar>
+        <v-toolbar-title>New Track</v-toolbar-title>
+      </v-toolbar>
 
-      <v-card-text class="pt-4 pb-0">
+      <v-card-text>
         <v-text-field
           v-model="inputs.name"
           label="Name"
@@ -28,8 +28,10 @@
           counter
           maxlength="32"
           required
+          class="mt-8"
         />
       </v-card-text>
+      <v-divider />
 
       <v-card-actions>
         <v-spacer />
@@ -67,6 +69,14 @@ export default {
       create(this.inputs)
 
       this.open = false
+    }
+  },
+
+  watch: {
+    open (next) {
+      if (next) {
+        this.inputs.name = ''
+      }
     }
   }
 }

@@ -1,14 +1,12 @@
 <template>
   <div>
     <v-toolbar flat color="transparent">
-      <v-toolbar-title class="text-h4">
-        <!-- {{ name }} -->
-
-        <span @click="dialog.rename = true">{{ name }}</span>
-        <dialog-rename
-          :show.sync="dialog.rename"
-        />
+      <v-toolbar-title class="text-h4 mr-2">
+        {{ name }}
       </v-toolbar-title>
+
+      <dialog-rename class="ml-4" />
+
       <v-spacer />
 
       <v-btn

@@ -1,36 +1,53 @@
 <template>
   <v-dialog
-    v-model="show"
-    max-width="300"
+    v-model="open"
+    max-width="400"
   >
+    <template #activator="{ on, attrs }">
+      <v-btn
+        icon
+        small
+        color="grey"
+        v-on="on"
+        v-bind="attrs"
+      >
+        <v-icon>mdi-pencil-outline</v-icon>
+      </v-btn>
+    </template>
+
     <v-card>
-      <v-card-title>
-        <span class="headline">Rename Track</span>
-      </v-card-title>
+      <v-toolbar>
+        <v-toolbar-title>Rename Track</v-toolbar-title>
+      </v-toolbar>
 
       <v-card-text>
-        <v-container>
-          <v-text-field
-            v-model="name"
-            label="Name"
-            required
-          />
-        </v-container>
+        <v-text-field
+          v-model="name"
+          label="Name"
+          outlined
+          counter
+          maxlength="32"
+          required
+          class="mt-8"
+        />
       </v-card-text>
+
+      <v-divider />
+
       <v-card-actions>
         <v-spacer />
         <v-btn
           text
           @click="open = false"
         >
-          Close
+          Cancel
         </v-btn>
         <v-btn
           color="primary"
           text
           @click="save"
         >
-          Save
+          Update
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -42,37 +59,20 @@ import { name } from '@/use/editor'
 import { update } from '@/use/tracks'
 
 export default {
-  props: {
-    show: {
-      type: Boolean,
-      required: true
-    }
-  },
-
   data: () => ({
+    open: false,
     inputs: {
       name: ''
     }
   }),
 
   computed: {
-    open: {
-      get () {
-        return this.show
-      },
-
-      set (show) {
-        this.$emit('update:show', show)
-      }
-    },
-
     name: {
       get () {
         return this.inputs.name || name.value
       },
 
       set (value) {
-        // name.value = value
         this.inputs.name = value
       }
     }
@@ -80,11 +80,17 @@ export default {
 
   methods: {
     save () {
-      // name.value = this.inputs.name
-      // update({ name: this.inputs.name })
       update(this.inputs)
 
       this.open = false
+    }
+  },
+
+  watch: {
+    open (next) {
+      if (next) {
+        this.name = ''
+      }
     }
   }
 }

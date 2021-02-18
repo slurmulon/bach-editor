@@ -1,8 +1,8 @@
 <template>
   <v-dialog
     v-model="show"
-    transition="dialog-bottom-transition"
     max-width="300"
+    transition="dialog-bottom-transition"
   >
     <v-card>
       <v-toolbar>

@@ -5,14 +5,14 @@
     max-width="300"
   >
     <v-card>
-      <v-toolbar
-        dark
-      >
-        Warning
+      <v-toolbar>
+        <v-icon class="mr-3">{{ icon }}</v-icon>
+        <v-toolbar-title>Warning</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
-        {{ text }}
-        <!-- <div class="text-h2 pa-12">Hello world!</div> -->
+        <div class="pt-4">
+          {{ text }}
+        </div>
       </v-card-text>
       <v-card-actions class="justify-end">
         <v-btn
@@ -27,7 +27,7 @@
           color="primary"
           @click="yes"
         >
-          Ok
+          Continue
         </v-btn>
       </v-card-actions>
     </v-card>

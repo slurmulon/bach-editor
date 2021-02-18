@@ -12,7 +12,6 @@
 </template>
 
 <script>
-// import { bach } from '@/use/editor'
 import { json } from '@/use/editor'
 import { PrismEditor } from 'vue-prism-editor'
 
@@ -24,7 +23,6 @@ export default {
   },
 
   computed: {
-    // json: () => JSON.stringify(bach.value, null, 2)
     json: () => json.value
   },
 

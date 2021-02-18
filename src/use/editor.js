@@ -13,7 +13,7 @@ export const store = useStorage('bach-editor')
 
 export const draft = ref('')
 export const dirty = ref(false)
-export const tab = ref('code')
+export const tab = ref(0)
 
 export const code = computed(() => draft.value.trim())
 export const bach = computed(() => compose(current.value.source))
@@ -76,15 +76,12 @@ export function copy () {
     const tabs = [code.value, json.value]
     const content = tabs[tab.value]
 
-    // clipboard.copy(draft.value)
     clipboard.copy(content)
 
-    ok({ text: 'Text content copied to clipboard!' })
+    ok({ text: 'Copied data to clipboard!' })
   } else {
     fail({ text: 'Copying not supported or permitted on device!' })
   }
 }
 
 export const clipboard = useClipboard()
-
-export default { store, draft, name, clipboard, dirty }

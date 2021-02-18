@@ -1,4 +1,3 @@
-// import { input } from '@/use/editor'
 import { load as edit } from '@/use/editor'
 import template from '@/bach/template.bach'
 import lib from '../../package'
@@ -84,22 +83,21 @@ export function create ({ name, source }) {
 
 export function destroy (ref) {
   const track = resolve(ref)
-  const updated = get(all)
+  const data = get(all)
 
-  delete updated[track.id]
+  delete data[track.id]
 
   if (get(current).id === track.id) {
     shift(track)
   }
 
-  set(store, updated)
+  set(store, data)
 }
 
 export function save (track) {
   const id = track.id || nid()
   const stored = get(find(id))
-  const updated = Date.now()
-  const changes = { id, ...stored, ...track, updated }
+  const changes = { id, ...stored, ...track, updated: Date.now() }
 
   set(store, { ...get(all), [id]: changes })
 }

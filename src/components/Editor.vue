@@ -20,6 +20,7 @@
 
       <v-btn
         icon
+        color="secondary"
         :disabled="!dirty"
         @click="save"
       >

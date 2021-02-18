@@ -22,43 +22,50 @@ export const all = computed(() => {
 })
 
 export const any = computed(() => Object.keys(get(store)).length)
-
 export const find = reactify((id) => get(store)[id])
 
 export const current = computed(() => find(get(context).current).value)
-
 export const selected = computed(() => get(any) ? get(current) : starter())
 
 export function select ({ id }) {
   set(context, { current: id })
 }
 
-// export function open (track) {
-//   select(track)
-//   // input(track.source, true)
-//   edit(track.source)
-// }
+export function resolve (ref) {
+  if (typeof ref === 'string') {
+    const all = get(store)
+    const track = all[ref]
 
-export function shift (ref) {
-  const track = resolve(ref)
-  const next = Object.values(get(all))
-    .sort((left, right) => right.updated - left.updated)
-    .find(({ id }) => track.id !== id)
-
-  select(next)
-}
-
-export function destroy (ref) {
-  const track = resolve(ref)
-  const updated = get(all)
-
-  delete updated[track.id]
-
-  if (get(current).id === track.id) {
-    shift(track)
+    return track
   }
 
-  set(store, updated)
+  // TODO: Consider validating track with JSON Schema
+  return ref
+}
+
+// TODO: Determine if major version change, if so clear out the user's data after offering a way to export everything
+export function load () {
+  const track = get(current)
+
+  if (!track) {
+    return create(starter())
+  }
+
+  edit(track.source)
+}
+
+export async function open (ref) {
+  const track = resolve(ref)
+
+  if (track) {
+    try {
+      await edit(track.source)
+
+      select(track)
+    } catch (_) {}
+  } else {
+    console.error('Track not found', ref)
+  }
 }
 
 // TODO: Enforce max of say 50 tracks due to basic monolithic storage mechanism
@@ -75,45 +82,17 @@ export function create ({ name, source }) {
   open(track)
 }
 
-// TODO: no-op if trying to re-open the current track
-//export function open (ref) {
-//  const track = resolve(ref)
-
-//  if (track) {
-//    // open(track)
-//    //
-//    select(track)
-//    // input(track.source, true)
-//    edit(track.source)
-//  } else {
-//    console.error('Track not found', ref)
-//  }
-//}
-
-export async function open (ref) {
+export function destroy (ref) {
   const track = resolve(ref)
+  const updated = get(all)
 
-  if (track) {
-    try {
-      await edit(track.source)
+  delete updated[track.id]
 
-      select(track)
-    } catch (_) {}
-  } else {
-    console.error('Track not found', ref)
-  }
-}
-
-export function resolve (ref) {
-  if (typeof ref === 'string') {
-    const all = get(store)
-    const track = all[ref]
-
-    return track
+  if (get(current).id === track.id) {
+    shift(track)
   }
 
-  // TODO: Consider validating track with JSON Schema
-  return ref
+  set(store, updated)
 }
 
 export function save (track) {
@@ -129,16 +108,13 @@ export function update (track) {
   save({ id: get(current).id, ...track })
 }
 
-// TODO: Determine if major version change, if so clear out the user's data after offering a way to export everything
-export function load () {
-  const track = get(current)
+export function shift (ref) {
+  const track = resolve(ref)
+  const next = Object.values(get(all))
+    .sort((left, right) => right.updated - left.updated)
+    .find(({ id }) => track.id !== id)
 
-  if (!track) {
-    return create(starter())
-  }
-
-  // input(track.source, true)
-  edit(track.source)
+  select(next)
 }
 
 export const starter = () => ({ name: 'Starter Track', source: template })

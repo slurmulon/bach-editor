@@ -3,14 +3,14 @@
     v-model="show"
     :timeout="timeout"
     :color="color"
-    multi-line
-    bottom
     elevation="24"
+    bottom
+    v-bind="attrs"
   >
     <v-icon>{{ icon }}</v-icon>
     <span>{{ text }}</span>
 
-    <template v-slot:action="{ attrs }">
+    <template #action="{ attrs }">
       <v-btn
         text
         v-bind="attrs"
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { open, text, color, icon, timeout } from '@/use/notify'
+import { open, text, color, icon, timeout, attrs } from '@/use/notify'
 
 export default {
   computed: {
@@ -31,15 +31,11 @@ export default {
     color: () => color.value,
     icon: () => icon.value,
     timeout: () => timeout.value,
+    attrs: () => attrs.value,
 
     show: {
-      get () {
-        return open.value
-      },
-
-      set (show) {
-        open.value = show
-      }
+      get: () => open.value,
+      set: (value) => open.value = value
     }
   }
 }

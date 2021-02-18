@@ -26,39 +26,15 @@ export default {
 
   computed: {
     source: {
-      get () {
-        // return draft.value.trim()
-        return code.value
-      },
-
-      set (source) {
-        input(source)
-      }
+      get: () => code.value,
+      set: (source) => input(source)
     },
 
     disabled: () => playing.value
   },
 
   methods: {
-    highlighter (code) {
-      return highlight(code, Prism.languages.bach, 'bach')
-    },
-
-    highlighter_ORIG (code) {
-      // TODO: Eventually write a real prism syntax highlighter for bach
-      // return highlight(code, languages.ruby)
-      return highlight(
-        code,
-        {
-          ...languages.markup,
-          ...languages.js,
-          ...languages.elixir,
-          ...languages.css
-        },
-        'markup'
-        // 'elixir'
-      )
-    }
+    highlighter: (code) => highlight(code, Prism.languages.bach, 'bach')
   }
 }
 </script>

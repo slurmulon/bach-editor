@@ -65,6 +65,7 @@ export default {
     open,
 
     active: track => get(active(track)),
+
     remove: track => {
       if (get(dirty) && active(track)) {
         warn({

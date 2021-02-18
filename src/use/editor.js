@@ -13,9 +13,11 @@ export const store = useStorage('bach-editor')
 
 export const draft = ref('')
 export const dirty = ref(false)
+export const tab = ref('code')
 
 export const code = computed(() => draft.value.trim())
 export const bach = computed(() => compose(current.value.source))
+export const json = computed(() => JSON.stringify(bach.value, null, 2))
 export const name = computed(() => current.value ? current.value.name : '')
 
 export const validate = (source) => {
@@ -71,9 +73,13 @@ export function input (source, pristine) {
 
 export function copy () {
   if (clipboard.isSupported) {
-    clipboard.copy(draft.value)
+    const tabs = [code.value, json.value]
+    const content = tabs[tab.value]
 
-    ok({ text: 'Code copied to clipboard!' })
+    // clipboard.copy(draft.value)
+    clipboard.copy(content)
+
+    ok({ text: 'Text content copied to clipboard!' })
   } else {
     fail({ text: 'Copying not supported or permitted on device!' })
   }

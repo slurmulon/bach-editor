@@ -12,8 +12,8 @@
 </template>
 
 <script>
-// import { jsonify, track } from '@/use/editor'
-import { bach } from '@/use/editor'
+// import { bach } from '@/use/editor'
+import { json } from '@/use/editor'
 import { PrismEditor } from 'vue-prism-editor'
 
 import { highlight, languages } from 'prismjs/components/prism-core'
@@ -24,10 +24,8 @@ export default {
   },
 
   computed: {
-    json: () => {
-      // return jsonify(track.value).value
-      return JSON.stringify(bach.value, null, 2)
-    }
+    // json: () => JSON.stringify(bach.value, null, 2)
+    json: () => json.value
   },
 
   methods: {

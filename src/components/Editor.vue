@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { commit as save, draft, name, dirty, copy } from '@/use/editor'
+import { commit as save, tab, draft, name, dirty, copy } from '@/use/editor'
 import { toggle, playing } from '@/use/player'
 import { load } from '@/use/tracks'
 
@@ -98,7 +98,7 @@ export default {
   },
 
   data: () => ({
-    tab: null,
+    // tab: null,
     items: ['code', 'json'],
     dialog: {
       rename: false
@@ -108,7 +108,12 @@ export default {
   computed: {
     playing: () => playing.value,
     dirty: () => dirty.value,
-    name: () => name.value
+    name: () => name.value,
+
+    tab: {
+      get: () => tab.value,
+      set: (value) => tab.value = value
+    }
   },
 
   methods: {

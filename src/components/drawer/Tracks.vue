@@ -19,28 +19,6 @@
 
     <v-divider />
 
-    <!-- <v-list-item> -->
-    <!--   <v-list-item-content> -->
-    <!--     <v-text-field -->
-    <!--       prepend-icon="mdi-search" -->
-    <!--       outlined -->
-    <!--     /> -->
-    <!--   </v-list-item-content> -->
-    <!-- </v-list-item> -->
-
-    <!-- <v-list-item> -->
-    <!--   <v-list-item-content> -->
-    <!--     <v-row no-gutters justify="center"> -->
-    <!--       <v-col cols="2"> -->
-    <!--         <v-icon>mdi-delete</v-icon> -->
-    <!--       </v-col> -->
-    <!--       <v-col cols="2"> -->
-    <!--         <v-icon>mdi-plus</v-icon> -->
-    <!--       </v-col> -->
-    <!--     </v-row> -->
-    <!--   </v-list-item-content> -->
-    <!-- </v-list-item> -->
-
     <v-list-item
       v-for="track in all"
       :key="track.id"
@@ -57,7 +35,7 @@
         <v-btn
           icon
           small
-          @click="destroy(track)"
+          @click.stop="remove(track)"
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
@@ -67,7 +45,9 @@
 </template>
 
 <script>
-import { all, current, open, destroy } from '@/use/tracks'
+import { all, current, active, open, destroy } from '@/use/tracks'
+import { dirty } from '@/use/editor'
+import { warn } from '@/use/ask'
 import { get } from '@vueuse/core'
 
 import DialogCreate from '@/components/tracks/dialog/Create'
@@ -78,16 +58,23 @@ export default {
   },
 
   computed: {
-    all: () => all.value
+    all: () => get(all)
   },
 
   methods: {
-    active (track) {
-      return track.id === get(current).id
-    },
-
     open,
-    destroy
+
+    active: track => get(active(track)),
+    remove: track => {
+      if (get(dirty) && active(track)) {
+        warn({
+          problem: 'removing',
+          then: () => destroy(track)
+        })
+      } else {
+        destroy(track)
+      }
+    }
   }
 }
 </script>

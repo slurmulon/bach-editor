@@ -17,6 +17,18 @@ export function ask (props) {
   set(icon, props.icon || icon.value)
 }
 
+export function warn ({ problem, ...props }) {
+  const warning = warnings[problem]
+
+  console.log('DAS WARNING', typeof warning, warning, problem)
+
+  if (typeof warning === 'object') {
+    ask({ ...warning, ...props })
+  } else {
+    throw Error(`Cannot warn, provided unsupported problem key: ${problem}`)
+  }
+}
+
 export function yes (opts) {
   if (typeof then.value === 'function') {
     then.value(opts)
@@ -37,4 +49,13 @@ export function reset () {
   set(then, null)
   set(text, '')
   set(icon, 'mdi-alert-box')
+}
+
+export const warnings = {
+  changes: {
+    text: 'You will lose unsaved changes if you change tracks.'
+  },
+  removing: {
+    text: 'You will lose unsaved changes if you delete this track.'
+  }
 }

@@ -1,7 +1,7 @@
 import { update } from '@/use/tracks'
 import { current } from '@/use/tracks'
 import { validate as inspect } from '@/schemas/bach/sections'
-import { ask } from '@/use/ask'
+import { warn } from '@/use/ask'
 import { ok, fail } from '@/use/notify'
 import { compose } from 'bach-js'
 import template from '@/bach/template.bach'
@@ -42,27 +42,16 @@ export function load (source) {
     }
 
     if (dirty.value) {
-      ask({
+      warn({
+        problem: 'changes',
         then: () => action(),
         deny: () => reject(),
-        text: 'You will lose your unsaved changes if you switch tracks. Continue?'
       })
     } else {
       action()
     }
   })
 }
-
-// export function load (source) {
-//   if (dirty.value) {
-//     ask({
-//       then: () => input(source, true),
-//       text: 'You will lose your unsaved changes if you switch tracks. Continue?'
-//     })
-//   } else {
-//     input(source, true)
-//   }
-// }
 
 export function commit (state = {}) {
   const valid = validate(draft.value)
@@ -89,8 +78,6 @@ export function copy () {
     fail({ text: 'Copying not supported or permitted on device!' })
   }
 }
-
-// export const dark = usePreferredDark()
 
 export const clipboard = useClipboard()
 

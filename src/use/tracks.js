@@ -1,4 +1,4 @@
-import { load as edit } from '@/use/editor'
+import { load as edit, dirty } from '@/use/editor'
 import template from '@/bach/template.bach'
 import lib from '../../package'
 
@@ -25,6 +25,7 @@ export const find = reactify((id) => get(store)[id])
 
 export const current = computed(() => find(get(context).current).value)
 export const selected = computed(() => get(any) ? get(current) : starter())
+export const active = reactify(({ id }) => id === get(current).id)
 
 export function select ({ id }) {
   set(context, { current: id })

@@ -67,7 +67,7 @@ export default {
     active: track => get(active(track)),
 
     remove: track => {
-      if (get(dirty) && active(track)) {
+      if (get(dirty) && get(active(track))) {
         warn({
           problem: 'removing',
           then: () => destroy(track)

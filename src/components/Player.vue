@@ -6,6 +6,7 @@
   >
     <!-- <v-divider /> -->
     <v-container>
+      <!-- TODO: Try iterating by measure instead of section for improved visual consistency -->
       <!-- TODO: Probably put a header with a legend to show measurement of one bar/measure -->
       <v-row justify="center">
         <v-col
@@ -14,6 +15,8 @@
           :cols="colsOf(section)"
           align-self="center"
         >
+          <!-- :xl="colsOf(section)" -->
+          <!-- :xs="section.duration < 3 ? (colsOf(section) * 2) % 12 : colsOf(section)" -->
           <div class="text-h5 text-center my-4">
             <span :class="active($index) ? 'white--text' : 'grey--text text--lighten-1'">
               {{ durationOf(section) }}
@@ -110,6 +113,13 @@ export default {
 
     colsOf (section) {
       return Math.round((section.duration / music.value.longest.duration) * (GRID_SIZE / 2))
+      // return Math.round((section.duration / music.value.longest.duration))
+      // return Math.round(Math.min(GRID_SIZE / 4, Math.max(GRID_SIZE, (section.duration / music.value.longest.duration))))
+      // const ratio = music.value.shortest.duration / music.value.longest.duration
+      // const max = 3
+      // const min = GRID_SIZE * (1/3)
+
+      // return Math.round((section.duration
     },
 
     durationOf (section) {

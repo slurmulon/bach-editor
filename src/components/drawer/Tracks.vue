@@ -45,7 +45,7 @@
       v-for="track in all"
       :key="track.id"
       :input-value="active(track)"
-      @click="edit(track)"
+      @click="open(track)"
       link
       two-line
     >
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { all, current, edit, destroy } from '@/use/tracks'
+import { all, current, open, destroy } from '@/use/tracks'
 import { get } from '@vueuse/core'
 
 import DialogCreate from '@/components/tracks/dialog/Create'
@@ -86,7 +86,7 @@ export default {
       return track.id === get(current).id
     },
 
-    edit,
+    open,
     destroy
   }
 }

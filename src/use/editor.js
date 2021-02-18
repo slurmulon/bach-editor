@@ -1,12 +1,13 @@
 import { update } from '@/use/tracks'
 import { current } from '@/use/tracks'
 import { validate as inspect } from '@/schemas/bach/sections'
+import { ask } from '@/use/ask'
 import { ok, fail } from '@/use/notify'
 import { compose } from 'bach-js'
 import template from '@/bach/template.bach'
 
 import { ref, computed } from '@vue/composition-api'
-import { get, set, reactify, useStorage, useClipboard } from '@vueuse/core'
+import { set, reactify, useStorage, useClipboard } from '@vueuse/core'
 
 export const store = useStorage('bach-editor')
 
@@ -15,8 +16,6 @@ export const dirty = ref(false)
 
 export const code = computed(() => draft.value.trim())
 export const bach = computed(() => compose(current.value.source))
-// WARN: Probably don't want to do this b/c it's too centralized to be shooting off notifications (will lead to conflicts and dupes)
-// export const bach = computed(() => parse(current.value.source))
 export const name = computed(() => current.value ? current.value.name : '')
 
 export const validate = (source) => {
@@ -35,8 +34,37 @@ export const validate = (source) => {
   }
 }
 
-// TODO: Try to `compose`, catch errors, update list of errors if so
-export const commit = (state = {}) => {
+export function load (source) {
+  return new Promise((resolve, reject) => {
+    const action = () => {
+      input(source, true)
+      resolve(source)
+    }
+
+    if (dirty.value) {
+      ask({
+        then: () => action(),
+        deny: () => reject(),
+        text: 'You will lose your unsaved changes if you switch tracks. Continue?'
+      })
+    } else {
+      action()
+    }
+  })
+}
+
+// export function load (source) {
+//   if (dirty.value) {
+//     ask({
+//       then: () => input(source, true),
+//       text: 'You will lose your unsaved changes if you switch tracks. Continue?'
+//     })
+//   } else {
+//     input(source, true)
+//   }
+// }
+
+export function commit (state = {}) {
   const valid = validate(draft.value)
 
   if (valid) {
@@ -47,12 +75,12 @@ export const commit = (state = {}) => {
   }
 }
 
-export const input = (source, pristine) => {
+export function input (source, pristine) {
   set(draft, source)
   set(dirty, !pristine)
 }
 
-export const copy = () => {
+export function copy () {
   if (clipboard.isSupported) {
     clipboard.copy(draft.value)
 

@@ -1,4 +1,5 @@
-import { input } from '@/use/editor'
+// import { input } from '@/use/editor'
+import { load as edit } from '@/use/editor'
 import template from '@/bach/template.bach'
 import lib from '../../package'
 
@@ -17,9 +18,7 @@ export const all = computed(() => {
 
   return Object.entries(stored)
     .sort((left, right) => right[1].created - left[1].created)
-    .reduce((acc, [key, value]) => {
-      return { ...acc, [key]: value }
-    }, {})
+    .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
 })
 
 export const any = computed(() => Object.keys(get(store)).length)
@@ -34,10 +33,11 @@ export function select ({ id }) {
   set(context, { current: id })
 }
 
-export function open (track) {
-  select(track)
-  input(track.source, true)
-}
+// export function open (track) {
+//   select(track)
+//   // input(track.source, true)
+//   edit(track.source)
+// }
 
 export function shift (ref) {
   const track = resolve(ref)
@@ -75,11 +75,30 @@ export function create ({ name, source }) {
   open(track)
 }
 
-export function edit (ref) {
+// TODO: no-op if trying to re-open the current track
+//export function open (ref) {
+//  const track = resolve(ref)
+
+//  if (track) {
+//    // open(track)
+//    //
+//    select(track)
+//    // input(track.source, true)
+//    edit(track.source)
+//  } else {
+//    console.error('Track not found', ref)
+//  }
+//}
+
+export async function open (ref) {
   const track = resolve(ref)
 
   if (track) {
-    open(track)
+    try {
+      await edit(track.source)
+
+      select(track)
+    } catch (_) {}
   } else {
     console.error('Track not found', ref)
   }
@@ -93,6 +112,7 @@ export function resolve (ref) {
     return track
   }
 
+  // TODO: Consider validating track with JSON Schema
   return ref
 }
 
@@ -117,7 +137,8 @@ export function load () {
     return create(starter())
   }
 
-  input(track.source, true)
+  // input(track.source, true)
+  edit(track.source)
 }
 
 export const starter = () => ({ name: 'Starter Track', source: template })

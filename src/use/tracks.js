@@ -20,12 +20,14 @@ export const all = computed(() => {
     .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
 })
 
-export const any = computed(() => Object.keys(get(store)).length)
-export const find = reactify((id) => get(store)[id])
-
 export const current = computed(() => find(get(context).current).value)
 export const selected = computed(() => get(current) || starter())
 export const active = reactify(({ id }) => id === get(selected).id)
+
+export const find = reactify((id) => get(store)[id])
+export const count = computed(() => Object.keys(get(store)).length)
+export const any = computed(() => get(count) > 0)
+export const multiple = computed(() => get(count) > 1)
 
 export function select ({ id }) {
   set(context, { current: id })

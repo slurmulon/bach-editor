@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { all, current, active, open, destroy } from '@/use/tracks'
+import { all, current, active, multiple, open, destroy } from '@/use/tracks'
 import { dirty } from '@/use/editor'
 import { warn } from '@/use/warn'
 import { get } from '@vueuse/core'
@@ -60,7 +60,7 @@ export default {
 
   computed: {
     all: () => get(all),
-    multiple: () => Object.keys(get(all)).length > 1
+    multiple: () => get(multiple)
   },
 
   methods: {

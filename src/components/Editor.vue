@@ -98,7 +98,6 @@ export default {
   },
 
   data: () => ({
-    // tab: null,
     items: ['code', 'json'],
     dialog: {
       rename: false

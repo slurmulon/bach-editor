@@ -6,7 +6,7 @@ import { Gig } from 'gig'
 import { Sections } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
-import { ref, computed } from '@vue/composition-api'
+import { ref, computed, watch } from '@vue/composition-api'
 import { get } from '@vueuse/core'
 
 export const gig = ref({})
@@ -17,6 +17,12 @@ export const playing = ref(false)
 
 export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
+
+watch(track, (next, prev) => {
+  if (next.id !== prev.id && gig.value) {
+    stop()
+  }
+})
 
 export async function load (source) {
   await Tone.loaded()
@@ -68,7 +74,6 @@ export function play (section) {
 }
 
 export function stop () {
-  // gig.value.stop()
   gig.value.kill()
   gig.value = {}
 
@@ -106,6 +111,5 @@ const urls = notes.reduce((map, note) => ({ ...map, [note.name]: sample(note) })
 export const sampler = new Sampler({
   release: 1,
   baseUrl: 'http://127.0.0.1:8086/',
-  // baseUrl: 'http://192.168.0.155:8086',
   urls
 }).toDestination()

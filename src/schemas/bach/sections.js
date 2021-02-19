@@ -1,4 +1,4 @@
-import { Sections } from 'bach-js'
+import { Sections, MUSICAL_ELEMENTS } from 'bach-js'
 import { fail } from '@/use/notify'
 
 export function validate (bach) {
@@ -18,7 +18,7 @@ export function validate (bach) {
 }
 
 export const required = {
-  parts: ['note', 'chord', 'scale']
+  parts: MUSICAL_ELEMENTS
 }
 
 export const rules = [

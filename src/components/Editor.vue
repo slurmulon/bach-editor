@@ -1,9 +1,12 @@
 <template>
   <div>
     <v-toolbar flat color="transparent">
-      <v-toolbar-title class="text-h4">
-        Track
+      <v-toolbar-title class="text-h4 mr-2">
+        {{ name }}
       </v-toolbar-title>
+
+      <dialog-rename class="ml-4" />
+
       <v-spacer />
 
       <v-btn
@@ -15,6 +18,7 @@
 
       <v-btn
         icon
+        color="secondary"
         :disabled="!dirty"
         @click="save"
       >
@@ -64,15 +68,20 @@
         </v-tab-item>
       </v-tabs-items>
     </v-tabs>
+
+    <dialog-ask />
   </div>
 </template>
 
 <script>
-import { commit, track, dirty, clipboard } from '@/use/editor'
+import { commit as save, tab, draft, name, dirty, copy } from '@/use/editor'
 import { toggle, playing } from '@/use/player'
+import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
+import DialogRename from './editor/dialog/Rename'
+import DialogAsk from './Ask'
 
 import 'prismjs/components/prism-markup'
 import 'prismjs/components/prism-json'
@@ -83,31 +92,38 @@ import 'prismjs/themes/prism-twilight.css'
 export default {
   components: {
     BachCode,
-    BachJson
+    BachJson,
+    DialogRename,
+    DialogAsk
   },
 
   data: () => ({
-    tab: null,
-    items: ['code', 'json']
+    items: ['code', 'json'],
+    dialog: {
+      rename: false
+    }
   }),
 
   computed: {
     playing: () => playing.value,
-    dirty: () => dirty.value
+    dirty: () => dirty.value,
+    name: () => name.value,
+
+    tab: {
+      get: () => tab.value,
+      set: (value) => tab.value = value
+    }
   },
 
   methods: {
-    save () {
-      commit()
-    },
+    save,
+    copy,
+    toggle
 
-    copy () {
-      if (clipboard.isSupported) {
-        clipboard.copy(track.value)
-      }
-    },
+  },
 
-    toggle: () => toggle(track.value)
+  mounted () {
+    load()
   }
 }
 </script>
@@ -124,6 +140,7 @@ export default {
   font-size: 14px
   line-height: 1.5
   padding: 5px
+  max-height: 300px
 
   .token.play,
   .token.keyword

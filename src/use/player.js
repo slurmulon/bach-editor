@@ -1,13 +1,13 @@
-import { track } from '@/use/editor'
+import { selected as track } from '@/use/tracks'
+import { bach } from '@/use/editor'
 import { all as notes } from '@/core/notes'
 
 import { Gig } from 'gig'
 import { Sections } from 'bach-js'
-// import { notesIn } from 'bach-js'
-// import Tone, { Sampler, Transport } from 'tone'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { ref, computed } from '@vue/composition-api'
+import { get } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
@@ -15,7 +15,7 @@ export const index = ref(0)
 export const part = ref('chord')
 export const playing = ref(false)
 
-export const music = computed(() => new Sections(track.value))
+export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
 
 export async function load (source) {
@@ -25,6 +25,8 @@ export async function load (source) {
     source,
     loop: true
   })
+
+  console.log('gig', gig.value)
 
   gig.value.on('play', () => {
     // sampler.release = 2
@@ -46,15 +48,16 @@ export async function load (source) {
   return gig.value.play()
 }
 
-export function notesIn (section) {
-  const group = section.parts[part.value]
+export function notesIn (section, part) {
+  const group = section.parts[part]
   const all = group ? group.notes : []
+  const notes = Array.isArray(all) ? all : [all]
 
-  return all.map(note => `${note}2`)
+  return notes.map(note => `${note}2`)
 }
 
 export function play (section) {
-  const notes = notesIn(section)
+  const notes = notesIn(section, part.value)
   const duration = (section.duration * gig.value.interval) / 1000
 
   Tone.loaded().then(() => {
@@ -77,12 +80,11 @@ export function stop () {
 export function resume () {
 }
 
-// TODO: Remvoe track, just for testing
-export function toggle (track) {
+export function toggle () {
   if (playing.value) {
     stop()
   } else if (!gig.value.source) {
-    load(track)
+    load(bach.value)
     // resume()
   } else {
     // TOOD: Probably just call clear on load no matter what if gig object exists

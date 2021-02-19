@@ -73,27 +73,6 @@
         />
       </v-navigation-drawer>
 
-      <!-- <v-sheet -->
-      <!--   color="grey" -->
-      <!--   height="128" -->
-      <!--   width="100%" -->
-      <!-- /> -->
-
-      <!-- <v-list -->
-      <!--   class="pl-14" -->
-      <!--   shaped -->
-      <!-- > -->
-      <!--   <v-list-item -->
-      <!--     v-for="n in 5" -->
-      <!--     :key="n" -->
-      <!--     link -->
-      <!--   > -->
-      <!--     <v-list-item-content> -->
-      <!--       <v-list-item-title>Item {{ n }}</v-list-item-title> -->
-      <!--     </v-list-item-content> -->
-      <!--   </v-list-item> -->
-      <!-- </v-list> -->
-
       <tracks />
     </v-navigation-drawer>
 
@@ -104,17 +83,6 @@
       color="transparent"
     >
       <info />
-      <!-- <v-list> -->
-      <!--   <v-list-item -->
-      <!--     v-for="n in 5" -->
-      <!--     :key="n" -->
-      <!--     link -->
-      <!--   > -->
-      <!--     <v-list-item-content> -->
-      <!--       <v-list-item-title>Item {{ n }}</v-list-item-title> -->
-      <!--     </v-list-item-content> -->
-      <!--   </v-list-item> -->
-      <!-- </v-list> -->
     </v-navigation-drawer>
 
     <v-main>
@@ -137,6 +105,8 @@
       <!--   solo -->
       <!-- /> -->
     </v-footer>
+
+    <notify />
   </v-app>
 </template>
 
@@ -144,18 +114,20 @@
 import Logo from './Logo'
 import Tracks from './drawer/Tracks'
 import Info from './drawer/Info'
+import Notify from './Notify'
 
 export default {
   components: {
     Logo,
     Tracks,
-    Info
+    Info,
+    Notify
   },
 
   data: () => ({
     drawer: null,
     links: [
-      { name: 'Showcase', href: '/showcase' },
+      // { name: 'Showcase', href: '/showcase' },
       { name: 'Learn', href: 'https://slurmulon.github.io/bach/#/guide' },
       { name: 'Support', href: 'https://github.com/slurmulon/bach-editor/issues' }
     ]

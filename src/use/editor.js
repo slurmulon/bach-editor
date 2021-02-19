@@ -9,8 +9,6 @@ import template from '@/bach/template.bach'
 import { ref, computed } from '@vue/composition-api'
 import { set, reactify, useStorage, useClipboard } from '@vueuse/core'
 
-export const store = useStorage('bach-editor')
-
 export const draft = ref('')
 export const dirty = ref(false)
 export const tab = ref(0)

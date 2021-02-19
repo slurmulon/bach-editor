@@ -1,29 +1,44 @@
 import { ref } from '@vue/composition-api'
-import { set, useStorage } from '@vueuse/core'
+import { set, reactify, useStorage } from '@vueuse/core'
 
 export const open = ref(false)
 export const then = ref(null)
 export const deny = ref(null)
+export const prob = ref('')
 export const text = ref('')
 export const icon = ref('mdi-alert-box')
 
 export const ignored = useStorage('bach-editor-ignored-warns', { changes: false, removing: false })
 
-export function commit (props) {
+export const ignoring = reactify(problem => ignored.value[problem || prob.value])
+
+export function ignore (problem) {
+  set(ignored, { ...ignored.value, [problem || prob.value]: true })
+}
+
+export function commit (props, show = true) {
   reset()
 
-  set(open, true)
+  set(open, show)
   set(then, props.then)
   set(deny, props.deny)
   set(text, props.text)
   set(icon, props.icon || icon.value)
+  set(prob, props.prob || props.problem)
 }
 
-export function warn ({ problem, ...props }) {
+export function warn (props) {
+  const problem = props.problem || prob.value
   const scenario = scenarios[problem]
 
   if (typeof scenario === 'object') {
-    ask({ ...scenario, ...props })
+    const concerned = !ignoring(problem).value
+
+    commit({ ...scenario, ...props }, concerned)
+
+    if (!concerned) {
+      yes()
+    }
   } else {
     throw Error(`Cannot warn, provided unsupported problem scenario key: ${problem}`)
   }
@@ -47,15 +62,16 @@ export function no (opts) {
 
 export function reset () {
   set(then, null)
+  set(prob, '')
   set(text, '')
   set(icon, 'mdi-alert-box')
 }
 
 export const scenarios = {
   changes: {
-    text: 'You will lose unsaved changes if you change tracks.'
+    text: 'You will lose unsaved changes if you change tracks!'
   },
   removing: {
-    text: 'You will lose unsaved changes if you delete this track.'
+    text: 'You will lose unsaved changes if you delete this track!'
   }
 }

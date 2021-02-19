@@ -1,8 +1,7 @@
 <template>
   <v-dialog
     v-model="show"
-    max-width="300"
-    transition="dialog-bottom-transition"
+    max-width="450"
   >
     <v-card>
       <v-toolbar>
@@ -10,11 +9,19 @@
         <v-toolbar-title>Warning</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
-        <div class="pt-4">
+        <div class="pt-9">
           {{ text }}
         </div>
       </v-card-text>
-      <v-card-actions class="justify-end">
+
+      <v-card-actions>
+        <v-checkbox
+          v-model="ignore"
+          label="Ignore"
+        />
+
+        <v-spacer />
+
         <v-btn
           text
           @click="no"
@@ -35,7 +42,7 @@
 </template>
 
 <script>
-import { open, yes, no, text, icon } from '@/use/warn'
+import { open, yes, no, text, icon, ignoring, ignore } from '@/use/warn'
 
 export default {
   computed: {
@@ -45,6 +52,11 @@ export default {
     show: {
       get: () => open.value,
       set: (value) => open.value = value
+    },
+
+    ignore: {
+      get: () => ignoring().value,
+      set: (value) => ignore()
     }
   },
 

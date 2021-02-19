@@ -104,7 +104,7 @@
 import Logo from './Logo'
 import Tracks from './drawer/Tracks'
 import Info from './drawer/Info'
-import Notify from './dialog/Notify'
+import Notify from './Notify'
 
 export default {
   components: {

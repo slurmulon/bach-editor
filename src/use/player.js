@@ -7,16 +7,15 @@ import { Sections } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { ref, computed, watch } from '@vue/composition-api'
-import { get } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
 export const index = ref(0)
 export const part = ref('chord')
-export const playing = ref(false)
 
 export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
+export const playing = computed(() => gig.value.playing)
 
 watch(track, (next, prev) => {
   if (next.id !== prev.id && gig.value) {
@@ -32,17 +31,15 @@ export async function load (source) {
     loop: true
   })
 
-  console.log('gig', gig.value)
-
   gig.value.on('play', () => {
     // sampler.release = 2
     // sampler.toMaster()
-    playing.value = true
   })
 
   gig.value.on('beat:play', () => {
     const { sections, cursor } = gig.value
     // TODO: Push into `gig.current` getter
+    // const { section } = gig.value.current
     const section = sections[cursor.section]
 
     current.value = section
@@ -74,12 +71,18 @@ export function play (section) {
 }
 
 export function stop () {
-  gig.value.kill()
-  gig.value = {}
+  if (gig.value.source) {
+    gig.value.kill()
+    gig.value = {}
+  }
 
   current.value = {}
   index.value = 0
-  playing.value = false
+}
+
+export function restart () {
+  gig.value.kill()
+  gig.value.play()
 }
 
 export function resume () {
@@ -88,13 +91,10 @@ export function resume () {
 export function toggle () {
   if (playing.value) {
     stop()
-  } else if (!gig.value.source) {
-    load(bach.value)
-    // resume()
+  } else if (gig.value.source) {
+    restart()
   } else {
-    // TOOD: Probably just call clear on load no matter what if gig object exists
-    gig.value.kill()
-    gig.value.play()
+    load(bach.value)
   }
 }
 

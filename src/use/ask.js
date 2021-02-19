@@ -20,8 +20,6 @@ export function ask (props) {
 export function warn ({ problem, ...props }) {
   const warning = warnings[problem]
 
-  console.log('DAS WARNING', typeof warning, warning, problem)
-
   if (typeof warning === 'object') {
     ask({ ...warning, ...props })
   } else {

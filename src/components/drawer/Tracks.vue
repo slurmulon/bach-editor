@@ -33,6 +33,7 @@
       </v-list-item-content>
       <v-list-item-action>
         <v-btn
+          v-if="multiple"
           icon
           small
           @click.stop="remove(track)"
@@ -58,7 +59,8 @@ export default {
   },
 
   computed: {
-    all: () => get(all)
+    all: () => get(all),
+    multiple: () => Object.keys(get(all)).length > 1
   },
 
   methods: {

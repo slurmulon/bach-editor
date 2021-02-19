@@ -8,14 +8,16 @@
       color="grey darken-4"
     >
       <v-app-bar-nav-icon @click="drawer = !drawer" />
-      <v-app-bar-title>
-        <logo />
-      </v-app-bar-title>
+        <v-app-bar-title>
+          <logo />
+        </v-app-bar-title>
       <v-spacer />
 
       <v-btn
         v-for="link in links"
         :key="link.name"
+        :href="link.href"
+        :target="link.target"
         text
         class="font-weight-light"
       >
@@ -118,8 +120,16 @@ export default {
     drawer: null,
     links: [
       // { name: 'Showcase', href: '/showcase' },
-      { name: 'Learn', href: 'https://slurmulon.github.io/bach/#/guide' },
-      { name: 'Support', href: 'https://github.com/slurmulon/bach-editor/issues' }
+      {
+        name: 'Learn',
+        target: 'bach-learn',
+        href: 'https://slurmulon.github.io/bach/#/guide'
+      },
+      {
+        name: 'Support',
+        target: 'bach-support',
+        href: 'https://github.com/slurmulon/bach-editor/issues'
+      }
     ]
   })
 }

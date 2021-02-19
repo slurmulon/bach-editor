@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { open, yes, no, text, icon } from '@/use/ask'
+import { open, yes, no, text, icon } from '@/use/warn'
 
 export default {
   computed: {

@@ -1,15 +1,5 @@
 <template>
   <v-app id="inspire">
-    <!-- <v-system-bar app> -->
-    <!--   <v-spacer /> -->
-
-    <!--   <v-icon>mdi-square</v-icon> -->
-
-    <!--   <v-icon>mdi-circle</v-icon> -->
-
-    <!--   <v-icon>mdi-triangle</v-icon> -->
-    <!-- </v-system-bar> -->
-
     <v-app-bar
       app
       dense
@@ -114,7 +104,7 @@
 import Logo from './Logo'
 import Tracks from './drawer/Tracks'
 import Info from './drawer/Info'
-import Notify from './Notify'
+import Notify from './dialog/Notify'
 
 export default {
   components: {

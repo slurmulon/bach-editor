@@ -1,5 +1,5 @@
 import { ref } from '@vue/composition-api'
-import { set } from '@vueuse/core'
+import { set, useStorage } from '@vueuse/core'
 
 export const open = ref(false)
 export const then = ref(null)
@@ -7,7 +7,9 @@ export const deny = ref(null)
 export const text = ref('')
 export const icon = ref('mdi-alert-box')
 
-export function ask (props) {
+export const ignored = useStorage('bach-editor-ignored-warns', { changes: false, removing: false })
+
+export function commit (props) {
   reset()
 
   set(open, true)
@@ -18,12 +20,12 @@ export function ask (props) {
 }
 
 export function warn ({ problem, ...props }) {
-  const warning = warnings[problem]
+  const scenario = scenarios[problem]
 
-  if (typeof warning === 'object') {
-    ask({ ...warning, ...props })
+  if (typeof scenario === 'object') {
+    ask({ ...scenario, ...props })
   } else {
-    throw Error(`Cannot warn, provided unsupported problem key: ${problem}`)
+    throw Error(`Cannot warn, provided unsupported problem scenario key: ${problem}`)
   }
 }
 
@@ -49,7 +51,7 @@ export function reset () {
   set(icon, 'mdi-alert-box')
 }
 
-export const warnings = {
+export const scenarios = {
   changes: {
     text: 'You will lose unsaved changes if you change tracks.'
   },

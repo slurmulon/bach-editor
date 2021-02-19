@@ -47,7 +47,7 @@
 <script>
 import { all, current, active, open, destroy } from '@/use/tracks'
 import { dirty } from '@/use/editor'
-import { warn } from '@/use/ask'
+import { warn } from '@/use/warn'
 import { get } from '@vueuse/core'
 
 import DialogCreate from '@/components/tracks/dialog/Create'

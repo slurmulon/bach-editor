@@ -69,7 +69,7 @@
       </v-tabs-items>
     </v-tabs>
 
-    <dialog-ask />
+    <dialog-warn />
   </div>
 </template>
 
@@ -81,7 +81,7 @@ import { load } from '@/use/tracks'
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
 import DialogRename from './editor/dialog/Rename'
-import DialogAsk from './Ask'
+import DialogWarn from './dialog/Warn'
 
 import 'prismjs/components/prism-markup'
 import 'prismjs/components/prism-json'
@@ -94,7 +94,7 @@ export default {
     BachCode,
     BachJson,
     DialogRename,
-    DialogAsk
+    DialogWarn
   },
 
   data: () => ({

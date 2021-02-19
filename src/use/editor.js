@@ -1,7 +1,7 @@
 import { update } from '@/use/tracks'
 import { current } from '@/use/tracks'
 import { validate as inspect } from '@/schemas/bach/sections'
-import { warn } from '@/use/ask'
+import { warn } from '@/use/warn'
 import { ok, fail } from '@/use/notify'
 import { compose } from 'bach-js'
 import template from '@/bach/template.bach'

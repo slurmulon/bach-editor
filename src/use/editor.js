@@ -15,7 +15,7 @@ export const draft = ref('')
 export const dirty = ref(false)
 export const tab = ref(0)
 
-export const code = computed(() => draft.value.trim())
+export const code = computed(() => draft.value)
 export const bach = computed(() => compose(selected.value.source))
 export const json = computed(() => JSON.stringify(bach.value, null, 2))
 export const name = computed(() => selected.value ? selected.value.name : '')

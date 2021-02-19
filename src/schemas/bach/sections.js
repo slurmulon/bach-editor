@@ -24,8 +24,19 @@ export const required = {
 export const rules = [
   {
     ref: 'musical',
-    message: `Playback requires every beat to contain at least one musical element (${required.parts.join(', ')})`,
-    validator: sections => sections.musical,
+    message: `Each beat must contain at least one musical element (${required.parts.join(', ')})`,
+    validator: sections => sections.musical
+  },
+  {
+    ref: 'usable',
+    message: 'Unsupported scale or chord type',
+    validator: sections => {
+      try {
+        return !!sections.all
+      } catch (e) {
+        return false
+      }
+    }
   }
 ]
 

@@ -24,8 +24,8 @@ export const any = computed(() => Object.keys(get(store)).length)
 export const find = reactify((id) => get(store)[id])
 
 export const current = computed(() => find(get(context).current).value)
-export const selected = computed(() => get(any) ? get(current) : starter())
-export const active = reactify(({ id }) => id === get(current).id)
+export const selected = computed(() => get(current) || starter())
+export const active = reactify(({ id }) => id === get(selected).id)
 
 export function select ({ id }) {
   set(context, { current: id })
@@ -116,4 +116,4 @@ export function shift (ref) {
   select(next)
 }
 
-export const starter = () => ({ name: 'Starter Track', source: template })
+export const starter = () => ({ id: nid(), name: 'Starter Track', source: template })

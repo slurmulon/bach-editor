@@ -1,5 +1,5 @@
 import { update } from '@/use/tracks'
-import { current } from '@/use/tracks'
+import { selected } from '@/use/tracks'
 import { validate as inspect } from '@/schemas/bach/sections'
 import { warn } from '@/use/warn'
 import { ok, fail } from '@/use/notify'
@@ -16,9 +16,9 @@ export const dirty = ref(false)
 export const tab = ref(0)
 
 export const code = computed(() => draft.value.trim())
-export const bach = computed(() => compose(current.value.source))
+export const bach = computed(() => compose(selected.value.source))
 export const json = computed(() => JSON.stringify(bach.value, null, 2))
-export const name = computed(() => current.value ? current.value.name : '')
+export const name = computed(() => selected.value ? selected.value.name : '')
 
 export const validate = (source) => {
   try {

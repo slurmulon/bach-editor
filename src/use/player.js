@@ -18,7 +18,7 @@ export const sections = computed(() => music.value.all || [])
 export const playing = computed(() => gig.value.playing)
 
 watch(track, (next, prev) => {
-  if (next.id !== prev.id && gig.value) {
+  if (gig.value && next && prev && next.id !== prev.id) {
     stop()
   }
 })

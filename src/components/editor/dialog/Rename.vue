@@ -3,15 +3,28 @@
     v-model="open"
     max-width="400"
   >
-    <template #activator="{ on, attrs }">
-      <v-btn
-        icon
-        small
-        v-on="on"
-        v-bind="attrs"
+    <template #activator="dialog">
+      <v-tooltip
+        top
+        open-delay="500"
       >
-        <v-icon>mdi-pencil-outline</v-icon>
-      </v-btn>
+        <template #activator="tooltip">
+          <div
+            v-on="tooltip.on"
+            v-bind="tooltip.attrs"
+          >
+            <v-btn
+              icon
+              small
+              v-on="dialog.on"
+              v-bind="dialog.attrs"
+            >
+              <v-icon small>mdi-pencil-outline</v-icon>
+            </v-btn>
+          </div>
+        </template>
+        <span>Rename track</span>
+      </v-tooltip>
     </template>
 
     <v-card>

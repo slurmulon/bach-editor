@@ -3,16 +3,26 @@
     v-model="open"
     max-width="400"
   >
-    <template #activator="{ on, attrs }">
-      <v-btn
-        fab
-        small
-        color="secondary"
-        v-on="on"
-        v-bind="attrs"
-      >
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+    <template #activator="dialog">
+      <v-tooltip :value="tip" top>
+        <template #activator="tooltip">
+          <div
+            v-on="tooltip.on"
+            v-bind="tooltip.attrs"
+          >
+            <v-btn
+              fab
+              small
+              color="secondary"
+              v-on="dialog.on"
+              v-bind="dialog.attrs"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </div>
+        </template>
+        <span>Create new track</span>
+      </v-tooltip>
     </template>
 
     <v-card>
@@ -28,6 +38,7 @@
           counter
           maxlength="32"
           required
+          autofocus
           class="mt-8"
         />
       </v-card-text>
@@ -59,6 +70,7 @@ import { create } from '@/use/tracks'
 export default {
   data: () => ({
     open: false,
+    tip: false,
     inputs: {
       name: ''
     }
@@ -76,6 +88,7 @@ export default {
     open (next) {
       if (next) {
         this.inputs.name = ''
+        this.tip = false
       }
     }
   }

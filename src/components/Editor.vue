@@ -9,32 +9,63 @@
 
       <v-spacer />
 
-      <v-btn
-        icon
-        @click="copy"
+      <v-tooltip
+        top
+        open-delay="500"
       >
-        <v-icon>mdi-clipboard-text-play</v-icon>
-      </v-btn>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            icon
+            @click="copy"
+            v-on="on"
+            v-bind="attrs"
+          >
+            <v-icon>mdi-clipboard-text-play</v-icon>
+          </v-btn>
+        </template>
+        <span>Copy to clipboard</span>
+      </v-tooltip>
 
-      <v-btn
-        icon
-        color="secondary"
-        :disabled="!dirty"
-        @click="save"
+      <v-tooltip
+        top
+        open-delay="500"
       >
-        <v-icon>mdi-content-save</v-icon>
-      </v-btn>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            icon
+            color="secondary"
+            :disabled="!dirty"
+            @click="save"
+            v-on="on"
+            v-bind="attrs"
+          >
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
+        </template>
+        <span>Save locally</span>
+      </v-tooltip>
 
-      <v-btn
-        icon
-        x-large
-        :disabled="dirty"
-        :color="playing ? 'primary' : 'secondary'"
-        @click="toggle"
+      <v-tooltip
+        top
+        open-delay="500"
       >
-        <v-icon v-if="!playing">mdi-play-circle</v-icon>
-        <v-icon v-else>mdi-stop-circle</v-icon>
-      </v-btn>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            icon
+            x-large
+            :disabled="dirty"
+            :color="playing ? 'primary' : 'secondary'"
+            v-on="on"
+            v-bind="attrs"
+            @click="toggle"
+          >
+            <v-icon v-if="!playing">mdi-play-circle</v-icon>
+            <v-icon v-else>mdi-stop-circle</v-icon>
+          </v-btn>
+        </template>
+        <span>Play/Stop</span>
+        <!-- <span>{{ !playing ? 'Play' : 'Stop' }} track</span> -->
+      </v-tooltip>
     </v-toolbar>
 
     <v-divider />

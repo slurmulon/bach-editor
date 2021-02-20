@@ -7,6 +7,7 @@ import { Sections } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { ref, computed, watch } from '@vue/composition-api'
+import { reactify } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
@@ -15,7 +16,9 @@ export const part = ref('chord')
 
 export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
+export const measures = computed(() => music.value.measures || [])
 export const playing = computed(() => gig.value.playing)
+export const seconds = reactify(duration => music.value.durations.cast(duration, { as: 'second' }))
 
 watch(track, (next, prev) => {
   if (gig.value && next && prev && next.id !== prev.id) {
@@ -61,7 +64,7 @@ export function notesIn (section, part) {
 
 export function play (section) {
   const notes = notesIn(section, part.value)
-  const duration = (section.duration * gig.value.interval) / 1000
+  const duration = seconds(section.duration).value
 
   Tone.loaded().then(() => {
     sampler.triggerAttackRelease(notes, duration)
@@ -83,9 +86,6 @@ export function stop () {
 export function restart () {
   gig.value.kill()
   gig.value.play()
-}
-
-export function resume () {
 }
 
 export function toggle () {

@@ -1,15 +1,5 @@
 <template>
   <v-app id="inspire">
-    <!-- <v-system-bar app> -->
-    <!--   <v-spacer /> -->
-
-    <!--   <v-icon>mdi-square</v-icon> -->
-
-    <!--   <v-icon>mdi-circle</v-icon> -->
-
-    <!--   <v-icon>mdi-triangle</v-icon> -->
-    <!-- </v-system-bar> -->
-
     <v-app-bar
       app
       dense
@@ -18,14 +8,16 @@
       color="grey darken-4"
     >
       <v-app-bar-nav-icon @click="drawer = !drawer" />
-      <v-app-bar-title>
-        <logo />
-      </v-app-bar-title>
+        <v-app-bar-title>
+          <logo />
+        </v-app-bar-title>
       <v-spacer />
 
       <v-btn
         v-for="link in links"
         :key="link.name"
+        :href="link.href"
+        :target="link.target"
         text
         class="font-weight-light"
       >
@@ -56,65 +48,55 @@
         mini-variant
         color="transparent"
       >
-        <v-avatar
-          class="d-block text-center mx-auto mt-4"
-          color="grey darken-1"
-          size="36"
-        />
+        <v-tooltip right>
+          <template #activator="{ on, attrs }">
+            <v-avatar
+              class="d-block text-center mx-auto mt-4"
+              color="grey darken-2"
+              size="36"
+              v-on="on"
+              v-bind="attrs"
+            >
+              <v-icon>mdi-cog-outline</v-icon>
+            </v-avatar>
+          </template>
+          <span>Change settings</span>
+        </v-tooltip>
 
         <v-divider class="mx-3 my-5" />
 
-        <v-avatar
-          v-for="n in 6"
-          :key="n"
-          class="d-block text-center mx-auto mb-9"
-          color="grey lighten-1"
-          size="28"
-        />
+        <v-tooltip
+          v-for="control in controls"
+          :key="control.ref"
+          color="secondary"
+          right
+        >
+          <template #activator="{ on, attrs }">
+            <v-avatar
+              class="d-block text-center mx-auto mb-9"
+              size="28"
+              v-on="on"
+              v-bind="attrs"
+            >
+              <v-icon>{{ control.icon }}</v-icon>
+            </v-avatar>
+          </template>
+          <span>{{ control.tip }}</span>
+        </v-tooltip>
       </v-navigation-drawer>
-
-      <!-- <v-sheet -->
-      <!--   color="grey" -->
-      <!--   height="128" -->
-      <!--   width="100%" -->
-      <!-- /> -->
-
-      <!-- <v-list -->
-      <!--   class="pl-14" -->
-      <!--   shaped -->
-      <!-- > -->
-      <!--   <v-list-item -->
-      <!--     v-for="n in 5" -->
-      <!--     :key="n" -->
-      <!--     link -->
-      <!--   > -->
-      <!--     <v-list-item-content> -->
-      <!--       <v-list-item-title>Item {{ n }}</v-list-item-title> -->
-      <!--     </v-list-item-content> -->
-      <!--   </v-list-item> -->
-      <!-- </v-list> -->
 
       <tracks />
     </v-navigation-drawer>
 
     <v-navigation-drawer
+      :value="$vuetify.breakpoint.name !== 'sm'"
       app
       clipped
       right
+      stateless
       color="transparent"
     >
       <info />
-      <!-- <v-list> -->
-      <!--   <v-list-item -->
-      <!--     v-for="n in 5" -->
-      <!--     :key="n" -->
-      <!--     link -->
-      <!--   > -->
-      <!--     <v-list-item-content> -->
-      <!--       <v-list-item-title>Item {{ n }}</v-list-item-title> -->
-      <!--     </v-list-item-content> -->
-      <!--   </v-list-item> -->
-      <!-- </v-list> -->
     </v-navigation-drawer>
 
     <v-main>
@@ -137,6 +119,8 @@
       <!--   solo -->
       <!-- /> -->
     </v-footer>
+
+    <notify />
   </v-app>
 </template>
 
@@ -144,20 +128,58 @@
 import Logo from './Logo'
 import Tracks from './drawer/Tracks'
 import Info from './drawer/Info'
+import Notify from './Notify'
 
 export default {
   components: {
     Logo,
     Tracks,
-    Info
+    Info,
+    Notify
   },
 
   data: () => ({
     drawer: null,
     links: [
-      { name: 'Showcase', href: '/showcase' },
-      { name: 'Learn', href: 'https://slurmulon.github.io/bach/#/guide' },
-      { name: 'Support', href: 'https://github.com/slurmulon/bach-editor/issues' }
+      // { name: 'Showcase', href: '/showcase' },
+      {
+        name: 'Learn',
+        target: 'bach-learn',
+        href: 'https://slurmulon.github.io/bach/#/guide'
+      },
+      {
+        name: 'Support',
+        target: 'bach-support',
+        href: 'https://github.com/slurmulon/bach-editor/issues'
+      }
+    ],
+    controls: [
+      // {
+        // ref: 'github',
+        // icon: 'mdi-github',
+        // target: 'bach-source',
+        // link: 'https://github.com/slurmulon/bach-editor'
+      // },
+      {
+        ref: 'settings',
+        // icon: 'mdi-cog-outline',
+        icon: 'mdi-github',
+        tip: 'Editor source code',
+        click: () => {}
+      },
+      {
+        ref: 'import-all',
+        icon: 'mdi-upload-outline',
+        tip: 'Import entire collection',
+        click: () => {}
+      },
+      {
+        ref: 'export-all',
+        icon: 'mdi-download-outline',
+        // icon: 'mdi-content-save-settings-outline',
+        tip: 'Export entire collection',
+        click: () => {}
+      }
     ]
   })
 }

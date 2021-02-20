@@ -1,22 +1,30 @@
-import { track } from '@/use/editor'
+import { selected as track } from '@/use/tracks'
+import { bach } from '@/use/editor'
 import { all as notes } from '@/core/notes'
 
 import { Gig } from 'gig'
 import { Sections } from 'bach-js'
-// import { notesIn } from 'bach-js'
-// import Tone, { Sampler, Transport } from 'tone'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
-import { ref, computed } from '@vue/composition-api'
+import { ref, computed, watch } from '@vue/composition-api'
+import { reactify } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
 export const index = ref(0)
 export const part = ref('chord')
-export const playing = ref(false)
 
-export const music = computed(() => new Sections(track.value))
+export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
+export const measures = computed(() => music.value.measures || [])
+export const playing = computed(() => gig.value.playing)
+export const seconds = reactify(duration => music.value.durations.cast(duration, { as: 'second' }))
+
+watch(track, (next, prev) => {
+  if (gig.value && next && prev && next.id !== prev.id) {
+    stop()
+  }
+})
 
 export const headers = computed(() => music.value.source.headers || {})
 
@@ -38,12 +46,12 @@ export async function load (source) {
   gig.value.on('play', () => {
     // sampler.release = 2
     // sampler.toMaster()
-    playing.value = true
   })
 
   gig.value.on('beat:play', () => {
     const { sections, cursor } = gig.value
     // TODO: Push into `gig.current` getter
+    // const { section } = gig.value.current
     const section = sections[cursor.section]
 
     current.value = section
@@ -55,16 +63,17 @@ export async function load (source) {
   return gig.value.play()
 }
 
-export function notesIn (section) {
-  const group = section.parts[part.value]
+export function notesIn (section, part) {
+  const group = section.parts[part]
   const all = group ? group.notes : []
+  const notes = Array.isArray(all) ? all : [all]
 
-  return all.map(note => `${note}2`)
+  return notes.map(note => `${note}2`)
 }
 
 export function play (section) {
-  const notes = notesIn(section)
-  const duration = (section.duration * gig.value.interval) / 1000
+  const notes = notesIn(section, part.value)
+  const duration = seconds(section.duration).value
 
   Tone.loaded().then(() => {
     sampler.triggerAttackRelease(notes, duration)
@@ -74,29 +83,27 @@ export function play (section) {
 }
 
 export function stop () {
-  // gig.value.stop()
-  gig.value.kill()
-  gig.value = {}
+  if (gig.value.source) {
+    gig.value.kill()
+    gig.value = {}
+  }
 
   current.value = {}
   index.value = 0
-  playing.value = false
 }
 
-export function resume () {
+export function restart () {
+  gig.value.kill()
+  gig.value.play()
 }
 
-// TODO: Remvoe track, just for testing
-export function toggle (track) {
+export function toggle () {
   if (playing.value) {
     stop()
-  } else if (!gig.value.source) {
-    load(track)
-    // resume()
+  } else if (gig.value.source) {
+    restart()
   } else {
-    // TOOD: Probably just call clear on load no matter what if gig object exists
-    gig.value.kill()
-    gig.value.play()
+    load(bach.value)
   }
 }
 
@@ -113,6 +120,5 @@ const urls = notes.reduce((map, note) => ({ ...map, [note.name]: sample(note) })
 export const sampler = new Sampler({
   release: 1,
   baseUrl: 'http://127.0.0.1:8086/',
-  // baseUrl: 'http://192.168.0.155:8086',
   urls
 }).toDestination()

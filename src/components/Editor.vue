@@ -1,36 +1,71 @@
 <template>
   <div>
     <v-toolbar flat color="transparent">
-      <v-toolbar-title class="text-h4">
-        Track
+      <v-toolbar-title class="text-h4 mr-2">
+        {{ name }}
       </v-toolbar-title>
+
+      <dialog-rename class="ml-4" />
+
       <v-spacer />
 
-      <v-btn
-        icon
-        @click="copy"
+      <v-tooltip
+        top
+        open-delay="500"
       >
-        <v-icon>mdi-clipboard-text-play</v-icon>
-      </v-btn>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            icon
+            @click="copy"
+            v-on="on"
+            v-bind="attrs"
+          >
+            <v-icon>mdi-clipboard-text-play</v-icon>
+          </v-btn>
+        </template>
+        <span>Copy to clipboard</span>
+      </v-tooltip>
 
-      <v-btn
-        icon
-        :disabled="!dirty"
-        @click="save"
+      <v-tooltip
+        top
+        open-delay="500"
       >
-        <v-icon>mdi-content-save</v-icon>
-      </v-btn>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            icon
+            color="secondary"
+            :disabled="!dirty"
+            @click="save"
+            v-on="on"
+            v-bind="attrs"
+          >
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
+        </template>
+        <span>Save locally</span>
+      </v-tooltip>
 
-      <v-btn
-        icon
-        x-large
-        :disabled="dirty"
-        :color="playing ? 'primary' : 'secondary'"
-        @click="toggle"
+      <v-tooltip
+        top
+        open-delay="500"
       >
-        <v-icon v-if="!playing">mdi-play-circle</v-icon>
-        <v-icon v-else>mdi-stop-circle</v-icon>
-      </v-btn>
+        <template #activator="{ on, attrs }">
+          <v-btn
+            icon
+            x-large
+            :disabled="dirty"
+            :color="playing ? 'primary' : 'secondary'"
+            v-on="on"
+            v-bind="attrs"
+            @click="toggle"
+          >
+            <v-icon v-if="!playing">mdi-play-circle</v-icon>
+            <v-icon v-else>mdi-stop-circle</v-icon>
+          </v-btn>
+        </template>
+        <span>Play/Stop</span>
+        <!-- <span>{{ !playing ? 'Play' : 'Stop' }} track</span> -->
+      </v-tooltip>
     </v-toolbar>
 
     <v-divider />
@@ -64,15 +99,20 @@
         </v-tab-item>
       </v-tabs-items>
     </v-tabs>
+
+    <dialog-warn />
   </div>
 </template>
 
 <script>
-import { commit, track, dirty, clipboard } from '@/use/editor'
+import { commit as save, tab, draft, name, dirty, copy } from '@/use/editor'
 import { toggle, playing } from '@/use/player'
+import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
+import DialogRename from './editor/dialog/Rename'
+import DialogWarn from './dialog/Warn'
 
 import 'prismjs/components/prism-markup'
 import 'prismjs/components/prism-json'
@@ -83,31 +123,38 @@ import 'prismjs/themes/prism-twilight.css'
 export default {
   components: {
     BachCode,
-    BachJson
+    BachJson,
+    DialogRename,
+    DialogWarn
   },
 
   data: () => ({
-    tab: null,
-    items: ['code', 'json']
+    items: ['code', 'json'],
+    dialog: {
+      rename: false
+    }
   }),
 
   computed: {
     playing: () => playing.value,
-    dirty: () => dirty.value
+    dirty: () => dirty.value,
+    name: () => name.value,
+
+    tab: {
+      get: () => tab.value,
+      set: (value) => tab.value = value
+    }
   },
 
   methods: {
-    save () {
-      commit()
-    },
+    save,
+    copy,
+    toggle
 
-    copy () {
-      if (clipboard.isSupported) {
-        clipboard.copy(track.value)
-      }
-    },
+  },
 
-    toggle: () => toggle(track.value)
+  mounted () {
+    load()
   }
 }
 </script>
@@ -124,6 +171,7 @@ export default {
   font-size: 14px
   line-height: 1.5
   padding: 5px
+  max-height: 300px
 
   .token.play,
   .token.keyword

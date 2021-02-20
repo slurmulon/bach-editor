@@ -82,7 +82,6 @@ import { music, sections, index, part, playing, notesIn } from '@/use/player'
 import { bach } from '@/use/editor'
 
 import { Durations } from 'bach-js'
-import Fraction from 'fraction.js'
 
 const GRID_SIZE = 12
 
@@ -129,11 +128,6 @@ export default {
       return `${pretty} ${kind}` + (value > 1 ? 's' : '')
 
     }
-  },
-
-  filters: {
-    numberless: text => text.replace(/[0-9]+$/, ''),
-    fractionize: text => new Fraction(text).toFraction(true).replace(/\s/, ' + ')
   }
 }
 </script>

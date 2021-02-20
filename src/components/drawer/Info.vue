@@ -12,7 +12,7 @@
     </v-list-item>
 
     <v-divider />
-    <!-- {{ panel }} -->
+
     <v-expansion-panels
       accordion
       multiple
@@ -25,7 +25,7 @@
         style="background: transparent"
       >
         <v-expansion-panel-header expand-icon="mdi-menu-down">
-          <span class="text-capitalize">{{key}}</span>
+          <span class="text-capitalize">{{ key }}</span>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-list
@@ -41,7 +41,7 @@
                 <v-list-item-subtitle v-text="metric.name" />
               </v-list-item-content>
               <v-list-item-action>
-                <v-btn 
+                <v-btn
                   icon
                   x-small
                   @click="copy(metric)"
@@ -70,7 +70,7 @@ export default {
     headers: () => headers.value,
     metrics () {
       return {
-        general: [
+        timing: [
           {
             name: 'Meter',
             header: 'meter',
@@ -82,14 +82,14 @@ export default {
             filter: ''
           }
         ],
-        details: [
+        durations: [
           {
-            name: 'ms/beat unit',
+            name: 'ms per beat',
             header: 'ms-per-beat-unit',
             filter: 'round'
           },
           {
-            name: 'beat unit/measure',
+            name: 'beats per measure',
             header: 'beat-units-per-measure',
             filter: ''
           },
@@ -99,7 +99,7 @@ export default {
             filter: ''
           },
           {
-            name: 'ms/pulse beat',
+            name: 'ms per pulse beat',
             header: 'ms-per-pulse-beat',
             filter: 'round'
           },
@@ -140,9 +140,11 @@ export default {
 
     pretty (metric) {
       const value = this.valueOf(metric)
+
       if (metric.filter) {
         return this.$options.filters[metric.filter](value)
       }
+
       return value
     },
 
@@ -151,10 +153,6 @@ export default {
         clipboard.copy(this.valueOf(metric))
       }
     },
-  },
-
-  filters: {
-    round: value => !isNaN(value) ? value.toFixed(2) : value
   }
 }
 </script>

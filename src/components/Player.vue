@@ -6,7 +6,6 @@
   >
     <!-- <v-divider /> -->
     <v-container>
-      <!-- TODO: Try iterating by measure instead of section for improved visual consistency -->
       <!-- TODO: Probably put a header with a legend to show measurement of one bar/measure -->
       <v-row justify="center">
         <v-col
@@ -24,8 +23,6 @@
           </div>
 
           <v-sheet
-            rounded
-            elevation="6"
             color="transparent"
             class="px-3 pt-3"
           >
@@ -123,7 +120,7 @@ export default {
     },
 
     durationOf (section) {
-      const beats = this.durations.cast(section.duration)
+      const beats = this.durations.cast(section.duration, { as: 'beat' })
       const bar = this.durations.bar.beat
       const kind = beats <  bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)

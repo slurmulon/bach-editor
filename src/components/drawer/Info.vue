@@ -63,7 +63,7 @@ import { clipboard } from '@/use/editor'
 
 export default {
   data: () => ({
-    panel: [0, 1]
+    panel: [0, 0]
   }),
 
   computed: {

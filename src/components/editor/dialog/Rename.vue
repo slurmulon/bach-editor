@@ -38,6 +38,7 @@
           label="Name"
           outlined
           counter
+          autofocus
           maxlength="32"
           required
           class="mt-8"

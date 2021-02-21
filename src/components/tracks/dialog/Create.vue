@@ -4,7 +4,10 @@
     max-width="400"
   >
     <template #activator="dialog">
-      <v-tooltip :value="tip" top>
+      <v-tooltip
+        top
+        open-delay="500"
+      >
         <template #activator="tooltip">
           <div
             v-on="tooltip.on"
@@ -70,7 +73,6 @@ import { create } from '@/use/tracks'
 export default {
   data: () => ({
     open: false,
-    tip: false,
     inputs: {
       name: ''
     }
@@ -88,7 +90,6 @@ export default {
     open (next) {
       if (next) {
         this.inputs.name = ''
-        this.tip = false
       }
     }
   }

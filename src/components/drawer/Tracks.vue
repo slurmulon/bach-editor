@@ -1,15 +1,12 @@
 <template>
-  <v-list
-    shaped
-  >
-    <!-- class="pl-14" -->
+  <v-list shaped>
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title class="title">
           Tracks
         </v-list-item-title>
         <v-list-item-subtitle>
-          Your local tracks
+          {{ count }} local tracks
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action>
@@ -46,7 +43,7 @@
 </template>
 
 <script>
-import { all, current, active, multiple, open, destroy } from '@/use/tracks'
+import { all, current, active, multiple, count, open, destroy } from '@/use/tracks'
 import { dirty } from '@/use/editor'
 import { warn } from '@/use/warn'
 import { get } from '@vueuse/core'
@@ -60,6 +57,7 @@ export default {
 
   computed: {
     all: () => get(all),
+    count: () => get(count),
     multiple: () => get(multiple)
   },
 

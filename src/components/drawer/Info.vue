@@ -70,11 +70,11 @@ export default {
     headers: () => headers.value,
     metrics () {
       return {
-        timing: [
+        signature: [
           {
             name: 'Meter',
             header: 'meter',
-            filter: ''
+            filter: 'meter'
           },
           {
             name: 'Tempo',
@@ -84,38 +84,29 @@ export default {
         ],
         durations: [
           {
-            name: 'ms per beat',
-            header: 'ms-per-beat-unit',
-            filter: 'round'
-          },
-          {
-            name: 'beats per measure',
-            header: 'beat-units-per-measure',
-            filter: ''
+            name: 'beat unit',
+            header: 'beat-unit',
+            filter: 'fractionize'
           },
           {
             name: 'pulse beat',
             header: 'pulse-beat',
+            filter: 'fractionize'
+          },
+          {
+            name: 'beat units in bar',
+            header: 'beat-units-per-measure',
             filter: ''
           },
           {
-            name: 'ms per pulse beat',
-            header: 'ms-per-pulse-beat',
-            filter: 'round'
+            name: 'pulse units in bar',
+            header: 'pulse-beats-per-measure',
+            filter: ''
           },
+
           {
             name: 'total beat(s)',
             header: 'total-beats',
-            filter: ''
-          },
-          {
-            name: 'total pulse beat(s)',
-            header: 'total-pulse-beats',
-            filter: ''
-          },
-          {
-            name: 'beat unit',
-            header: 'beat-unit',
             filter: ''
           },
           {
@@ -124,10 +115,20 @@ export default {
             filter: ''
           },
           {
-            name: 'pulse beats/measure',
-            header: 'pulse-beats-per-measure',
+            name: 'total pulse beat(s)',
+            header: 'total-pulse-beats',
             filter: ''
-          }
+          },
+          {
+            name: 'ms per beat',
+            header: 'ms-per-beat-unit',
+            filter: 'round'
+          },
+          {
+            name: 'ms per pulse',
+            header: 'ms-per-pulse-beat',
+            filter: 'round'
+          },
         ]
       }
     }

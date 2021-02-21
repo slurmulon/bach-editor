@@ -70,7 +70,7 @@ export default {
     headers: () => headers.value,
     metrics () {
       return {
-        signature: [
+        timing: [
           {
             name: 'Meter',
             header: 'meter',
@@ -99,33 +99,34 @@ export default {
             filter: ''
           },
           {
-            name: 'pulse units in bar',
+            name: 'pulse beats in bar',
             header: 'pulse-beats-per-measure',
             filter: ''
           },
 
           {
-            name: 'total beat(s)',
+            name: 'total bars',
+            // TODO: Update name of this header in `bach`, poorly named (or create alias such as `total-measures`
             header: 'total-beats',
             filter: ''
           },
           {
-            name: 'total beat unit(s)',
+            name: 'total beat units',
             header: 'total-beat-units',
             filter: ''
           },
           {
-            name: 'total pulse beat(s)',
+            name: 'total pulse beats',
             header: 'total-pulse-beats',
             filter: ''
           },
           {
-            name: 'ms per beat',
+            name: 'ms per beat unit',
             header: 'ms-per-beat-unit',
             filter: 'round'
           },
           {
-            name: 'ms per pulse',
+            name: 'ms per pulse beat',
             header: 'ms-per-pulse-beat',
             filter: 'round'
           },

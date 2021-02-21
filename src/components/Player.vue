@@ -36,12 +36,12 @@
             >
               <v-card
                 outlined
-                class="fill-height pa-2"
+                class="fill-height"
                 :color="active($index) ? 'grey darken-3' : null"
                 :raised="active($index)"
                 :disabled="!active($index)"
               >
-                <v-row>
+                <v-row no-gutters>
                   <v-col align-content="start">
                     <v-card-title
                       :style="{

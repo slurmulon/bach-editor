@@ -37,12 +37,18 @@
               <v-card
                 outlined
                 class="fill-height pa-2"
+                :color="active($index) ? 'grey darken-3' : null"
                 :raised="active($index)"
                 :disabled="!active($index)"
               >
                 <v-row>
                   <v-col align-content="start">
-                    <v-card-title :style="{ color: active($index) ? $vuetify.theme.themes.dark.primary: null }">
+                    <v-card-title
+                      :style="{
+                        'color': active($index) ? $vuetify.theme.themes.dark.primary: null,
+                        'word-break': 'break-word'
+                      }"
+                    >
                       {{ part.value }}
                     </v-card-title>
 
@@ -53,8 +59,11 @@
                     </v-card-subtitle>
                   </v-col>
 
-                  <v-col :cols="colsOf(section) < 4 ? 12 : null">
-                    <v-card-text v-if="section">
+                  <v-col :cols="($vuetify.breakpoint.mobile || colsOf(section) < 6) ? 12 : null">
+                    <v-card-text
+                      v-if="section"
+                      :class="['d-block', colsOf(section) < 6 ? 'pt-0' : null]"
+                    >
                       <v-chip
                         v-for="note in notesIn(section, key)"
                         :key="note"
@@ -108,7 +117,12 @@ export default {
     },
 
     colsOf (section) {
-      return Math.round((section.duration / music.value.longest.duration) * (GRID_SIZE / 2))
+      // const bar = music.value.source.headers['pulse-beats-per-measure']
+      const { longest } = this.durations
+      const bar = this.durations.bar.pulse
+
+      return Math.floor((section.duration / Math.max(bar, longest)) * GRID_SIZE)
+      // return Math.round((section.duration / music.value.longest.duration) * (GRID_SIZE / 2))
       // return Math.round((section.duration / music.value.longest.duration))
       // return Math.round(Math.min(GRID_SIZE / 4, Math.max(GRID_SIZE, (section.duration / music.value.longest.duration))))
       // const ratio = music.value.shortest.duration / music.value.longest.duration

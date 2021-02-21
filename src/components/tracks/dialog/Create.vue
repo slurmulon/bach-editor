@@ -29,42 +29,44 @@
       </v-tooltip>
     </template>
 
-    <v-card>
-      <v-toolbar>
-        <v-toolbar-title>New Track</v-toolbar-title>
-      </v-toolbar>
+    <v-form @submit.prevent="save">
+      <v-card>
+        <v-toolbar>
+          <v-toolbar-title>New Track</v-toolbar-title>
+        </v-toolbar>
 
-      <v-card-text>
-        <v-text-field
-          v-model="inputs.name"
-          label="Name"
-          outlined
-          counter
-          maxlength="32"
-          required
-          autofocus
-          class="mt-8"
-        />
-      </v-card-text>
-      <v-divider />
+        <v-card-text>
+          <v-text-field
+            v-model="inputs.name"
+            label="Name"
+            outlined
+            counter
+            maxlength="32"
+            required
+            autofocus
+            class="mt-8"
+          />
+        </v-card-text>
+        <v-divider />
 
-      <v-card-actions>
-        <v-spacer />
-        <v-btn
-          text
-          @click="open = false"
-        >
-          Cancel
-        </v-btn>
-        <v-btn
-          color="primary"
-          text
-          @click="save"
-        >
-          Create
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            text
+            @click="open = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            text
+            color="primary"
+            @click="save"
+          >
+            Create
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-form>
   </v-dialog>
 </template>
 

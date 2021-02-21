@@ -95,7 +95,7 @@ export default {
 
   methods: {
     save () {
-      update(this.inputs)
+      update({ name: this.name })
 
       this.open = false
     }

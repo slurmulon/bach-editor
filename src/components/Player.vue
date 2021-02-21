@@ -62,8 +62,9 @@
                   <v-col :cols="($vuetify.breakpoint.mobile || colsOf(section) <= 6) ? 12 : null">
                     <v-card-text
                       v-if="section"
-                      :class="['d-block', colsOf(section) <= 6 ? 'pt-0' : null]"
+                      class="d-block"
                     >
+                      <!-- :class="['d-block', colsOf(section) <= 6 ? 'pt-0' : null]" -->
                       <v-chip
                         v-for="note in notesIn(section, key)"
                         :key="note"

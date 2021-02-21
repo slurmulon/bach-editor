@@ -9,6 +9,14 @@
           Useful track data
         </v-list-item-subtitle>
       </v-list-item-content>
+      <v-list-item-action>
+        <v-btn
+          icon
+          @click="open = false"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-list-item-action>
     </v-list-item>
 
     <v-divider />
@@ -60,6 +68,7 @@
 <script>
 import { headers } from '@/use/player'
 import { clipboard } from '@/use/editor'
+import { right as open, mini } from '@/use/drawer'
 
 export default {
   data: () => ({
@@ -68,6 +77,12 @@ export default {
 
   computed: {
     headers: () => headers.value,
+
+    open: {
+      get: () => open.value,
+      set: (value) => open.value = value
+    },
+
     metrics () {
       return {
         timing: [
@@ -108,7 +123,7 @@ export default {
             name: 'total bars',
             // TODO: Update name of this header in `bach`, poorly named (or create alias such as `total-measures`
             header: 'total-beats',
-            filter: ''
+            filter: 'fractionize'
           },
           {
             name: 'total beat units',

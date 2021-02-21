@@ -7,7 +7,7 @@
       clipped-right
       color="grey darken-4"
     >
-      <v-app-bar-nav-icon @click="drawer = !drawer" />
+      <v-app-bar-nav-icon @click="left = !left" />
         <v-app-bar-title>
           <logo />
         </v-app-bar-title>
@@ -24,6 +24,13 @@
         {{ link.name }}
       </v-btn>
 
+      <v-btn
+        icon
+        @click="right = !right"
+      >
+        <v-icon>mdi-information-outline</v-icon>
+      </v-btn>
+
       <!-- <v-responsive max-width="156"> -->
       <!--   <v-text-field -->
       <!--     dense -->
@@ -36,11 +43,12 @@
     </v-app-bar>
 
     <v-navigation-drawer
-      v-model="drawer"
+      v-model="left"
       app
       clipped
       width="300"
-      :color="!$vuetify.breakpoint.mobile ? 'transparent' : 'grey darken-4'"
+      :color="!$vuetify.breakpoint.mobile ? 'transparent' : 'grey darken-4'
+"
     >
       <!-- <v-navigation-drawer -->
       <!--   v-model="drawer" -->
@@ -89,12 +97,12 @@
     </v-navigation-drawer>
 
     <v-navigation-drawer
-      :value="$vuetify.breakpoint.smAndUp"
+      v-model="right"
       app
       clipped
       right
-      stateless
-      color="transparent"
+      :stateless="$vuetify.breakpoint.smAndUp"
+      :color="$vuetify.breakpoint.smAndUp ? 'transparent' : 'grey darken-4'"
     >
       <info />
     </v-navigation-drawer>
@@ -130,6 +138,8 @@ import Tracks from './drawer/Tracks'
 import Info from './drawer/Info'
 import Notify from './Notify'
 
+import { left, right, mini } from '@/use/drawer'
+
 export default {
   components: {
     Logo,
@@ -139,7 +149,8 @@ export default {
   },
 
   data: () => ({
-    drawer: null,
+    // drawer: null,
+    // mini: true,
     links: [
       // { name: 'Showcase', href: '/showcase' },
       {
@@ -175,6 +186,23 @@ export default {
         link: 'https://github.com/slurmulon/bach-editor'
       }
     ]
-  })
+  }),
+
+  computed: {
+    left: {
+      get: () => left.value,
+      set: (value) => left.value = value
+    },
+
+    right: {
+      get: () => right.value,
+      set: (value) => right.value = value
+    },
+
+    mini: {
+      get: () => mini.value,
+      set: (value) => mini.value = value
+    }
+  }
 }
 </script>

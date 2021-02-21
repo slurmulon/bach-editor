@@ -5,7 +5,8 @@
   >
     <template #activator="dialog">
       <v-tooltip
-        top
+        :top="!$vuetify.breakpoint.mobile"
+        :right="$vuetify.breakpoint.mobile"
         open-delay="500"
       >
         <template #activator="tooltip">

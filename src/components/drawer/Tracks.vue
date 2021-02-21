@@ -1,8 +1,8 @@
 <template>
   <v-list
-    class="pl-14"
     shaped
   >
+    <!-- class="pl-14" -->
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title class="title">

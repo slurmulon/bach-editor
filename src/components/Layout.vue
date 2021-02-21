@@ -40,56 +40,56 @@
       app
       clipped
       width="300"
-      color="transparent"
+      :color="!$vuetify.breakpoint.mobile ? 'transparent' : 'grey darken-4'"
     >
-      <v-navigation-drawer
-        v-model="drawer"
-        absolute
-        mini-variant
-        color="transparent"
-      >
-        <v-tooltip right>
-          <template #activator="{ on, attrs }">
-            <v-avatar
-              class="d-block text-center mx-auto mt-4"
-              color="grey darken-2"
-              size="36"
-              v-on="on"
-              v-bind="attrs"
-            >
-              <v-icon>mdi-cog-outline</v-icon>
-            </v-avatar>
-          </template>
-          <span>Change settings</span>
-        </v-tooltip>
+      <!-- <v-navigation-drawer -->
+      <!--   v-model="drawer" -->
+      <!--   absolute -->
+      <!--   mini-variant -->
+      <!--   :color="!$vuetify.breakpoint.mobile ? 'transparent' : null" -->
+      <!-- > -->
+      <!--   <v-tooltip right> -->
+      <!--     <template #activator="{ on, attrs }"> -->
+      <!--       <v-avatar -->
+      <!--         class="d-block text-center mx-auto mt-4" -->
+      <!--         color="grey darken-2" -->
+      <!--         size="36" -->
+      <!--         v-on="on" -->
+      <!--         v-bind="attrs" -->
+      <!--       > -->
+      <!--         <v-icon>mdi-cog-outline</v-icon> -->
+      <!--       </v-avatar> -->
+      <!--     </template> -->
+      <!--     <span>Change settings</span> -->
+      <!--   </v-tooltip> -->
 
-        <v-divider class="mx-3 my-5" />
+      <!--   <v-divider class="mx-3 my-5" /> -->
 
-        <v-tooltip
-          v-for="control in controls"
-          :key="control.ref"
-          color="secondary"
-          right
-        >
-          <template #activator="{ on, attrs }">
-            <v-avatar
-              class="d-block text-center mx-auto mb-9"
-              size="28"
-              v-on="on"
-              v-bind="attrs"
-            >
-              <v-icon>{{ control.icon }}</v-icon>
-            </v-avatar>
-          </template>
-          <span>{{ control.tip }}</span>
-        </v-tooltip>
-      </v-navigation-drawer>
+      <!--   <v-tooltip -->
+      <!--     v-for="control in controls" -->
+      <!--     :key="control.ref" -->
+      <!--     color="secondary" -->
+      <!--     right -->
+      <!--   > -->
+      <!--     <template #activator="{ on, attrs }"> -->
+      <!--       <v-avatar -->
+      <!--         class="d-block text-center mx-auto mb-9" -->
+      <!--         size="28" -->
+      <!--         v-on="on" -->
+      <!--         v-bind="attrs" -->
+      <!--       > -->
+      <!--         <v-icon>{{ control.icon }}</v-icon> -->
+      <!--       </v-avatar> -->
+      <!--     </template> -->
+      <!--     <span>{{ control.tip }}</span> -->
+      <!--   </v-tooltip> -->
+      <!-- </v-navigation-drawer> -->
 
       <tracks />
     </v-navigation-drawer>
 
     <v-navigation-drawer
-      :value="$vuetify.breakpoint.name !== 'sm'"
+      :value="$vuetify.breakpoint.smAndUp"
       app
       clipped
       right
@@ -154,19 +154,6 @@ export default {
       }
     ],
     controls: [
-      // {
-        // ref: 'github',
-        // icon: 'mdi-github',
-        // target: 'bach-source',
-        // link: 'https://github.com/slurmulon/bach-editor'
-      // },
-      {
-        ref: 'settings',
-        // icon: 'mdi-cog-outline',
-        icon: 'mdi-github',
-        tip: 'Editor source code',
-        click: () => {}
-      },
       {
         ref: 'import-all',
         icon: 'mdi-upload-outline',
@@ -179,6 +166,13 @@ export default {
         // icon: 'mdi-content-save-settings-outline',
         tip: 'Export entire collection',
         click: () => {}
+      },
+      {
+        ref: 'github',
+        icon: 'mdi-github',
+        target: 'bach-source',
+        tip: 'Editor source code',
+        link: 'https://github.com/slurmulon/bach-editor'
       }
     ]
   })

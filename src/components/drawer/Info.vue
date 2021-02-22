@@ -51,10 +51,9 @@
               <v-list-item-action>
                 <v-btn
                   icon
-                  x-small
                   @click="copy(metric)"
                 >
-                  <v-icon>mdi-clipboard-text-play</v-icon>
+                  <v-icon small>mdi-clipboard-text-play</v-icon>
                 </v-btn>
               </v-list-item-action>
             </v-list-item>

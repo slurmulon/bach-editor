@@ -14,8 +14,6 @@
           :cols="colsOf(section)"
           align-self="center"
         >
-          <!-- :xl="colsOf(section)" -->
-          <!-- :xs="section.duration < 3 ? (colsOf(section) * 2) % 12 : colsOf(section)" -->
           <div class="text-h5 text-center my-4">
             <span :class="active($index) ? 'white--text' : 'grey--text text--lighten-1'">
               {{ durationOf(section) }}
@@ -26,9 +24,10 @@
             color="transparent"
             class="px-3 pt-3"
           >
-            <!-- :color="active($index) ? 'grey darken-3' : 'transparent'" -->
-          <!-- <v-row align="stretch"> -->
-          <v-row justify="center" class="mb-4">
+          <v-row
+            justify="center"
+            class="mb-4"
+          >
             <v-col
               v-for="(part, key) in section.parts"
               :key="key"
@@ -64,7 +63,6 @@
                       v-if="section"
                       class="d-block"
                     >
-                      <!-- :class="['d-block', colsOf(section) <= 6 ? 'pt-0' : null]" -->
                       <v-chip
                         v-for="note in notesIn(section, key)"
                         :key="note"
@@ -118,30 +116,21 @@ export default {
     },
 
     colsOf (section) {
-      // const bar = music.value.source.headers['pulse-beats-per-measure']
       const { longest } = this.durations
       const bar = this.durations.bar.pulse
+      const size = section.duration / Math.max(bar, longest)
 
-      return Math.floor((section.duration / Math.max(bar, longest)) * GRID_SIZE)
-      // return Math.round((section.duration / music.value.longest.duration) * (GRID_SIZE / 2))
-      // return Math.round((section.duration / music.value.longest.duration))
-      // return Math.round(Math.min(GRID_SIZE / 4, Math.max(GRID_SIZE, (section.duration / music.value.longest.duration))))
-      // const ratio = music.value.shortest.duration / music.value.longest.duration
-      // const max = 3
-      // const min = GRID_SIZE * (1/3)
-
-      // return Math.round((section.duration
+      return Math.floor(size * GRID_SIZE)
     },
 
     durationOf (section) {
       const beats = this.durations.cast(section.duration, { as: 'beat' })
       const bar = this.durations.bar.beat
-      const kind = beats <  bar ? 'beat' : 'bar'
+      const kind = beats < bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)
       const pretty = this.$options.filters.fractionize(value)
 
       return `${pretty} ${kind}` + (value > 1 ? 's' : '')
-
     }
   }
 }

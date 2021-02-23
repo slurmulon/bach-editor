@@ -1,18 +1,19 @@
 import { selected as track } from '@/use/tracks'
 import { bach } from '@/use/editor'
-import { all as notes } from '@/core/notes'
 
 import { Gig } from 'gig'
 import { Sections } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
+import { note } from '@tonaljs/tonal'
 import { ref, computed, watch } from '@vue/composition-api'
-import { reactify } from '@vueuse/core'
+import { reactify, useStorage } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
 export const index = ref(0)
 export const part = ref('chord')
+export const settings = useStorage('bach-editor-player-settings', { volume: 0, mute: false })
 
 export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
@@ -92,6 +93,10 @@ export function toggle () {
   }
 }
 
+export function configure (opts) {
+  settings.value = { ...settings.value, ...opts }
+}
+
 export function sample (note) {
   const pitch = note.name.replace(/#/, 's')
   const url = `${pitch}.mp3`
@@ -99,11 +104,13 @@ export function sample (note) {
   return url
 }
 
-const urls = notes.reduce((map, note) => ({ ...map, [note.name]: sample(note) }), {})
+export const notes = ['Ab2', 'A2', 'Bb2', 'B2', 'C2', 'Db2', 'D2', 'Eb2', 'E2', 'F2', 'Gb2', 'G2'].map(note)
+export const samples = notes.reduce((map, note) => ({ ...map, [note.name]: sample(note) }), {})
 
 // @see: https://github.com/sustained/sforzando/blob/master/src/library/instruments.js
 export const sampler = new Sampler({
   release: 1,
-  baseUrl: 'http://127.0.0.1:8086/',
-  urls
+  urls: samples,
+  baseUrl: 'http://127.0.0.1:8086/'
+  // baseUrl: process.env.VUE_APP_AUDIO_SERVER_BASE_URL
 }).toDestination()

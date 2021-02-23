@@ -50,49 +50,6 @@
       :color="!$vuetify.breakpoint.mobile ? 'transparent' : 'grey darken-4'
 "
     >
-      <!-- <v-navigation-drawer -->
-      <!--   v-model="drawer" -->
-      <!--   absolute -->
-      <!--   mini-variant -->
-      <!--   :color="!$vuetify.breakpoint.mobile ? 'transparent' : null" -->
-      <!-- > -->
-      <!--   <v-tooltip right> -->
-      <!--     <template #activator="{ on, attrs }"> -->
-      <!--       <v-avatar -->
-      <!--         class="d-block text-center mx-auto mt-4" -->
-      <!--         color="grey darken-2" -->
-      <!--         size="36" -->
-      <!--         v-on="on" -->
-      <!--         v-bind="attrs" -->
-      <!--       > -->
-      <!--         <v-icon>mdi-cog-outline</v-icon> -->
-      <!--       </v-avatar> -->
-      <!--     </template> -->
-      <!--     <span>Change settings</span> -->
-      <!--   </v-tooltip> -->
-
-      <!--   <v-divider class="mx-3 my-5" /> -->
-
-      <!--   <v-tooltip -->
-      <!--     v-for="control in controls" -->
-      <!--     :key="control.ref" -->
-      <!--     color="secondary" -->
-      <!--     right -->
-      <!--   > -->
-      <!--     <template #activator="{ on, attrs }"> -->
-      <!--       <v-avatar -->
-      <!--         class="d-block text-center mx-auto mb-9" -->
-      <!--         size="28" -->
-      <!--         v-on="on" -->
-      <!--         v-bind="attrs" -->
-      <!--       > -->
-      <!--         <v-icon>{{ control.icon }}</v-icon> -->
-      <!--       </v-avatar> -->
-      <!--     </template> -->
-      <!--     <span>{{ control.tip }}</span> -->
-      <!--   </v-tooltip> -->
-      <!-- </v-navigation-drawer> -->
-
       <tracks />
     </v-navigation-drawer>
 
@@ -138,7 +95,7 @@ import Tracks from './drawer/Tracks'
 import Info from './drawer/Info'
 import Notify from './Notify'
 
-import { left, right, mini } from '@/use/drawer'
+import { left, right } from '@/use/drawer'
 
 export default {
   components: {
@@ -149,10 +106,7 @@ export default {
   },
 
   data: () => ({
-    // drawer: null,
-    // mini: true,
     links: [
-      // { name: 'Showcase', href: '/showcase' },
       {
         name: 'Learn',
         target: 'bach-learn',
@@ -197,11 +151,6 @@ export default {
     right: {
       get: () => right.value,
       set: (value) => right.value = value
-    },
-
-    mini: {
-      get: () => mini.value,
-      set: (value) => mini.value = value
     }
   }
 }

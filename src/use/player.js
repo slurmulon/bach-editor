@@ -27,7 +27,6 @@ watch(track, (next, prev) => {
   }
 })
 
-
 export async function load (source) {
   await Tone.loaded()
 
@@ -36,15 +35,8 @@ export async function load (source) {
     loop: true
   })
 
-  gig.value.on('play', () => {
-    // sampler.release = 2
-    // sampler.toMaster()
-  })
-
   gig.value.on('beat:play', () => {
     const { sections, cursor } = gig.value
-    // TODO: Push into `gig.current` getter
-    // const { section } = gig.value.current
     const section = sections[cursor.section]
 
     current.value = section

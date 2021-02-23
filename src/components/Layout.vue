@@ -77,6 +77,7 @@
       color="#121212"
       elevation="12"
     >
+      <!-- outlined -->
       <slot name="footer" />
       <!-- <v-text-field -->
       <!--   dense -->

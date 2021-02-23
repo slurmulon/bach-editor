@@ -7,20 +7,30 @@ import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { note } from '@tonaljs/tonal'
 import { ref, computed, watch } from '@vue/composition-api'
-import { reactify, useStorage } from '@vueuse/core'
+import { get, set, reactify, useStorage, useDebounceFn } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
 export const index = ref(0)
 export const part = ref('chord')
-export const settings = useStorage('bach-editor-player-settings', { volume: 0, mute: false })
+
+export const settings = useStorage('bach-editor-player-settings', {
+  volume: 0,
+  muted: false,
+  loop: true,
+  follow: true
+})
 
 export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
 export const measures = computed(() => music.value.measures || [])
 export const headers = computed(() => music.value.source.headers || {})
+
 export const playing = computed(() => gig.value.playing)
 export const seconds = reactify(duration => music.value.durations.cast(duration, { as: 'second' }))
+// export const muted = computed(() => get(settings).volume <= DECIBALS.min)
+
+export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 1/60)
 
 watch(track, (next, prev) => {
   if (gig.value && next && prev && next.id !== prev.id) {
@@ -47,14 +57,6 @@ export async function load (source) {
   })
 
   return gig.value.play()
-}
-
-export function notesIn (section, part) {
-  const group = section.parts[part]
-  const all = group ? group.notes : []
-  const notes = Array.isArray(all) ? all : [all]
-
-  return notes.map(note => `${note}2`)
 }
 
 export function play (section) {
@@ -93,11 +95,34 @@ export function toggle () {
   }
 }
 
-export function configure (opts) {
-  settings.value = { ...settings.value, ...opts }
+export function gain (decibals) {
+  const volume = Math.max(DECIBALS.min, Math.min(DECIBALS.max, decibals))
+  const audible = volume > DECIBALS.min
+
+  if (audible) {
+    configure({ volume: decibals })
+
+    sampler.volume.value = volume
+  } else {
+    mute()
+  }
 }
 
-export function sample (note) {
+export function mute (yes = true) {
+  configure({ muted: yes })
+
+  sampler.volume.mute = yes
+}
+
+export function notesIn (section, part) {
+  const group = section.parts[part]
+  const all = group ? group.notes : []
+  const notes = Array.isArray(all) ? all : [all]
+
+  return notes.map(note => `${note}2`)
+}
+
+export function sampleOf (note) {
   const pitch = note.name.replace(/#/, 's')
   const url = `${pitch}.mp3`
 
@@ -105,7 +130,8 @@ export function sample (note) {
 }
 
 export const notes = ['Ab2', 'A2', 'Bb2', 'B2', 'C2', 'Db2', 'D2', 'Eb2', 'E2', 'F2', 'Gb2', 'G2'].map(note)
-export const samples = notes.reduce((map, note) => ({ ...map, [note.name]: sample(note) }), {})
+
+export const samples = notes.reduce((map, note) => ({ ...map, [note.name]: sampleOf(note) }), {})
 
 // @see: https://github.com/sustained/sforzando/blob/master/src/library/instruments.js
 export const sampler = new Sampler({
@@ -114,3 +140,7 @@ export const sampler = new Sampler({
   baseUrl: 'http://127.0.0.1:8086/'
   // baseUrl: process.env.VUE_APP_AUDIO_SERVER_BASE_URL
 }).toDestination()
+
+console.log('sampler', sampler)
+
+export const DECIBALS = { min: -24, max: 4 }

@@ -17,6 +17,7 @@ export const part = ref('chord')
 export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
 export const measures = computed(() => music.value.measures || [])
+export const headers = computed(() => music.value.source.headers || {})
 export const playing = computed(() => gig.value.playing)
 export const seconds = reactify(duration => music.value.durations.cast(duration, { as: 'second' }))
 
@@ -34,15 +35,8 @@ export async function load (source) {
     loop: true
   })
 
-  gig.value.on('play', () => {
-    // sampler.release = 2
-    // sampler.toMaster()
-  })
-
   gig.value.on('beat:play', () => {
     const { sections, cursor } = gig.value
-    // TODO: Push into `gig.current` getter
-    // const { section } = gig.value.current
     const section = sections[cursor.section]
 
     current.value = section

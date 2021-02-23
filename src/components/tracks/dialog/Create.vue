@@ -4,7 +4,11 @@
     max-width="400"
   >
     <template #activator="dialog">
-      <v-tooltip :value="tip" top>
+      <v-tooltip
+        :top="!$vuetify.breakpoint.mobile"
+        :right="$vuetify.breakpoint.mobile"
+        open-delay="500"
+      >
         <template #activator="tooltip">
           <div
             v-on="tooltip.on"
@@ -25,42 +29,44 @@
       </v-tooltip>
     </template>
 
-    <v-card>
-      <v-toolbar>
-        <v-toolbar-title>New Track</v-toolbar-title>
-      </v-toolbar>
+    <v-form @submit.prevent="save">
+      <v-card>
+        <v-toolbar>
+          <v-toolbar-title>New Track</v-toolbar-title>
+        </v-toolbar>
 
-      <v-card-text>
-        <v-text-field
-          v-model="inputs.name"
-          label="Name"
-          outlined
-          counter
-          maxlength="32"
-          required
-          autofocus
-          class="mt-8"
-        />
-      </v-card-text>
-      <v-divider />
+        <v-card-text>
+          <v-text-field
+            v-model="inputs.name"
+            label="Name"
+            outlined
+            counter
+            maxlength="32"
+            required
+            autofocus
+            class="mt-8"
+          />
+        </v-card-text>
+        <v-divider />
 
-      <v-card-actions>
-        <v-spacer />
-        <v-btn
-          text
-          @click="open = false"
-        >
-          Cancel
-        </v-btn>
-        <v-btn
-          color="primary"
-          text
-          @click="save"
-        >
-          Create
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            text
+            @click="open = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            text
+            color="primary"
+            @click="save"
+          >
+            Create
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-form>
   </v-dialog>
 </template>
 
@@ -70,7 +76,6 @@ import { create } from '@/use/tracks'
 export default {
   data: () => ({
     open: false,
-    tip: false,
     inputs: {
       name: ''
     }
@@ -88,7 +93,6 @@ export default {
     open (next) {
       if (next) {
         this.inputs.name = ''
-        this.tip = false
       }
     }
   }

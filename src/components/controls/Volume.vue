@@ -18,7 +18,7 @@ import { settings, gain, muted, mute, DECIBALS } from '@/use/player'
 export default {
   computed: {
     volume: {
-      get: ({ muted }) => !muted ? settings.value.volume : -24,
+      get: ({ muted }) => !muted ? settings.value.volume : DECIBALS.min,
       set: (value) => gain(value)
     },
 

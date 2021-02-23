@@ -28,7 +28,6 @@ export const headers = computed(() => music.value.source.headers || {})
 
 export const playing = computed(() => gig.value.playing)
 export const seconds = reactify(duration => music.value.durations.cast(duration, { as: 'second' }))
-// export const muted = computed(() => get(settings).volume <= DECIBALS.min)
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 1/60)
 
@@ -111,6 +110,7 @@ export function gain (decibals) {
 export function mute (yes = true) {
   configure({ muted: yes })
 
+  // FIXME: This doesn't seem to have an effect on the actual volume (tone.js issue, it seems)
   sampler.volume.mute = yes
 }
 
@@ -140,7 +140,5 @@ export const sampler = new Sampler({
   baseUrl: 'http://127.0.0.1:8086/'
   // baseUrl: process.env.VUE_APP_AUDIO_SERVER_BASE_URL
 }).toDestination()
-
-console.log('sampler', sampler)
 
 export const DECIBALS = { min: -24, max: 4 }

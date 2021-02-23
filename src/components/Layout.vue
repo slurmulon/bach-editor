@@ -72,10 +72,12 @@
 
     <v-footer
       app
-      color="transparent"
-      height="72"
       inset
+      height="72"
+      color="#121212"
+      elevation="12"
     >
+      <slot name="footer" />
       <!-- <v-text-field -->
       <!--   dense -->
       <!--   flat -->

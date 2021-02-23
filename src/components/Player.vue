@@ -58,7 +58,7 @@
                     </v-card-subtitle>
                   </v-col>
 
-                  <v-col :cols="($vuetify.breakpoint.mobile || colsOf(section) <= 6) ? 12 : null">
+                  <v-col :cols="($vuetify.breakpoint.mobile || colsOf(section) < 6) ? 12 : null">
                     <v-card-text
                       v-if="section"
                       class="d-block"

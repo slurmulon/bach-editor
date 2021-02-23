@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-toolbar flat color="transparent">
+    <v-toolbar
+      flat
+      color="transparent"
+    >
       <v-toolbar-title class="text-h4 mr-2">
         {{ name }}
       </v-toolbar-title>

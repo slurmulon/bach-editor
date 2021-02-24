@@ -1,6 +1,6 @@
 <template>
   <v-btn-toggle
-    :value="toggle"
+    :value="toggles"
     dense
     group
     tile
@@ -49,7 +49,7 @@
           icon
           v-on="on"
           v-bind="attrs"
-          @click="follow = !follow"
+          @click="coder = !coder"
         >
           <!-- <v-icon>mdi-home-roof</v-icon> -->
           <v-icon>mdi-code-braces</v-icon>
@@ -65,7 +65,9 @@ import { settings, configure, loops } from '@/use/player'
 
 export default {
   computed: {
-    toggle: ({ loop, follow }) => [loop, follow].map((value, index) => value ? index : null),
+    all: () => [settings.value.loop, settings.value.follow, settings.value.coder],
+
+    toggles: ({ all }) => all.map((value, index) => value ? index : null),
 
     loop: {
       get: () => settings.value.loop,
@@ -75,6 +77,11 @@ export default {
     follow: {
       get: () => settings.value.follow,
       set: (value) => configure({ follow: value })
+    },
+
+    coder: {
+      get: () => settings.value.coder,
+      set: (value) => configure({ coder: value })
     }
   }
 }

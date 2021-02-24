@@ -18,7 +18,8 @@ export const settings = useStorage('bach-editor-player-settings', {
   volume: 0,
   muted: false,
   loop: true,
-  follow: true
+  follow: true,
+  coder: true
 })
 
 export const music = computed(() => new Sections(track.value.source))
@@ -42,12 +43,10 @@ export async function load (source) {
 
   gig.value = new Gig({
     source,
-    // loop: true
     loop: settings.value.loop
   })
 
   gig.value.on('beat:play', () => {
-    console.log('----- gig BeAt play ++++++')
     const { sections, cursor } = gig.value
     const section = sections[cursor.section]
 

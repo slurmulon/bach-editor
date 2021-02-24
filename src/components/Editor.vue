@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="editor">
     <v-toolbar
       flat
       color="transparent"
@@ -109,7 +109,7 @@
 
 <script>
 import { commit as save, tab, draft, name, dirty, copy } from '@/use/editor'
-import { toggle, playing } from '@/use/player'
+import { toggle, playing, settings } from '@/use/player'
 import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
@@ -158,6 +158,14 @@ export default {
 
   mounted () {
     load()
+  },
+
+  watch: {
+    playing (next, prev) {
+      if (!next && prev && settings.value.coder) {
+        this.$vuetify.goTo(this.$refs.editor, { duration: 1000, easing: 'easeOutQuad' })
+      }
+    }
   }
 }
 </script>

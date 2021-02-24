@@ -2,7 +2,7 @@
   <v-sheet
     outlined
     color="transparent"
-    class="mt-8"
+    class="player mt-8"
   >
     <!-- <v-divider /> -->
     <v-container>
@@ -127,7 +127,7 @@ export default {
     },
 
     durationOf (section) {
-      const beats = this.durations.cast(section.duration, { as: 'beat' })
+      const beats = this.durations.unitize(section.duration, { as: 'beat' })
       const bar = this.durations.bar.beat
       const kind = beats < bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)
@@ -143,7 +143,7 @@ export default {
         const [target] = this.$refs[`section-${this.index}`]
 
         this.$vuetify.goTo(target, {
-          duration: this.durations.unit.quarter,
+          duration: this.durations.time.quarter,
           easing: 'easeOutQuad'
         })
       }
@@ -151,3 +151,8 @@ export default {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+.player > .container
+  background: linear-gradient(360deg, darken(#121212, 2.5%), transparent)
+</style>

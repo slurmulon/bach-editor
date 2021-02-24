@@ -173,7 +173,8 @@ export default {
 <style lang="sass">
 // TODO: Move to main.css or the like
 .v-tabs-items
-  border: 1px solid #1e1e1e
+  // border: 1px solid #1e1e1e
+  border: 1px solid rgba(255, 255, 255, 0.12) !important
   background-color: transparent !important
 
 /* required class */

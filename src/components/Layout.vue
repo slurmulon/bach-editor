@@ -74,7 +74,7 @@
       app
       inset
       height="72"
-      color="#121212"
+      color="rgb(12, 12, 12)"
       elevation="12"
     >
       <!-- outlined -->
@@ -158,3 +158,13 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+$color: #121212
+
+.v-main
+  background: linear-gradient(360deg, darken($color, 2.5%), $color)
+
+.v-footer
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important
+</style>

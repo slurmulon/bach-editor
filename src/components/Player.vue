@@ -153,8 +153,11 @@ export default {
 
 <style lang="sass" scoped>
 // TODO; Import from Vuetify instead
-$color: #121212
+// $color: #121212
 
-.player > .container
-  background: linear-gradient(360deg, darken($color, 2.5%), $color)
+// .player > .container
+//   background: linear-gradient(360deg, darken($color, 2.5%), $color)
+
+.player
+  background-color: transparent !important
 </style>

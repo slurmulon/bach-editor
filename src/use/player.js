@@ -13,6 +13,7 @@ export const gig = ref({})
 export const current = ref({})
 export const index = ref(0)
 export const part = ref('chord')
+export const played = ref(Date.now())
 
 export const settings = useStorage('bach-editor-player-settings', {
   volume: 0,
@@ -52,6 +53,7 @@ export async function load (source) {
 
     current.value = section
     index.value = cursor.section
+    played.value = Date.now()
 
     play(section)
   })

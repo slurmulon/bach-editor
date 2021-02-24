@@ -163,7 +163,7 @@ export default {
   watch: {
     playing (next, prev) {
       if (!next && prev && settings.value.coder) {
-        this.$vuetify.goTo(this.$refs.editor, { duration: 1000, easing: 'easeOutQuad' })
+        this.$vuetify.goTo(0, { duration: 750, easing: 'easeOutQuad' })
       }
     }
   }

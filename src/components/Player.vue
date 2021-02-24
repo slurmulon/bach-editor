@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { music, sections, index, part, playing, settings, notesIn } from '@/use/player'
+import { music, sections, index, part, playing, played, settings, notesIn } from '@/use/player'
 import { bach } from '@/use/editor'
 
 import { Durations } from 'bach-js'
@@ -100,6 +100,7 @@ export default {
     index: () => index.value,
     part: () => part.value,
     playing: () => playing.value,
+    played: () => played.value,
     settings: () => settings.value,
     durations: () => new Durations(bach.value)
   },
@@ -137,9 +138,9 @@ export default {
   },
 
   watch: {
-    index (next, prev) {
-      if (next && next !== prev && this.settings.follow) {
-        const [target] = this.$refs[`section-${next}`]
+    played (next, prev) {
+      if (this.settings.follow && next && next !== prev) {
+        const [target] = this.$refs[`section-${this.index}`]
 
         this.$vuetify.goTo(target, {
           duration: this.durations.unit.quarter,

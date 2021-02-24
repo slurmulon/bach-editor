@@ -42,10 +42,12 @@ export async function load (source) {
 
   gig.value = new Gig({
     source,
-    loop: true
+    // loop: true
+    loop: settings.value.loop
   })
 
   gig.value.on('beat:play', () => {
+    console.log('----- gig BeAt play ++++++')
     const { sections, cursor } = gig.value
     const section = sections[cursor.section]
 
@@ -53,6 +55,10 @@ export async function load (source) {
     index.value = cursor.section
 
     play(section)
+  })
+
+  gig.value.on('stop', () => {
+    reset()
   })
 
   return gig.value.play()
@@ -72,16 +78,22 @@ export function play (section) {
 export function stop () {
   if (gig.value.source) {
     gig.value.kill()
-    gig.value = {}
   }
 
-  current.value = {}
-  index.value = 0
+  reset()
 }
 
 export function restart () {
+  reset()
+
   gig.value.kill()
   gig.value.play()
+}
+
+export function reset () {
+  gig.value = {}
+  current.value = {}
+  index.value = 0
 }
 
 export function toggle () {
@@ -105,6 +117,12 @@ export function gain (decibals) {
   } else {
     mute()
   }
+}
+
+export function loops (yes = true) {
+  configure({ loop: yes })
+
+  gig.value.loops = yes
 }
 
 export function mute (yes = true) {

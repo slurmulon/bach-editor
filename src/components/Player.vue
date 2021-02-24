@@ -138,10 +138,13 @@ export default {
 
   watch: {
     index (next, prev) {
-      if (next !== prev && this.settings.follow) {
+      if (next && next !== prev && this.settings.follow) {
         const [target] = this.$refs[`section-${next}`]
 
-        this.$vuetify.goTo(target, { duration: this.durations.unit.quarter, easing: 'easeOutCubic' })
+        this.$vuetify.goTo(target, {
+          duration: this.durations.unit.quarter,
+          easing: 'easeOutQuad'
+        })
       }
     }
   }

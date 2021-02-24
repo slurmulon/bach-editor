@@ -14,12 +14,13 @@
 
 <script>
 import { gig, index, playing } from '@/use/player'
-import { useIntervalFn } from '@vueuse/core'
+
+let interval = null
 
 export default {
   data: () => ({
     progress: 0,
-    control: null
+    // interval: null
   }),
 
   computed: {
@@ -29,25 +30,25 @@ export default {
 
   methods: {
     sync () {
-      if (!this.playing) {
-        clearInterval(this.control)
-        this.progress = 0
-        return
-      }
+      if (!this.playing || gig.value.completion > 1) return this.clear()
 
       const unit = gig.value.durations.time['16n']
 
-      // TODO: Rename to interval
-      this.control = setInterval(() => {
-        // this.progress = gig.value.progress * 100
-        // this.progress = (gig.value.elapsed / gig.value.duration) * 100
-        this.progress = gig.value.completion * 100
+      interval = requestAnimationFrame(() => {
+        this.tick()
+      })//, unit)
+    },
 
-        if ((!this.playing && this.control) || this.progress >= 100) {
-          clearInterval(this.control)
-          this.progress = 0
-        }
-      }, unit)
+    tick () {
+      this.progress = gig.value.completion * 100
+
+      this.sync()
+    },
+
+    clear () {
+      cancelAnimationFrame(interval)
+
+      this.progress = 0
     }
   },
 
@@ -58,21 +59,6 @@ export default {
 
     index () {
       this.sync()
-    },
-
-    index_ORIG (next, prev) {
-      if (next) {
-        this.control = useIntervalFn(() => {
-          this.progress = gig.value.progress * 100
-
-          if (!this.playing) {
-            this.control.stop()
-            this.progress = 0
-          }
-        }, gig.value.durations.time['16n'])
-      } else {
-        this.progress = 0
-      }
     }
   }
 }

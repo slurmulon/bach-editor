@@ -19,8 +19,7 @@ let interval = null
 
 export default {
   data: () => ({
-    progress: 0,
-    // interval: null
+    progress: 0
   }),
 
   computed: {
@@ -35,14 +34,10 @@ export default {
       const unit = gig.value.durations.time['16n']
 
       interval = requestAnimationFrame(() => {
-        this.tick()
+        this.progress = gig.value.completion * 100
+
+        this.sync()
       })//, unit)
-    },
-
-    tick () {
-      this.progress = gig.value.completion * 100
-
-      this.sync()
     },
 
     clear () {
@@ -68,6 +63,7 @@ export default {
 .player-progress
   position: absolute
   top: 0
+  left: 0
   width: 100%
   height: 2px
   background: darken(rgba(12, 12, 12), 10%)

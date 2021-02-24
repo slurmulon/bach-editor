@@ -184,6 +184,7 @@ export default {
   line-height: 1.5
   padding: 5px
   max-height: 300px
+  // background-color: darken(#0d0d0d, 2%)
 
   .token.play,
   .token.keyword

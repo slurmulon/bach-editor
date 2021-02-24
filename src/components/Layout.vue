@@ -160,7 +160,10 @@ export default {
 </script>
 
 <style lang="sass">
+// ORIG
 $color: #121212
+// NICE ALT
+// $color: rgb(12, 12, 12)
 
 .v-main
   background: linear-gradient(360deg, darken($color, 2.5%), $color)

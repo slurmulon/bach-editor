@@ -31,7 +31,7 @@ export const headers = computed(() => music.value.source.headers || {})
 export const playing = computed(() => gig.value.playing)
 export const seconds = reactify(duration => music.value.durations.cast(duration, { as: 'second' }))
 
-export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 1/60)
+export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
 
 watch(track, (next, prev) => {
   if (gig.value && next && prev && next.id !== prev.id) {

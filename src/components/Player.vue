@@ -1,7 +1,6 @@
 <template>
   <v-sheet
     outlined
-    color="transparent"
     class="player mt-8"
   >
     <!-- <v-divider /> -->
@@ -153,6 +152,9 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+// TODO; Import from Vuetify instead
+$color: #121212
+
 .player > .container
-  background: linear-gradient(360deg, darken(#121212, 2.5%), transparent)
+  background: linear-gradient(360deg, darken($color, 2.5%), $color)
 </style>

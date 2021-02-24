@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { settings, gain, muted, mute, DECIBALS } from '@/use/player'
+import { settings, gain, mute, DECIBALS } from '@/use/player'
 
 export default {
   computed: {

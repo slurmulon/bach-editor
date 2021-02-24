@@ -10,36 +10,15 @@
     <!--   <v-icon color="success">mdi-check</v-icon> -->
     <!-- </div> -->
 
-    <v-btn
-      icon
-      class="mr-4"
-    >
-      <!-- <v-icon>mdi-code-tags</v-icon> -->
-      <v-icon>mdi-cog</v-icon>
-    </v-btn>
-
-    <!-- <v-btn-toggle -->
-    <!--   dense -->
-    <!--   multiple -->
+    <!-- <v-btn -->
+    <!--   icon -->
+    <!--   class="mr-4" -->
     <!-- > -->
-    <!--   <v-btn> -->
-    <!--     <v-icon>mdi-sync</v-icon> -->
-    <!--   </v-btn> -->
+    <!--   <1!-- <v-icon>mdi-code-tags</v-icon> --1> -->
+    <!--   <v-icon>mdi-cog</v-icon> -->
+    <!-- </v-btn> -->
 
-    <!--   <v-btn> -->
-    <!--     <v-icon>mdi-eye-settings</v-icon> -->
-    <!--   </v-btn> -->
-
-    <!--   <v-btn> -->
-    <!--     <v-icon>mdi-format-underline</v-icon> -->
-    <!--   </v-btn> -->
-
-    <!--   <v-btn> -->
-    <!--     <v-icon>mdi-format-color-fill</v-icon> -->
-    <!--   </v-btn> -->
-    <!-- </v-btn-toggle> -->
-
-    <!-- <v-spacer /> -->
+    <settings class="mr-4" />
 
     <volume />
 
@@ -52,6 +31,7 @@
 <script>
 import Play from './controls/Play'
 import Volume from './controls/Volume'
+import Settings from './controls/Settings'
 
 import { toggle, playing } from '@/use/player'
 import { dirty } from '@/use/editor'
@@ -68,7 +48,8 @@ export default {
 
   components: {
     Play,
-    Volume
+    Volume,
+    Settings
   }
 }
 </script>

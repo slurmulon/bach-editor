@@ -39,11 +39,29 @@
       </template>
       <span>Scroll with music</span>
     </v-tooltip>
+
+    <v-tooltip
+      top
+      open-delay="250"
+    >
+      <template #activator="{ on, attrs }">
+        <v-btn
+          icon
+          v-on="on"
+          v-bind="attrs"
+          @click="follow = !follow"
+        >
+          <!-- <v-icon>mdi-home-roof</v-icon> -->
+          <v-icon>mdi-code-braces</v-icon>
+        </v-btn>
+      </template>
+      <span>Return to code on stop</span>
+    </v-tooltip>
   </v-btn-toggle>
 </template>
 
 <script>
-import { settings, configure } from '@/use/player'
+import { settings, configure, loops } from '@/use/player'
 
 export default {
   computed: {
@@ -51,7 +69,7 @@ export default {
 
     loop: {
       get: () => settings.value.loop,
-      set: (value) => configure({ loop: value })
+      set: (value) => loops(value)
     },
 
     follow: {

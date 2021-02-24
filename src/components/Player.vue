@@ -11,6 +11,7 @@
         <v-col
           v-for="(section, $index) in sections"
           :key="$index"
+          :ref="`section-${$index}`"
           :cols="colsOf(section)"
           align-self="center"
         >
@@ -86,7 +87,7 @@
 </template>
 
 <script>
-import { music, sections, index, part, playing, notesIn } from '@/use/player'
+import { music, sections, index, part, playing, settings, notesIn } from '@/use/player'
 import { bach } from '@/use/editor'
 
 import { Durations } from 'bach-js'
@@ -99,6 +100,7 @@ export default {
     index: () => index.value,
     part: () => part.value,
     playing: () => playing.value,
+    settings: () => settings.value,
     durations: () => new Durations(bach.value)
   },
 
@@ -131,6 +133,16 @@ export default {
       const pretty = this.$options.filters.fractionize(value)
 
       return `${pretty} ${kind}` + (value > 1 ? 's' : '')
+    }
+  },
+
+  watch: {
+    index (next, prev) {
+      if (next !== prev && this.settings.follow) {
+        const [target] = this.$refs[`section-${next}`]
+
+        this.$vuetify.goTo(target, { duration: this.durations.unit.quarter, easing: 'easeOutCubic' })
+      }
     }
   }
 }

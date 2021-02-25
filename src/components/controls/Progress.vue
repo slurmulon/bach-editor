@@ -13,48 +13,12 @@
 </template>
 
 <script>
-import { gig, index, playing } from '@/use/player'
-
-let interval = null
+import { progress, playing } from '@/use/player'
 
 export default {
-  data: () => ({
-    progress: 0
-  }),
-
   computed: {
     playing: () => playing.value,
-    index: () => index.value
-  },
-
-  methods: {
-    sync () {
-      if (!this.playing || gig.value.completion > 1) return this.clear()
-
-      const unit = gig.value.durations.time['16n']
-
-      interval = requestAnimationFrame(() => {
-        this.progress = gig.value.completion * 100
-
-        this.sync()
-      })//, unit)
-    },
-
-    clear () {
-      cancelAnimationFrame(interval)
-
-      this.progress = 0
-    }
-  },
-
-  watch: {
-    playing () {
-      this.sync()
-    },
-
-    index () {
-      this.sync()
-    }
+    progress: () => progress.value
   }
 }
 </script>

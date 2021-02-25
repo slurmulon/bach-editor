@@ -7,11 +7,13 @@ import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { note } from '@tonaljs/tonal'
 import { ref, computed, watch } from '@vue/composition-api'
-import { get, set, reactify, useStorage, useDebounceFn } from '@vueuse/core'
+import { get, set, reactify, useStorage, useRafFn, useDebounceFn } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
 export const index = ref(0)
+export const metronome = ref(null)
+export const progress = ref(null)
 export const part = ref('chord')
 export const played = ref(Date.now())
 
@@ -33,6 +35,22 @@ export const playing = computed(() => gig.value.playing)
 export const seconds = reactify(duration => music.value.durations.cast(duration, { as: 'second' }))
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
+
+export const timeline = useRafFn(() => {
+  if (playing.value) {
+    const { completion } = gig.value
+
+    if (completion <= 1) {
+      progress.value = completion * 100
+      metronome.value = gig.value.metronome
+    } else {
+      progress.value = 0
+      metronome.value = 0
+
+      timeline.pause()
+    }
+  }
+}, { immediate: false })
 
 watch(track, (next, prev) => {
   if (gig.value && next && prev && next.id !== prev.id) {
@@ -57,13 +75,23 @@ export async function load (source) {
     played.value = Date.now()
 
     play(section)
+    timeline.resume()
   })
 
   gig.value.on('stop', () => {
     reset()
   })
 
-  return gig.value.play()
+  // timeline.resume()
+
+  // return gig.value.play()
+
+  start()
+}
+
+export function start () {
+  gig.value.play()
+  timeline.resume()
 }
 
 export function play (section) {
@@ -82,6 +110,7 @@ export function stop () {
     gig.value.kill()
   }
 
+  timeline.pause()
   reset()
 }
 
@@ -96,6 +125,8 @@ export function reset () {
   gig.value = {}
   current.value = {}
   index.value = 0
+  progress.value = null
+  metronome.value = null
 }
 
 export function toggle () {

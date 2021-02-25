@@ -7,7 +7,7 @@
       v-for="beat in beats"
       :key="beat"
     >
-      <v-icon :color="beat - 1 <= current ? 'primary' : null">
+      <v-icon :color="(current != null && (beat - 1 <= current)) ? 'primary' : null">
         mdi-circle-small
       </v-icon>
     </v-col>
@@ -15,53 +15,13 @@
 </template>
 
 <script>
-import { gig, headers, playing } from '@/use/player'
-
-import { useRafFn } from '@vueuse/core'
-
-let timeline = null
+import { headers, metronome, playing } from '@/use/player'
 
 export default {
-  data: () => ({
-    current: null
-  }),
-
   computed: {
     playing: () => playing.value,
+    current: () =>  metronome.value,
     beats: () => headers.value['beat-units-per-measure']
-  },
-
-  methods: {
-    play () {
-      this.current = null
-
-      timeline.resume()
-    },
-
-    stop () {
-      this.current = null
-
-      timeline.pause()
-    }
-  },
-
-  mounted () {
-    timeline = useRafFn(() => {
-      this.current = gig.value.metronome
-      console.log('metronome!', this.current)
-    })
-
-    timeline.pause()
-  },
-
-  watch: {
-    playing (next, prev) {
-      if (next) {
-        this.play()
-      } else {
-        this.stop()
-      }
-    }
   }
 }
 </script>

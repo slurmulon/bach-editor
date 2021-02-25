@@ -1,38 +1,16 @@
 <template>
   <div style="width: 100%">
     <progress-bar />
-    <!-- <v-progress-linear -->
-    <!--   :value="progress" -->
-    <!--   top -->
-    <!--   absolute -->
-    <!--   height="2" -->
-    <!-- /> -->
 
     <v-toolbar
       flat
       color="transparent"
     >
-      <!-- <div v-if="dirty"> -->
-      <!--   Unsaved changes -->
-      <!-- </div> -->
-      <!-- <div v-else> -->
-      <!--   <v-icon color="success">mdi-check</v-icon> -->
-      <!-- </div> -->
-
-      <!-- <v-btn -->
-      <!--   icon -->
-      <!--   class="mr-4" -->
-      <!-- > -->
-      <!--   <1!-- <v-icon>mdi-code-tags</v-icon> --1> -->
-      <!--   <v-icon>mdi-cog</v-icon> -->
-      <!-- </v-btn> -->
-
       <settings class="mr-4" />
-
       <volume />
-
       <v-spacer />
 
+      <metronome />
       <play />
     </v-toolbar>
   </div>
@@ -41,6 +19,7 @@
 <script>
 import Play from './controls/Play'
 import Volume from './controls/Volume'
+import Metronome from './controls/Metronome'
 import Settings from './controls/Settings'
 import ProgressBar from './controls/Progress'
 
@@ -60,6 +39,7 @@ export default {
   components: {
     Play,
     Volume,
+    Metronome,
     Settings,
     ProgressBar
   }

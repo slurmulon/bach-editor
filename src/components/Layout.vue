@@ -77,15 +77,7 @@
       color="rgb(12, 12, 12)"
       elevation="12"
     >
-      <!-- outlined -->
       <slot name="footer" />
-      <!-- <v-text-field -->
-      <!--   dense -->
-      <!--   flat -->
-      <!--   hide-details -->
-      <!--   rounded -->
-      <!--   solo -->
-      <!-- /> -->
     </v-footer>
 
     <notify />

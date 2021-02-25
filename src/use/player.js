@@ -26,6 +26,7 @@ export const settings = useStorage('bach-editor-player-settings', {
 export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
 export const measures = computed(() => music.value.measures || [])
+export const durations = computed(() => music.value.durations || {})
 export const headers = computed(() => music.value.source.headers || {})
 
 export const playing = computed(() => gig.value.playing)

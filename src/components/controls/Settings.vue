@@ -3,7 +3,7 @@
     :value="toggles"
     dense
     group
-    rounded
+    shaped
     multiple
   >
     <v-tooltip

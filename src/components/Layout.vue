@@ -166,7 +166,7 @@ $color: #121212
 // $color: rgb(12, 12, 12)
 
 .v-main
-  background: linear-gradient(360deg, darken($color, 2.5%), $color)
+  background: linear-gradient(360deg, darken($color, 3%), $color)
 
 .v-footer
   border-top: 1px solid rgba(255, 255, 255, 0.12) !important

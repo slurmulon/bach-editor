@@ -82,10 +82,6 @@ export async function load (source) {
     reset()
   })
 
-  // timeline.resume()
-
-  // return gig.value.play()
-
   start()
 }
 

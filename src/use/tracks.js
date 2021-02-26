@@ -118,6 +118,12 @@ export function shift (ref) {
   select(next)
 }
 
+export async function nuke () {
+  const track = get(current)
+
+  set(store, { [track.id]: track })
+}
+
 export async function restore (file) {
   const data = file instanceof File ? await file.text() : null
 

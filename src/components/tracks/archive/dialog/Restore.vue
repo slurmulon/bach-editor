@@ -25,7 +25,6 @@
         </v-toolbar>
 
         <v-card-text>
-          {{ inputs.file }}
          <v-file-input
             v-model="inputs.file"
             label="Select archive file (.json)"
@@ -98,7 +97,7 @@ export default {
   watch: {
     open (next) {
       if (next) {
-        this.inputs.name = ''
+        this.inputs.file = null
       }
     }
   }

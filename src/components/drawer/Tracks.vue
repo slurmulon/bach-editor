@@ -32,9 +32,10 @@
           <v-spacer />
           <!-- <v-col cols="2"> -->
           <v-col>
-            <v-btn icon>
-              <v-icon>mdi-delete-outline</v-icon>
-            </v-btn>
+            <!-- <v-btn icon> -->
+            <!--   <v-icon>mdi-delete-outline</v-icon> -->
+            <!-- </v-btn> -->
+            <btn-nuke />
           </v-col>
           <v-spacer />
           <!-- <v-col cols="2"> -->
@@ -82,11 +83,13 @@ import { get } from '@vueuse/core'
 
 import DialogCreate from '@/components/tracks/dialog/Create'
 import MenuArchive from '@/components/tracks/archive/Menu'
+import BtnNuke from '@/components/tracks/Nuke'
 
 export default {
   components: {
     DialogCreate,
-    MenuArchive
+    MenuArchive,
+    BtnNuke
   },
 
   computed: {

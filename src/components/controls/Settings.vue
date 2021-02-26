@@ -55,7 +55,7 @@
           <v-icon>mdi-code-braces</v-icon>
         </v-btn>
       </template>
-      <span>Return to code on stop</span>
+      <span>Scroll to code on stop</span>
     </v-tooltip>
   </v-btn-toggle>
 </template>

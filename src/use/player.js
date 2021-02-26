@@ -184,8 +184,7 @@ export const samples = notes.reduce((map, note) => ({ ...map, [note.name]: sampl
 export const sampler = new Sampler({
   release: 1,
   urls: samples,
-  baseUrl: 'http://127.0.0.1:8086/'
-  // baseUrl: process.env.VUE_APP_AUDIO_SERVER_BASE_URL
+  baseUrl: process.env.VUE_APP_AUDIO_SERVER_BASE_URL
 }).toDestination()
 
 export const DECIBALS = { min: -24, max: 4 }

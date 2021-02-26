@@ -13,20 +13,22 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          Import tracks
+          Import track archive
         </v-list-item-content>
       </v-list-item>
     </template>
 
-    <v-form @submit.prevent="save">
+    <v-form @submit.prevent="load">
       <v-card>
         <v-toolbar>
-          <v-toolbar-title>Import Tracks</v-toolbar-title>
+          <v-toolbar-title>Import Archive</v-toolbar-title>
         </v-toolbar>
 
         <v-card-text>
+          {{ inputs.file }}
          <v-file-input
-            label="Select archive file (.json, .tar.gz)"
+            v-model="inputs.file"
+            label="Select archive file (.json)"
             show-size
           />
 
@@ -63,7 +65,8 @@
           <v-btn
             text
             color="primary"
-            @click="save"
+            :disabled="!inputs.file"
+            @click="load"
           >
             Import
           </v-btn>
@@ -74,19 +77,19 @@
 </template>
 
 <script>
-import { create } from '@/use/tracks'
+import { restore } from '@/use/tracks'
 
 export default {
   data: () => ({
     open: false,
     inputs: {
-      name: ''
+      file: null
     }
   }),
 
   methods: {
-    save () {
-      create(this.inputs)
+    load () {
+      restore(this.inputs.file)
 
       this.open = false
     }

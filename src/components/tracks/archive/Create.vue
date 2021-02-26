@@ -7,7 +7,7 @@
     </v-list-item-avatar>
 
     <v-list-item-content>
-      Export tracks
+      Export track archive
     </v-list-item-content>
 
     <a

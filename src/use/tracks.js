@@ -118,10 +118,19 @@ export function shift (ref) {
   select(next)
 }
 
-export function restore (archive) {
-  // TODO: check version, warn if minor/patch, error if major diff
-  set(store, archive.store)
-  set(context, archive.context)
+export async function restore (file) {
+  const data = file instanceof File ? await file.text() : null
+
+  if (data) {
+    const archive = JSON.parse(data)
+
+    // TODO: check version, warn if minor/patch, error if major diff
+    // set(store, archive.store)
+    // set(context, archive.context)
+  } else {
+    // notify error
+    throw Error('Invalid or missing archive file')
+  }
 }
 
 export function archive () {

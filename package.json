@@ -1,6 +1,6 @@
 {
   "name": "bach-editor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -12,10 +12,10 @@
   "dependencies": {
     "@tonaljs/tonal": "^4.6.0",
     "@vueuse/core": "^4.1.0",
-    "bach-js": "github:slurmulon/bach-js",
+    "bach-js": "github:slurmulon/bach-js#v2.5.0",
     "core-js": "^3.6.5",
     "fraction.js": "^4.0.13",
-    "gig": "github:slurmulon/gig",
+    "gig": "github:slurmulon/gig#v1.4.0",
     "nanoid": "^3.1.20",
     "prism-themes": "^1.5.0",
     "prismjs": "^1.23.0",

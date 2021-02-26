@@ -16,6 +16,7 @@
 
       <v-card-actions>
         <v-checkbox
+          v-if="ignorable"
           v-model="ignore"
           label="Ignore"
         />
@@ -42,12 +43,13 @@
 </template>
 
 <script>
-import { open, yes, no, text, icon, ignoring, ignore } from '@/use/warn'
+import { open, yes, no, prob, text, icon, ignorable, ignoring, ignore } from '@/use/warn'
 
 export default {
   computed: {
     text: () => text.value,
     icon: () => icon.value,
+    ignorable: () => ignorable.value,
 
     show: {
       get: () => open.value,

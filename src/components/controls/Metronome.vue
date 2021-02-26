@@ -27,7 +27,7 @@ export default {
   methods: {
     color (beat) {
       if (!this.playing)
-        return 'grey'
+        return 'grey darken-3'
       if (this.current != null && (beat - 1 <= this.current))
         return 'primary'
     }

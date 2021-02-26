@@ -7,7 +7,7 @@
       v-for="beat in beats"
       :key="beat"
     >
-      <v-icon :color="(current != null && (beat - 1 <= current)) ? 'primary' : null">
+      <v-icon :color="color(beat)">
         mdi-circle-small
       </v-icon>
     </v-col>
@@ -22,6 +22,15 @@ export default {
     playing: () => playing.value,
     current: () =>  metronome.value,
     beats: () => headers.value['beat-units-per-measure']
+  },
+
+  methods: {
+    color (beat) {
+      if (!this.playing)
+        return 'grey'
+      if (this.current != null && (beat - 1 <= this.current))
+        return 'primary'
+    }
   }
 }
 </script>

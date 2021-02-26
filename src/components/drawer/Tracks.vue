@@ -1,5 +1,5 @@
 <template>
-  <div class="tracks-drawer" style="height: calc(100% - 72px); overflow: auto;">
+  <div class="tracks-drawer">
     <div>
     <v-list shaped>
       <v-list-item>
@@ -49,7 +49,6 @@
       inset
       height="72"
       :color="!$vuetify.breakpoint.mobile ? 'rgb(12, 12, 12)' : 'grey darken-4'"
-      style="border-right: 1px solid rgba(255, 255, 255, 0.12)"
     >
       <v-list-item>
         <v-list-item-content>
@@ -123,6 +122,11 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.track-drawer
-  height: calc(100% - 72px)
-  overflow: auto
+.tracks-drawer
+  height: calc(100% - 72px) !important
+  overflow: auto !important
+
+  .v-footer
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important
+    border-right: 1px solid rgba(255, 255, 255, 0.12) !important
+</style>

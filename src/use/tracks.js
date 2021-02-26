@@ -125,8 +125,8 @@ export async function restore (file) {
     const archive = JSON.parse(data)
 
     // TODO: check version, warn if minor/patch, error if major diff
-    // set(store, archive.store)
-    // set(context, archive.context)
+    set(store, archive.store)
+    set(context, archive.context)
   } else {
     // notify error
     throw Error('Invalid or missing archive file')

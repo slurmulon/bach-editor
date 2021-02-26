@@ -10,7 +10,7 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action>
-        <dialog-create />
+        <create />
       </v-list-item-action>
     </v-list-item>
 
@@ -35,12 +35,12 @@
             <!-- <v-btn icon> -->
             <!--   <v-icon>mdi-delete-outline</v-icon> -->
             <!-- </v-btn> -->
-            <btn-nuke />
+            <nuke />
           </v-col>
           <v-spacer />
           <!-- <v-col cols="2"> -->
           <v-col>
-            <menu-archive />
+            <archive />
           </v-col>
           <!-- <v-spacer /> -->
         </v-row>
@@ -81,15 +81,15 @@ import { dirty } from '@/use/editor'
 import { warn } from '@/use/warn'
 import { get } from '@vueuse/core'
 
-import DialogCreate from '@/components/tracks/dialog/Create'
-import MenuArchive from '@/components/tracks/archive/Menu'
-import BtnNuke from '@/components/tracks/Nuke'
+import Create from '@/components/tracks/dialog/Create'
+import Archive from '@/components/tracks/archive/Menu'
+import Nuke from '@/components/tracks/Nuke'
 
 export default {
   components: {
-    DialogCreate,
-    MenuArchive,
-    BtnNuke
+    Create,
+    Archive,
+    Nuke
   },
 
   computed: {

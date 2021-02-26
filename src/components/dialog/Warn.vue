@@ -8,6 +8,7 @@
         <v-icon class="mr-3">{{ icon }}</v-icon>
         <v-toolbar-title>Warning</v-toolbar-title>
       </v-toolbar>
+
       <v-card-text>
         <div class="pt-9">
           {{ text }}
@@ -43,7 +44,7 @@
 </template>
 
 <script>
-import { open, yes, no, prob, text, icon, ignorable, ignoring, ignore } from '@/use/warn'
+import { open, yes, no, text, icon, ignorable, ignoring, ignore } from '@/use/warn'
 
 export default {
   computed: {

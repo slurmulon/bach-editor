@@ -56,20 +56,23 @@
             no-gutters
             justify="center"
           >
-            <v-spacer />
-            <v-col>
-              <v-btn icon>
-                <v-icon>mdi-sort</v-icon>
-              </v-btn>
+            <v-col class="text-center">
+              <create :btn="{ color: 'white', fab: false, icon: true }" />
             </v-col>
 
-            <v-spacer />
-            <v-col>
+            <!-- TODO: Enable eventually -->
+            <!-- <v-spacer /> -->
+            <!-- <v-col> -->
+            <!--   <v-btn icon> -->
+            <!--     <v-icon>mdi-sort</v-icon> -->
+            <!--   </v-btn> -->
+            <!-- </v-col> -->
+
+            <v-col class="text-center">
               <nuke />
             </v-col>
 
-            <v-spacer />
-            <v-col>
+            <v-col class="text-center">
               <archive />
             </v-col>
           </v-row>

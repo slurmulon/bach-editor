@@ -1,7 +1,5 @@
 <template>
-  <v-menu
-    bottom
-  >
+  <v-menu top>
     <template #activator="menu">
       <v-tooltip top>
         <template #activator="tooltip">

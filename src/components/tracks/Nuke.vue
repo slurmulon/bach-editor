@@ -1,10 +1,18 @@
 <template>
-  <v-btn
-    icon
-    @click="click"
-  >
-    <v-icon>mdi-delete-outline</v-icon>
-  </v-btn>
+  <v-tooltip top>
+    <template #activator="{ on, attrs }">
+      <v-btn
+        icon
+        @click="click"
+        v-on="on"
+        v-bind="attrs"
+      >
+        <v-icon>mdi-delete-outline</v-icon>
+      </v-btn>
+    </template>
+
+    <span>Delete all</span>
+  </v-tooltip>
 </template>
 
 <script>

@@ -118,4 +118,19 @@ export function shift (ref) {
   select(next)
 }
 
+export function restore (archive) {
+  // TODO: check version, warn if minor/patch, error if major diff
+  set(store, archive.store)
+  set(context, archive.context)
+}
+
+export function archive () {
+  return {
+    store: get(store),
+    context: get(store),
+    version: get(store),
+    created: Date.now()
+  }
+}
+
 export const starter = () => ({ id: nid(), name: 'Starter Track', source: template })

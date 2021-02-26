@@ -16,6 +16,38 @@
 
     <v-divider />
 
+    <v-list-item>
+      <v-list-item-content>
+        <v-row
+          no-gutters
+          justify="center"
+        >
+          <v-spacer />
+          <!-- <v-col cols="2"> -->
+          <v-col>
+            <v-btn icon>
+              <v-icon>mdi-sort</v-icon>
+            </v-btn>
+          </v-col>
+          <v-spacer />
+          <!-- <v-col cols="2"> -->
+          <v-col>
+            <v-btn icon>
+              <v-icon>mdi-delete-outline</v-icon>
+            </v-btn>
+          </v-col>
+          <v-spacer />
+          <!-- <v-col cols="2"> -->
+          <v-col>
+            <menu-archive />
+          </v-col>
+          <!-- <v-spacer /> -->
+        </v-row>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-divider />
+
     <v-list-item
       v-for="track in all"
       :key="track.id"
@@ -49,10 +81,12 @@ import { warn } from '@/use/warn'
 import { get } from '@vueuse/core'
 
 import DialogCreate from '@/components/tracks/dialog/Create'
+import MenuArchive from '@/components/tracks/archive/Menu'
 
 export default {
   components: {
-    DialogCreate
+    DialogCreate,
+    MenuArchive
   },
 
   computed: {

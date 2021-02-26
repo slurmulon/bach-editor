@@ -1,8 +1,7 @@
 <template>
   <v-sheet
     outlined
-    color="transparent"
-    class="mt-8"
+    class="player mt-8"
   >
     <!-- <v-divider /> -->
     <v-container>
@@ -11,6 +10,7 @@
         <v-col
           v-for="(section, $index) in sections"
           :key="$index"
+          :ref="`section-${$index}`"
           :cols="colsOf(section)"
           align-self="center"
         >
@@ -58,7 +58,7 @@
                     </v-card-subtitle>
                   </v-col>
 
-                  <v-col :cols="($vuetify.breakpoint.mobile || colsOf(section) <= 6) ? 12 : null">
+                  <v-col :cols="($vuetify.breakpoint.mobile || colsOf(section) < 6) ? 12 : null">
                     <v-card-text
                       v-if="section"
                       class="d-block"
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { music, sections, index, part, playing, notesIn } from '@/use/player'
+import { music, sections, index, part, playing, played, settings, notesIn } from '@/use/player'
 import { bach } from '@/use/editor'
 
 import { Durations } from 'bach-js'
@@ -99,6 +99,8 @@ export default {
     index: () => index.value,
     part: () => part.value,
     playing: () => playing.value,
+    played: () => played.value,
+    settings: () => settings.value,
     durations: () => new Durations(bach.value)
   },
 
@@ -124,7 +126,7 @@ export default {
     },
 
     durationOf (section) {
-      const beats = this.durations.cast(section.duration, { as: 'beat' })
+      const beats = this.durations.unitize(section.duration, { as: 'beat' })
       const bar = this.durations.bar.beat
       const kind = beats < bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)
@@ -132,6 +134,30 @@ export default {
 
       return `${pretty} ${kind}` + (value > 1 ? 's' : '')
     }
+  },
+
+  watch: {
+    played (next, prev) {
+      if (this.settings.follow && next && next !== prev) {
+        const [target] = this.$refs[`section-${this.index}`]
+
+        this.$vuetify.goTo(target, {
+          duration: this.durations.time.quarter,
+          easing: 'easeOutQuad'
+        })
+      }
+    }
   }
 }
 </script>
+
+<style lang="sass" scoped>
+// TODO; Import from Vuetify instead
+// $color: #121212
+
+// .player > .container
+//   background: linear-gradient(360deg, darken($color, 2.5%), $color)
+
+.player
+  background-color: transparent !important
+</style>

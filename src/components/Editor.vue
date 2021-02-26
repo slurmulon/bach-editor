@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <v-toolbar flat color="transparent">
+  <div ref="editor">
+    <v-toolbar
+      flat
+      color="transparent"
+    >
       <v-toolbar-title class="text-h4 mr-2">
         {{ name }}
       </v-toolbar-title>
@@ -106,7 +109,7 @@
 
 <script>
 import { commit as save, tab, draft, name, dirty, copy } from '@/use/editor'
-import { toggle, playing } from '@/use/player'
+import { toggle, playing, settings } from '@/use/player'
 import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
@@ -155,6 +158,14 @@ export default {
 
   mounted () {
     load()
+  },
+
+  watch: {
+    playing (next, prev) {
+      if (!next && prev && settings.value.coder) {
+        this.$vuetify.goTo(0, { duration: 750, easing: 'easeOutQuad' })
+      }
+    }
   }
 }
 </script>
@@ -162,7 +173,8 @@ export default {
 <style lang="sass">
 // TODO: Move to main.css or the like
 .v-tabs-items
-  border: 1px solid #1e1e1e
+  // border: 1px solid #1e1e1e
+  border: 1px solid rgba(255, 255, 255, 0.12) !important
   background-color: transparent !important
 
 /* required class */
@@ -172,6 +184,7 @@ export default {
   line-height: 1.5
   padding: 5px
   max-height: 300px
+  // background-color: darken(#0d0d0d, 2%)
 
   .token.play,
   .token.keyword

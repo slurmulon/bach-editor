@@ -13,6 +13,10 @@
 - https://vis.versilstudios.com/vsco-community.html
 - http://theremin.music.uiowa.edu/MISpiano.html
 
+# Math
+
+- https://www.trysmudford.com/blog/linear-interpolation-functions/
+
 # Prism
 
 - https://github.com/PrismJS/prism/tree/a5107d5c284126143ce9405025946e21bb0b956e/components

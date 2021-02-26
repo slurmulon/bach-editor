@@ -1,12 +1,13 @@
 <template>
   <layout>
-  <!-- <div class="home"> -->
-  <!--   <img alt="Vue logo" src="../assets/logo.png"> -->
-  <!--   <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-  <!-- </div> -->
-    <!-- Main content -->
-    <editor />
-    <player />
+    <template #default>
+      <editor />
+      <player />
+    </template>
+
+    <template #footer>
+      <controls />
+    </template>
   </layout>
 </template>
 
@@ -14,13 +15,15 @@
 import Layout from '@/components/Layout'
 import Editor from '@/components/Editor'
 import Player from '@/components/Player'
+import Controls from '@/components/Controls'
 
 export default {
   name: 'Home',
   components: {
     Layout,
     Editor,
-    Player
+    Player,
+    Controls
   }
 }
 </script>

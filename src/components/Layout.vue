@@ -72,17 +72,12 @@
 
     <v-footer
       app
-      color="transparent"
-      height="72"
       inset
+      height="72"
+      color="rgb(12, 12, 12)"
+      elevation="12"
     >
-      <!-- <v-text-field -->
-      <!--   dense -->
-      <!--   flat -->
-      <!--   hide-details -->
-      <!--   rounded -->
-      <!--   solo -->
-      <!-- /> -->
+      <slot name="footer" />
     </v-footer>
 
     <notify />
@@ -155,3 +150,16 @@ export default {
   }
 }
 </script>
+
+<style lang="sass">
+// ORIG
+$color: #121212
+// NICE ALT
+// $color: rgb(12, 12, 12)
+
+.v-main
+  background: linear-gradient(360deg, darken($color, 3%), $color)
+
+.v-footer
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important
+</style>

@@ -1,25 +1,56 @@
 import { selected as track } from '@/use/tracks'
 import { bach } from '@/use/editor'
-import { all as notes } from '@/core/notes'
 
 import { Gig } from 'gig'
 import { Sections } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
+import { note } from '@tonaljs/tonal'
 import { ref, computed, watch } from '@vue/composition-api'
-import { reactify } from '@vueuse/core'
+import { get, set, reactify, useStorage, useRafFn, useDebounceFn } from '@vueuse/core'
 
 export const gig = ref({})
 export const current = ref({})
 export const index = ref(0)
+export const metronome = ref(null)
+export const progress = ref(null)
 export const part = ref('chord')
+export const played = ref(Date.now())
+
+export const settings = useStorage('bach-editor-player-settings', {
+  volume: 0,
+  muted: false,
+  loop: true,
+  follow: true,
+  coder: true
+})
 
 export const music = computed(() => new Sections(track.value.source))
 export const sections = computed(() => music.value.all || [])
 export const measures = computed(() => music.value.measures || [])
+export const durations = computed(() => music.value.durations || {})
 export const headers = computed(() => music.value.source.headers || {})
+
 export const playing = computed(() => gig.value.playing)
 export const seconds = reactify(duration => music.value.durations.cast(duration, { as: 'second' }))
+
+export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
+
+export const timeline = useRafFn(() => {
+  if (playing.value) {
+    const { completion } = gig.value
+
+    if (completion <= 1) {
+      progress.value = completion * 100
+      metronome.value = gig.value.metronome
+    } else {
+      progress.value = 0
+      metronome.value = 0
+
+      timeline.pause()
+    }
+  }
+}, { immediate: false })
 
 watch(track, (next, prev) => {
   if (gig.value && next && prev && next.id !== prev.id) {
@@ -32,7 +63,7 @@ export async function load (source) {
 
   gig.value = new Gig({
     source,
-    loop: true
+    loop: settings.value.loop
   })
 
   gig.value.on('beat:play', () => {
@@ -41,19 +72,22 @@ export async function load (source) {
 
     current.value = section
     index.value = cursor.section
+    played.value = Date.now()
 
     play(section)
+    timeline.resume()
   })
 
-  return gig.value.play()
+  gig.value.on('stop', () => {
+    reset()
+  })
+
+  start()
 }
 
-export function notesIn (section, part) {
-  const group = section.parts[part]
-  const all = group ? group.notes : []
-  const notes = Array.isArray(all) ? all : [all]
-
-  return notes.map(note => `${note}2`)
+export function start () {
+  gig.value.play()
+  timeline.resume()
 }
 
 export function play (section) {
@@ -70,16 +104,25 @@ export function play (section) {
 export function stop () {
   if (gig.value.source) {
     gig.value.kill()
-    gig.value = {}
   }
 
-  current.value = {}
-  index.value = 0
+  timeline.pause()
+  reset()
 }
 
 export function restart () {
+  reset()
+
   gig.value.kill()
   gig.value.play()
+}
+
+export function reset () {
+  gig.value = {}
+  current.value = {}
+  index.value = 0
+  progress.value = null
+  metronome.value = null
 }
 
 export function toggle () {
@@ -92,18 +135,57 @@ export function toggle () {
   }
 }
 
-export function sample (note) {
+export function gain (decibals) {
+  const volume = Math.max(DECIBALS.min, Math.min(DECIBALS.max, decibals))
+  const audible = volume > DECIBALS.min
+
+  if (audible) {
+    configure({ volume: decibals })
+
+    sampler.volume.value = volume
+  } else {
+    mute()
+  }
+}
+
+export function loops (yes = true) {
+  configure({ loop: yes })
+
+  gig.value.loops = yes
+}
+
+export function mute (yes = true) {
+  configure({ muted: yes })
+
+  // FIXME: This doesn't seem to have an effect on the actual volume (tone.js issue, it seems)
+  sampler.volume.mute = yes
+}
+
+export function notesIn (section, part) {
+  const group = section.parts[part]
+  const all = group ? group.notes : []
+  const notes = Array.isArray(all) ? all : [all]
+
+  return notes.map(note => `${note}2`)
+}
+
+export function sampleOf (note) {
   const pitch = note.name.replace(/#/, 's')
   const url = `${pitch}.mp3`
 
   return url
 }
 
-const urls = notes.reduce((map, note) => ({ ...map, [note.name]: sample(note) }), {})
+export const notes = ['Ab2', 'A2', 'Bb2', 'B2', 'C2', 'Db2', 'D2', 'Eb2', 'E2', 'F2', 'Gb2', 'G2'].map(note)
+
+export const samples = notes.reduce((map, note) => ({ ...map, [note.name]: sampleOf(note) }), {})
 
 // @see: https://github.com/sustained/sforzando/blob/master/src/library/instruments.js
 export const sampler = new Sampler({
   release: 1,
-  baseUrl: 'http://127.0.0.1:8086/',
-  urls
+  urls: samples,
+  baseUrl: 'http://127.0.0.1:8086/'
+  // baseUrl: process.env.VUE_APP_AUDIO_SERVER_BASE_URL
 }).toDestination()
+
+export const DECIBALS = { min: -24, max: 4 }

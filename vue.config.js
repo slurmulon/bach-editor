@@ -13,6 +13,5 @@ module.exports = {
       .use('raw-loader')
         .loader('raw-loader')
         .end()
-  },
-  lintOnSave: false
+  }
 }

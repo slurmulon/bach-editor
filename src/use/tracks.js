@@ -127,8 +127,8 @@ export function restore (archive) {
 export function archive () {
   return {
     store: get(store),
-    context: get(store),
-    version: get(store),
+    context: get(context),
+    version: get(version),
     created: Date.now()
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <v-menu
-    left
+    bottom
   >
     <template #activator="menu">
       <v-tooltip top>
@@ -23,8 +23,20 @@
     </template>
 
     <v-list dense>
-      <v-list-item>Import archive</v-list-item>
-      <v-list-item>Export archive</v-list-item>
+      <restore />
+      <create />
     </v-list>
   </v-menu>
 </template>
+
+<script>
+import Create from './Create'
+import Restore from './dialog/Restore'
+
+export default {
+  components: {
+    Create,
+    Restore
+  }
+}
+</script>

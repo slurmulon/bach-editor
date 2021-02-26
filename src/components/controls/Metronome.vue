@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { headers, metronome, playing } from '@/use/player'
+import { metronome, headers, playing } from '@/use/player'
 
 export default {
   computed: {

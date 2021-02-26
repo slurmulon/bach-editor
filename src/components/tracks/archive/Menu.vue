@@ -1,5 +1,8 @@
 <template>
-  <v-menu top>
+  <v-menu
+    top
+    nudge-top="40"
+  >
     <template #activator="menu">
       <v-tooltip top>
         <template #activator="tooltip">

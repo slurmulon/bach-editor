@@ -144,8 +144,28 @@ export default {
             filter: 'numeric'
           },
           {
+            name: 'sec. per beat unit',
+            value: get(durations).cast(get(durations).time.beat, { is: 'ms', as: 'second' }),
+            filter: 'numeric'
+          },
+          {
             name: 'ms per pulse beat',
             header: 'ms-per-pulse-beat',
+            filter: 'numeric'
+          },
+          {
+            name: 'sec. per pulse beat',
+            value: get(durations).cast(get(durations).time.pulse, { is: 'ms', as: 'second' }),
+            filter: 'numeric'
+          },
+          {
+            name: 'ms per bar',
+            value: get(durations).cast(get(durations).bar.pulse, { as: 'ms' }),
+            filter: 'numeric'
+          },
+          {
+            name: 'seconds per bar',
+            value: get(durations).cast(get(durations).bar.beat, { is: 'beat', as: 'second' }),
             filter: 'numeric'
           }
         ],

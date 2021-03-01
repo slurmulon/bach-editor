@@ -3,18 +3,25 @@
     v-model="open"
     max-width="400"
   >
-     <v-form @submit.prevent="load">
+     <v-form
+       v-model="valid"
+       @submit.prevent="load"
+     >
       <v-card>
         <v-toolbar>
           <v-toolbar-title>Import Archive</v-toolbar-title>
         </v-toolbar>
 
         <v-card-text>
-         <v-file-input
+          <v-file-input
             v-model="inputs.file"
+            :rules="rules"
+            accept="application/json"
             label="Select archive file (.json)"
             prepend-icon="mdi-archive"
             show-size
+            required
+            class="mb-3"
           />
 
           <v-sheet
@@ -51,7 +58,7 @@
           <v-btn
             text
             color="primary"
-            :disabled="!inputs.file"
+            :disabled="!valid || !inputs.file"
             @click="load"
           >
             Import
@@ -74,9 +81,9 @@ export default {
   },
 
   data: () => ({
-    inputs: {
-      file: null
-    }
+    valid: false,
+    inputs: { file: null },
+    rules: [value => !value || value.size < 5000000 || 'Archive file must be less than 5MB!']
   }),
 
   computed: {

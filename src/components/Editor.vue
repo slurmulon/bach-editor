@@ -26,49 +26,10 @@
             <v-icon>mdi-clipboard-text-play</v-icon>
           </v-btn>
         </template>
-        <span>Copy to clipboard</span>
+        <span>Copy code</span>
       </v-tooltip>
 
-      <v-tooltip
-        top
-        open-delay="500"
-      >
-        <template #activator="{ on, attrs }">
-          <v-btn
-            icon
-            color="secondary"
-            :disabled="!dirty"
-            @click="save"
-            v-on="on"
-            v-bind="attrs"
-          >
-            <v-icon>mdi-content-save</v-icon>
-          </v-btn>
-        </template>
-        <span>Save locally</span>
-      </v-tooltip>
-
-      <v-tooltip
-        top
-        open-delay="500"
-      >
-        <template #activator="{ on, attrs }">
-          <v-btn
-            icon
-            x-large
-            :disabled="dirty"
-            :color="playing ? 'primary' : 'secondary'"
-            v-on="on"
-            v-bind="attrs"
-            @click="toggle"
-          >
-            <v-icon v-if="!playing">mdi-play-circle</v-icon>
-            <v-icon v-else>mdi-stop-circle</v-icon>
-          </v-btn>
-        </template>
-        <span>Play/Stop</span>
-        <!-- <span>{{ !playing ? 'Play' : 'Stop' }} track</span> -->
-      </v-tooltip>
+      <play />
     </v-toolbar>
 
     <v-divider />
@@ -114,6 +75,7 @@ import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
+import Play from './controls/Play'
 import DialogRename from './editor/dialog/Rename'
 import DialogWarn from './dialog/Warn'
 
@@ -127,6 +89,7 @@ export default {
   components: {
     BachCode,
     BachJson,
+    Play,
     DialogRename,
     DialogWarn
   },
@@ -153,7 +116,6 @@ export default {
     save,
     copy,
     toggle
-
   },
 
   mounted () {

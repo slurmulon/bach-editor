@@ -7,11 +7,10 @@
       <v-btn
         icon
         x-large
-        :disabled="dirty"
         :color="playing ? 'primary' : 'secondary'"
         v-on="on"
         v-bind="attrs"
-        @click="toggle"
+        @click="click"
       >
         <v-icon x-large v-if="!playing">mdi-play-circle</v-icon>
         <v-icon x-large v-else>mdi-stop-circle</v-icon>
@@ -23,6 +22,7 @@
 
 <script>
 import { toggle, playing } from '@/use/player'
+import { commit as save } from '@/use/editor'
 import { dirty } from '@/use/editor'
 
 export default {
@@ -31,6 +31,12 @@ export default {
     dirty: () => dirty.value
   },
 
-  methods: { toggle }
+  methods: {
+    click () {
+      if (this.dirty) save()
+
+      toggle()
+    }
+  }
 }
 </script>

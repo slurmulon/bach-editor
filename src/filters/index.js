@@ -1,4 +1,8 @@
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import Fraction from 'fraction.js'
+
+dayjs.extend(relativeTime)
 
 export const numberless = text => {
   if (!text) return text
@@ -19,3 +23,9 @@ export const meter = value => {
 }
 
 export const round = value => !isNaN(value) ? value.toFixed(2) : value
+
+export const when = value => {
+  if (!value) return value
+
+  return dayjs(value).fromNow()
+}

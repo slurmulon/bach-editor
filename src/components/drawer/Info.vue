@@ -35,6 +35,7 @@
         <v-expansion-panel-header expand-icon="mdi-menu-down">
           <span class="text-capitalize">{{ key }}</span>
         </v-expansion-panel-header>
+
         <v-expansion-panel-content>
           <v-list
             subheader
@@ -65,16 +66,18 @@
 </template>
 
 <script>
+import { current } from '@/use/tracks'
 import { headers } from '@/use/player'
 import { clipboard } from '@/use/editor'
 import { right as open, mini } from '@/use/drawer'
 
 export default {
   data: () => ({
-    panel: [0, 0]
+    panel: [1, 1, 0]
   }),
 
   computed: {
+    track: () => current.value,
     headers: () => headers.value,
 
     open: {
@@ -83,7 +86,24 @@ export default {
     },
 
     metrics () {
+      console.log('wut', this.track, current.value)
       return {
+        general: [
+          {
+            name: 'Created',
+            filter: 'when',
+            value: this.track.created
+          },
+          {
+            name: 'Updated',
+            filter: 'when',
+            value: this.track.updated
+          },
+          {
+            name: 'ID',
+            value: this.track.id
+          },
+        ],
         timing: [
           {
             name: 'Meter',
@@ -143,7 +163,7 @@ export default {
             name: 'ms per pulse beat',
             header: 'ms-per-pulse-beat',
             filter: 'round'
-          },
+          }
         ]
       }
     }
@@ -151,7 +171,7 @@ export default {
 
   methods: {
     valueOf (metric) {
-      return this.headers[metric.header]
+      return metric.value || this.headers[metric.header]
     },
 
     pretty (metric) {

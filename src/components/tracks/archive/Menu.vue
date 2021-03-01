@@ -5,29 +5,29 @@
     nudge-top="40"
   >
     <template #activator="menu">
-      <v-tooltip
-        top
-        open-delay="500"
+      <div
+        v-on="menu.on"
+        v-bind="menu.attrs"
       >
-        <template #activator="tooltip">
-          <div
-            v-on="tooltip.on"
-            v-bind="tooltip.attrs"
-          >
+        <v-tooltip
+          top
+          open-delay="500"
+        >
+          <template #activator="tooltip">
             <v-btn
               icon
-              v-on="menu.on"
-              v-bind="menu.attrs"
+              v-on="tooltip.on"
+              v-bind="tooltip.attrs"
             >
               <v-icon>mdi-archive</v-icon>
             </v-btn>
-          </div>
 
-          <restore :show.sync="restoring" />
-        </template>
+            <restore :show.sync="restoring" />
+          </template>
 
-        <span>Manage track archives</span>
-      </v-tooltip>
+          <span>Manage track archives</span>
+        </v-tooltip>
+      </div>
     </template>
 
     <v-list dense>

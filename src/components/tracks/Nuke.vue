@@ -31,7 +31,7 @@ export default {
   methods: {
     click () {
       warn({
-        problem: 'nuking',
+        problem: 'nuking-all',
         then: () => nuke()
       })
     }

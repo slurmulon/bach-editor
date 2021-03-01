@@ -9,7 +9,11 @@ export const text = ref('')
 export const icon = ref('mdi-alert-box')
 export const ignorable = ref(true)
 
-export const ignored = useStorage('bach-editor-ignored-warns', { changes: false, removing: false })
+export const ignored = useStorage('bach-editor-ignored-warns', {
+  'selecting-dirty': false,
+  'removing-dirty': false,
+  'removing-one': false
+})
 
 export const ignoring = reactify(problem => ignored.value[problem || prob.value])
 
@@ -70,15 +74,19 @@ export function reset () {
 }
 
 export const scenarios = {
-  changes: {
+  'selecting-dirty': {
     text: 'You will lose unsaved changes if you change tracks!',
     ignorable: true
   },
-  removing: {
+  'removing-dirty': {
     text: 'You will lose unsaved changes if you delete this track!',
     ignorable: true
   },
-  nuking: {
+  'removing-one': {
+    text: 'Are you sure you want to delete this track?',
+    ignorable: true
+  },
+  'nuking-all': {
     text: 'You are about to delete every track except the one you have selected!',
     ignorable: false
   }

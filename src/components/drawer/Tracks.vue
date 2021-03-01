@@ -31,14 +31,7 @@
           <v-list-item-subtitle>{{ track.id }}</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
-          <v-btn
-            v-if="multiple"
-            icon
-            small
-            @click.stop="remove(track)"
-          >
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
+          <remove :track="track" />
         </v-list-item-action>
       </v-list-item>
     </v-list>
@@ -89,12 +82,14 @@ import { warn } from '@/use/warn'
 import { get } from '@vueuse/core'
 
 import Create from '@/components/tracks/dialog/Create'
+import Remove from '@/components/tracks/Remove'
 import Archive from '@/components/tracks/archive/Menu'
 import Nuke from '@/components/tracks/Nuke'
 
 export default {
   components: {
     Create,
+    Remove,
     Archive,
     Nuke
   },
@@ -113,7 +108,7 @@ export default {
     remove: track => {
       if (get(dirty) && get(active(track))) {
         warn({
-          problem: 'removing',
+          problem: 'removing-dirty',
           then: () => destroy(track)
         })
       } else {

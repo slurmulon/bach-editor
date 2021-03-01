@@ -71,6 +71,7 @@
 
 <script>
 import { restore } from '@/use/tracks'
+import { ok, fail } from '@/use/notify'
 
 export default {
   props: {
@@ -99,10 +100,16 @@ export default {
   },
 
   methods: {
-    load () {
-      restore(this.inputs.file)
+    async load () {
+      try {
+        await restore(this.inputs.file)
 
-      this.open = false
+        ok({ text: 'Successfully imported track archive!' })
+
+        this.open = false
+      } catch (error) {
+        fail({ text: 'Failed to restore archive file due to invalid JSON data.' })
+      }
     }
   },
 

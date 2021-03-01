@@ -6,6 +6,7 @@
     <template #activator="{ on, attrs }">
       <v-btn
         icon
+        :disabled="!enabled"
         @click="click"
         v-on="on"
         v-bind="attrs"
@@ -19,10 +20,14 @@
 </template>
 
 <script>
-import { nuke } from '@/use/tracks'
+import { nuke, multiple } from '@/use/tracks'
 import { warn } from '@/use/warn'
 
 export default {
+  computed: {
+    enabled: () => multiple.value
+  },
+
   methods: {
     click () {
       warn({

@@ -3,22 +3,7 @@
     v-model="open"
     max-width="400"
   >
-    <template #activator="{ on, attrs }">
-      <v-list-item
-        v-on="on"
-        v-bind="attrs"
-      >
-        <v-list-item-avatar>
-          <v-icon>mdi-upload</v-icon>
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          Import track archive
-        </v-list-item-content>
-      </v-list-item>
-    </template>
-
-    <v-form @submit.prevent="load">
+     <v-form @submit.prevent="load">
       <v-card>
         <v-toolbar>
           <v-toolbar-title>Import Archive</v-toolbar-title>
@@ -28,6 +13,7 @@
          <v-file-input
             v-model="inputs.file"
             label="Select archive file (.json)"
+            prepend-icon="mdi-archive"
             show-size
           />
 
@@ -39,12 +25,13 @@
           >
             <div class="mb-2">
               <v-icon
+                small
                 color="warning"
                 class="pr-2"
               >
                 mdi-alert
               </v-icon>
-              <span class="text-h6">Warning</span>
+              <span class="text-subtitle-1 font-weight-bold">Warning</span>
             </div>
             <div>
               Importing an archive will replace your current collection of tracks unless you have already created an export with your latest changes!
@@ -79,12 +66,30 @@
 import { restore } from '@/use/tracks'
 
 export default {
+  props: {
+    show: {
+      type: Boolean,
+      required: false
+    }
+  },
+
   data: () => ({
-    open: false,
     inputs: {
       file: null
     }
   }),
+
+  computed: {
+    open: {
+      get () {
+        return this.show
+      },
+
+      set (value) {
+        this.$emit('update:show', value)
+      }
+    }
+  },
 
   methods: {
     load () {

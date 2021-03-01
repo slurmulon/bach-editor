@@ -1,5 +1,8 @@
 <template>
-  <v-tooltip top>
+  <v-tooltip
+    top
+    open-delay="500"
+  >
     <template #activator="{ on, attrs }">
       <v-btn
         icon
@@ -11,7 +14,7 @@
       </v-btn>
     </template>
 
-    <span>Delete all</span>
+    <span>Delete all tracks</span>
   </v-tooltip>
 </template>
 

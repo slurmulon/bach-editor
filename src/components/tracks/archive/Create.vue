@@ -1,7 +1,5 @@
 <template>
-  <v-list-item
-    @click.stop="save"
-  >
+  <v-list-item @click.stop="save">
     <v-list-item-avatar>
       <v-icon>mdi-download</v-icon>
     </v-list-item-avatar>
@@ -21,10 +19,6 @@
 import { archive } from '@/use/tracks'
 
 export default {
-  data: () => ({
-    open: false
-  }),
-
   methods: {
     save () {
       const { download } = this.$refs
@@ -36,6 +30,8 @@ export default {
       download.setAttribute('href', href)
       download.setAttribute('download', filename)
       download.click()
+
+      this.$emit('done')
     }
   }
 }

@@ -67,9 +67,11 @@
 
 <script>
 import { current } from '@/use/tracks'
-import { headers } from '@/use/player'
+import { durations, headers } from '@/use/player'
 import { clipboard } from '@/use/editor'
 import { right as open, mini } from '@/use/drawer'
+
+import { get, set } from '@vueuse/core'
 
 export default {
   data: () => ({
@@ -77,16 +79,15 @@ export default {
   }),
 
   computed: {
-    track: () => current.value,
-    headers: () => headers.value,
+    track: () => get(current),
+    headers: () => get(headers),
 
     open: {
-      get: () => open.value,
-      set: (value) => open.value = value
+      get: () => get(open),
+      set: (value) => set(open, value)
     },
 
     metrics () {
-      console.log('wut', this.track, current.value)
       return {
         general: [
           {
@@ -116,7 +117,7 @@ export default {
             filter: ''
           }
         ],
-        durations: [
+        units: [
           {
             name: 'beat unit',
             header: 'beat-unit',
@@ -137,7 +138,18 @@ export default {
             header: 'pulse-beats-per-measure',
             filter: ''
           },
-
+          {
+            name: 'ms per beat unit',
+            header: 'ms-per-beat-unit',
+            filter: 'round'
+          },
+          {
+            name: 'ms per pulse beat',
+            header: 'ms-per-pulse-beat',
+            filter: 'round'
+          }
+        ],
+        totals: [
           {
             name: 'total bars',
             // TODO: Update name of this header in `bach`, poorly named (or create alias such as `total-measures`
@@ -155,15 +167,16 @@ export default {
             filter: ''
           },
           {
-            name: 'ms per beat unit',
-            header: 'ms-per-beat-unit',
+            name: 'total ms',
+            value: get(durations).cast(get(durations).total, { as: 'ms' }),
             filter: 'round'
           },
           {
-            name: 'ms per pulse beat',
-            header: 'ms-per-pulse-beat',
+            name: 'total seconds',
+            value: get(durations).cast(get(durations).total, { as: 'second' }),
             filter: 'round'
           }
+
         ]
       }
     }

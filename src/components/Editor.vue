@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { commit as save, tab, draft, name, dirty, copy } from '@/use/editor'
+import { tab, draft, name, dirty, copy } from '@/use/editor'
 import { toggle, playing, settings } from '@/use/player'
 import { load } from '@/use/tracks'
 
@@ -113,7 +113,6 @@ export default {
   },
 
   methods: {
-    save,
     copy,
     toggle
   },

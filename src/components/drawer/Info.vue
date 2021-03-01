@@ -141,12 +141,12 @@ export default {
           {
             name: 'ms per beat unit',
             header: 'ms-per-beat-unit',
-            filter: 'round'
+            filter: 'numeric'
           },
           {
             name: 'ms per pulse beat',
             header: 'ms-per-pulse-beat',
-            filter: 'round'
+            filter: 'numeric'
           }
         ],
         totals: [
@@ -169,12 +169,12 @@ export default {
           {
             name: 'total ms',
             value: get(durations).cast(get(durations).total, { as: 'ms' }),
-            filter: 'round'
+            filter: 'numeric'
           },
           {
             name: 'total seconds',
             value: get(durations).cast(get(durations).total, { as: 'second' }),
-            filter: 'round'
+            filter: 'numeric'
           }
 
         ]

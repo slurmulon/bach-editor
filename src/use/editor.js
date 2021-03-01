@@ -22,11 +22,7 @@ export const validate = (source) => {
   try {
     const bach = compose(source)
 
-    if (inspect(bach)) {
-      ok({ text: 'Track compiled successfully!' })
-
-      return true
-    }
+    return inspect(bach)
   } catch (err) {
     fail({ text: 'Track compilation failed!' })
 
@@ -61,6 +57,8 @@ export function commit (state = {}) {
 
     set(draft, state.source || draft.value)
     set(dirty, false)
+  } else {
+    throw Error('Failed to commit changes, invalid bach')
   }
 }
 
@@ -76,7 +74,7 @@ export function copy () {
 
     clipboard.copy(content)
 
-    ok({ text: 'Copied data to clipboard!' })
+    ok({ text: 'Copied code to clipboard!' })
   } else {
     fail({ text: 'Copying not supported or permitted on device!' })
   }

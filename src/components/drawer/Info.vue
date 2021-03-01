@@ -35,6 +35,7 @@
         <v-expansion-panel-header expand-icon="mdi-menu-down">
           <span class="text-capitalize">{{ key }}</span>
         </v-expansion-panel-header>
+
         <v-expansion-panel-content>
           <v-list
             subheader
@@ -65,25 +66,45 @@
 </template>
 
 <script>
-import { headers } from '@/use/player'
+import { current } from '@/use/tracks'
+import { durations, headers } from '@/use/player'
 import { clipboard } from '@/use/editor'
 import { right as open, mini } from '@/use/drawer'
 
+import { get, set } from '@vueuse/core'
+
 export default {
   data: () => ({
-    panel: [0, 0]
+    panel: [1, 1, 0]
   }),
 
   computed: {
-    headers: () => headers.value,
+    track: () => get(current),
+    headers: () => get(headers),
 
     open: {
-      get: () => open.value,
-      set: (value) => open.value = value
+      get: () => get(open),
+      set: (value) => set(open, value)
     },
 
     metrics () {
       return {
+        general: [
+          {
+            name: 'Created',
+            filter: 'when',
+            value: this.track.created
+          },
+          {
+            name: 'Updated',
+            filter: 'when',
+            value: this.track.updated
+          },
+          {
+            name: 'ID',
+            value: this.track.id
+          },
+        ],
         timing: [
           {
             name: 'Meter',
@@ -96,7 +117,7 @@ export default {
             filter: ''
           }
         ],
-        durations: [
+        units: [
           {
             name: 'beat unit',
             header: 'beat-unit',
@@ -117,7 +138,38 @@ export default {
             header: 'pulse-beats-per-measure',
             filter: ''
           },
-
+          {
+            name: 'ms per beat unit',
+            header: 'ms-per-beat-unit',
+            filter: 'numeric'
+          },
+          {
+            name: 'sec. per beat unit',
+            value: get(durations).cast(get(durations).time.beat, { is: 'ms', as: 'second' }),
+            filter: 'numeric'
+          },
+          {
+            name: 'ms per pulse beat',
+            header: 'ms-per-pulse-beat',
+            filter: 'numeric'
+          },
+          {
+            name: 'sec. per pulse beat',
+            value: get(durations).cast(get(durations).time.pulse, { is: 'ms', as: 'second' }),
+            filter: 'numeric'
+          },
+          {
+            name: 'ms per bar',
+            value: get(durations).cast(get(durations).bar.pulse, { as: 'ms' }),
+            filter: 'numeric'
+          },
+          {
+            name: 'seconds per bar',
+            value: get(durations).cast(get(durations).bar.beat, { is: 'beat', as: 'second' }),
+            filter: 'numeric'
+          }
+        ],
+        totals: [
           {
             name: 'total bars',
             // TODO: Update name of this header in `bach`, poorly named (or create alias such as `total-measures`
@@ -135,15 +187,16 @@ export default {
             filter: ''
           },
           {
-            name: 'ms per beat unit',
-            header: 'ms-per-beat-unit',
-            filter: 'round'
+            name: 'total ms',
+            value: get(durations).cast(get(durations).total, { as: 'ms' }),
+            filter: 'numeric'
           },
           {
-            name: 'ms per pulse beat',
-            header: 'ms-per-pulse-beat',
-            filter: 'round'
-          },
+            name: 'total seconds',
+            value: get(durations).cast(get(durations).total, { as: 'second' }),
+            filter: 'numeric'
+          }
+
         ]
       }
     }
@@ -151,7 +204,7 @@ export default {
 
   methods: {
     valueOf (metric) {
-      return this.headers[metric.header]
+      return metric.value || this.headers[metric.header]
     },
 
     pretty (metric) {

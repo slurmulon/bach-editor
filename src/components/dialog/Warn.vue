@@ -10,7 +10,7 @@
       </v-toolbar>
 
       <v-card-text>
-        <div class="pt-9">
+        <div class="pt-7">
           {{ text }}
         </div>
       </v-card-text>

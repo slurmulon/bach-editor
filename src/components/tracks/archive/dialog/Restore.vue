@@ -17,7 +17,7 @@
             v-model="inputs.file"
             :rules="rules"
             accept="application/json"
-            label="Select archive file (.json)"
+            label="Track archive file (.json)"
             prepend-icon="mdi-archive"
             show-size
             required

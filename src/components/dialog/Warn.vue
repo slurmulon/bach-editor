@@ -15,6 +15,8 @@
         </div>
       </v-card-text>
 
+      <v-divider />
+
       <v-card-actions>
         <v-checkbox
           v-if="ignorable"

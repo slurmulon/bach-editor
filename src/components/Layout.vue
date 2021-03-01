@@ -30,22 +30,13 @@
       >
         <v-icon>mdi-information-outline</v-icon>
       </v-btn>
-
-      <!-- <v-responsive max-width="156"> -->
-      <!--   <v-text-field -->
-      <!--     dense -->
-      <!--     flat -->
-      <!--     hide-details -->
-      <!--     rounded -->
-      <!--     solo-inverted -->
-      <!--   /> -->
-      <!-- </v-responsive> -->
     </v-app-bar>
 
     <v-navigation-drawer
       v-model="left"
       app
       clipped
+      hide-overlay
       width="300"
       :color="!$vuetify.breakpoint.mobile ? 'transparent' : 'grey darken-4'
 "

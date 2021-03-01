@@ -118,4 +118,35 @@ export function shift (ref) {
   select(next)
 }
 
+export async function nuke () {
+  const track = get(current)
+
+  set(store, { [track.id]: track })
+}
+
+export async function restore (file) {
+  const data = file instanceof File ? await file.text() : null
+
+  if (data) {
+    const archive = JSON.parse(data)
+
+    // TODO: check version, warn if minor/patch, error if major diff
+    set(store, archive.store)
+    set(context, archive.context)
+
+    return archive
+  } else {
+    throw Error('Invalid or missing archive file')
+  }
+}
+
+export function archive () {
+  return {
+    store: get(store),
+    context: get(context),
+    version: get(version),
+    created: Date.now()
+  }
+}
+
 export const starter = () => ({ id: nid(), name: 'Starter Track', source: template })

@@ -5,8 +5,7 @@
   >
     <template #activator="dialog">
       <v-tooltip
-        :top="!$vuetify.breakpoint.mobile"
-        :right="$vuetify.breakpoint.mobile"
+        top
         open-delay="500"
       >
         <template #activator="tooltip">
@@ -17,9 +16,9 @@
             <v-btn
               fab
               small
-              color="secondary"
+              :color="btn.color || 'secondary'"
               v-on="dialog.on"
-              v-bind="dialog.attrs"
+              v-bind="{ ...btn, ...dialog.attrs }"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -74,6 +73,14 @@
 import { create } from '@/use/tracks'
 
 export default {
+  props: {
+    btn: {
+      type: Object,
+      required: false,
+      default: () => ({})
+    }
+  },
+
   data: () => ({
     open: false,
     inputs: {

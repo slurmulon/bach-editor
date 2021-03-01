@@ -7,8 +7,13 @@ export const deny = ref(null)
 export const prob = ref('')
 export const text = ref('')
 export const icon = ref('mdi-alert-box')
+export const ignorable = ref(true)
 
-export const ignored = useStorage('bach-editor-ignored-warns', { changes: false, removing: false })
+export const ignored = useStorage('bach-editor-ignored-warns', {
+  'selecting-dirty': false,
+  'removing-dirty': false,
+  'removing-one': false
+})
 
 export const ignoring = reactify(problem => ignored.value[problem || prob.value])
 
@@ -25,6 +30,7 @@ export function commit (props, show = true) {
   set(text, props.text)
   set(icon, props.icon || icon.value)
   set(prob, props.prob || props.problem)
+  set(ignorable, props.ignorable || scenarios[props.problem].ignorable)
 }
 
 export function warn (props) {
@@ -36,7 +42,7 @@ export function warn (props) {
 
     commit({ ...scenario, ...props }, concerned)
 
-    if (!concerned) {
+    if (scenario.ignorable && !concerned) {
       yes()
     }
   } else {
@@ -68,10 +74,20 @@ export function reset () {
 }
 
 export const scenarios = {
-  changes: {
-    text: 'You will lose unsaved changes if you change tracks!'
+  'selecting-dirty': {
+    text: 'You will lose unsaved changes if you change tracks!',
+    ignorable: true
   },
-  removing: {
-    text: 'You will lose unsaved changes if you delete this track!'
+  'removing-dirty': {
+    text: 'You will lose unsaved changes if you delete this track!',
+    ignorable: true
+  },
+  'removing-one': {
+    text: 'Are you sure you want to delete this track?',
+    ignorable: true
+  },
+  'nuking-all': {
+    text: 'You are about to delete every track except the one you have selected!',
+    ignorable: false
   }
 }

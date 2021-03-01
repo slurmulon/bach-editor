@@ -43,7 +43,7 @@ export function load (source) {
 
     if (dirty.value) {
       warn({
-        problem: 'changes',
+        problem: 'selecting-dirty',
         then: () => action(),
         deny: () => reject(),
       })

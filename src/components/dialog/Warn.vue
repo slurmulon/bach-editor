@@ -8,14 +8,18 @@
         <v-icon class="mr-3">{{ icon }}</v-icon>
         <v-toolbar-title>Warning</v-toolbar-title>
       </v-toolbar>
+
       <v-card-text>
         <div class="pt-9">
           {{ text }}
         </div>
       </v-card-text>
 
+      <v-divider />
+
       <v-card-actions>
         <v-checkbox
+          v-if="ignorable"
           v-model="ignore"
           label="Ignore"
         />
@@ -42,12 +46,13 @@
 </template>
 
 <script>
-import { open, yes, no, text, icon, ignoring, ignore } from '@/use/warn'
+import { open, yes, no, text, icon, ignorable, ignoring, ignore } from '@/use/warn'
 
 export default {
   computed: {
     text: () => text.value,
     icon: () => icon.value,
+    ignorable: () => ignorable.value,
 
     show: {
       get: () => open.value,

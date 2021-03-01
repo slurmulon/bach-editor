@@ -1,11 +1,9 @@
 <template>
   <v-sheet
     outlined
-    class="player mt-8"
+    class="player mt-3"
   >
-    <!-- <v-divider /> -->
     <v-container>
-      <!-- TODO: Probably put a header with a legend to show measurement of one bar/measure -->
       <v-row justify="center">
         <v-col
           v-for="(section, $index) in sections"

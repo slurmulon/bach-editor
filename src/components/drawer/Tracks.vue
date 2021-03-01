@@ -28,7 +28,7 @@
       >
         <v-list-item-content>
           <v-list-item-title>{{ track.name }}</v-list-item-title>
-          <v-list-item-subtitle>{{ track.id }}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{ track.updated | when }}</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
           <remove :track="track" />
@@ -102,19 +102,7 @@ export default {
 
   methods: {
     open,
-
-    active: track => get(active(track)),
-
-    remove: track => {
-      if (get(dirty) && get(active(track))) {
-        warn({
-          problem: 'removing-dirty',
-          then: () => destroy(track)
-        })
-      } else {
-        destroy(track)
-      }
-    }
+    active: track => get(active(track))
   }
 }
 </script>

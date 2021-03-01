@@ -78,9 +78,7 @@ export async function load (source) {
     timeline.resume()
   })
 
-  gig.value.on('stop', () => {
-    reset()
-  })
+  gig.value.on('stop', () => reset())
 
   start()
 }

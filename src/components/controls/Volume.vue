@@ -1,5 +1,8 @@
 <template>
-  <div style="width: 200px">
+  <v-col
+    sm="3"
+    cols="6"
+  >
     <v-slider
       v-model="volume"
       :min="limit.min"
@@ -9,7 +12,7 @@
       hide-details
       @click:prepend="toggle"
     />
-  </div>
+  </v-col>
 </template>
 
 <script>

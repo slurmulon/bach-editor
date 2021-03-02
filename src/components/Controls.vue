@@ -6,7 +6,9 @@
       flat
       color="transparent"
     >
-      <settings class="mr-4" />
+      <settings v-if="!$vuetify.breakpoint.mobile" />
+      <!-- <preferences v-else /> -->
+
       <volume />
       <v-spacer />
 
@@ -22,6 +24,7 @@ import Volume from './controls/Volume'
 import Metronome from './controls/Metronome'
 import Settings from './controls/Settings'
 import ProgressBar from './controls/Progress'
+import Preferences from './Preferences'
 
 import { toggle, playing } from '@/use/player'
 import { dirty } from '@/use/editor'
@@ -41,7 +44,8 @@ export default {
     Volume,
     Metronome,
     Settings,
-    ProgressBar
+    ProgressBar,
+    Preferences
   }
 }
 </script>

@@ -18,13 +18,15 @@
         :key="link.name"
         :href="link.href"
         :target="link.target"
+        :icon="!!link.icon"
         text
-        class="font-weight-light"
+        class="font-weight-light hidden-xs-only"
       >
-        {{ link.name }}
+        <v-icon v-if="link.icon">{{ link.icon }}</v-icon>
+        <span v-else>{{ link.name }}</span>
       </v-btn>
 
-      <preferences />
+      <preferences :tip="{ disabled: true }" />
 
       <v-btn
         icon
@@ -106,6 +108,12 @@ export default {
         name: 'Support',
         target: 'bach-support',
         href: 'https://github.com/slurmulon/bach-editor/issues'
+      },
+      {
+        name: 'Github',
+        target: 'bach-github',
+        icon: 'mdi-github',
+        href: 'https://github.com/slurmulon/bach-editor'
       }
     ]
   }),

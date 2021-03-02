@@ -7,6 +7,7 @@
       <v-tooltip
         top
         open-delay="500"
+        v-bind="tip"
       >
         <template #activator="tooltip">
           <div
@@ -93,9 +94,22 @@ import { configure as plays, settings as player, loops } from '@/use/player'
 import { configurable as scenarios, configure as warns, concerned, ignore, ignored } from '@/use/warn'
 
 export default {
+  props: {
+    icon: {
+      type: String,
+      required: false,
+      default: 'mdi-account-cog'
+    },
+
+    tip: {
+      type: Object,
+      required: false,
+      default: () => ({})
+    }
+  },
+
   data: () => ({
-    open: false,
-    icon: 'mdi-account-cog'
+    open: false
   }),
 
   computed: {

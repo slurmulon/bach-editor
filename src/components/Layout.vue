@@ -20,7 +20,7 @@
         :target="link.target"
         :icon="!!link.icon"
         text
-        class="font-weight-light hidden-xs-only"
+        :class="['font-weight-light', ...(link.classes || [])]"
       >
         <v-icon v-if="link.icon">{{ link.icon }}</v-icon>
         <span v-else>{{ link.name }}</span>
@@ -102,12 +102,21 @@ export default {
       {
         name: 'Learn',
         target: 'bach-learn',
-        href: 'https://slurmulon.github.io/bach/#/guide'
+        href: 'https://slurmulon.github.io/bach/#/guide',
+        classes: 'hidden-xs-only'
       },
       {
         name: 'Support',
         target: 'bach-support',
-        href: 'https://github.com/slurmulon/bach-editor/issues'
+        href: 'https://github.com/slurmulon/bach-editor/issues',
+        classes: 'hidden-xs-only'
+      },
+      {
+        name: 'Docs',
+        target: 'bach-learn',
+        icon: 'mdi-book-open-variant',
+        href: 'https://slurmulon.github.io/bach',
+        classes: 'hidden-sm-and-up'
       },
       {
         name: 'Github',

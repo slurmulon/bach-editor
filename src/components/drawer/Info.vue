@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { current } from '@/use/tracks'
+import { selected as track } from '@/use/tracks'
 import { durations, headers } from '@/use/player'
 import { clipboard } from '@/use/editor'
 import { right as open, mini } from '@/use/drawer'
@@ -79,7 +79,7 @@ export default {
   }),
 
   computed: {
-    track: () => get(current),
+    track: () => get(track),
     headers: () => get(headers),
 
     open: {

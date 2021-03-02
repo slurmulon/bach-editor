@@ -29,6 +29,24 @@
         <span>Copy code</span>
       </v-tooltip>
 
+      <v-tooltip
+        top
+        open-delay="500"
+      >
+        <template #activator="{ on, attrs }">
+          <v-btn
+            icon
+            :disabled="!dirty"
+            @click="save"
+            v-on="on"
+            v-bind="attrs"
+          >
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
+        </template>
+        <span>Save locally</span>
+      </v-tooltip>
+
       <play />
     </v-toolbar>
 
@@ -69,7 +87,7 @@
 </template>
 
 <script>
-import { tab, draft, name, dirty, copy } from '@/use/editor'
+import { commit as save, tab, draft, name, dirty, copy } from '@/use/editor'
 import { toggle, playing, settings } from '@/use/player'
 import { load } from '@/use/tracks'
 
@@ -113,6 +131,7 @@ export default {
   },
 
   methods: {
+    save,
     copy,
     toggle
   },

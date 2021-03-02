@@ -4,7 +4,7 @@
       bach
     </span>
     <span class="text--grey text-body-1 font-weight-thin hidden-xs-only ml-2">
-      sandbox editor
+      editor
     </span>
   </div>
 </template>

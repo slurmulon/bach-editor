@@ -18,11 +18,15 @@
         :key="link.name"
         :href="link.href"
         :target="link.target"
+        :icon="!!link.icon"
         text
-        class="font-weight-light"
+        :class="['font-weight-light', ...(link.classes || [])]"
       >
-        {{ link.name }}
+        <v-icon v-if="link.icon">{{ link.icon }}</v-icon>
+        <span v-else>{{ link.name }}</span>
       </v-btn>
+
+      <preferences />
 
       <v-btn
         icon
@@ -79,6 +83,7 @@
 import Logo from './Logo'
 import Tracks from './drawer/Tracks'
 import Info from './drawer/Info'
+import Preferences from './Preferences'
 import Notify from './Notify'
 
 import { left, right } from '@/use/drawer'
@@ -88,6 +93,7 @@ export default {
     Logo,
     Tracks,
     Info,
+    Preferences,
     Notify
   },
 
@@ -96,34 +102,27 @@ export default {
       {
         name: 'Learn',
         target: 'bach-learn',
-        href: 'https://slurmulon.github.io/bach/#/guide'
+        href: 'https://slurmulon.github.io/bach/#/guide',
+        classes: 'hidden-xs-only'
       },
       {
         name: 'Support',
         target: 'bach-support',
-        href: 'https://github.com/slurmulon/bach-editor/issues'
-      }
-    ],
-    controls: [
-      {
-        ref: 'import-all',
-        icon: 'mdi-upload-outline',
-        tip: 'Import entire collection',
-        click: () => {}
+        href: 'https://github.com/slurmulon/bach-editor/issues',
+        classes: 'hidden-xs-only'
       },
       {
-        ref: 'export-all',
-        icon: 'mdi-download-outline',
-        // icon: 'mdi-content-save-settings-outline',
-        tip: 'Export entire collection',
-        click: () => {}
+        name: 'Docs',
+        target: 'bach-learn',
+        icon: 'mdi-book-open-variant',
+        href: 'https://slurmulon.github.io/bach',
+        classes: 'hidden-sm-and-up'
       },
       {
-        ref: 'github',
+        name: 'Github',
+        target: 'bach-github',
         icon: 'mdi-github',
-        target: 'bach-source',
-        tip: 'Editor source code',
-        link: 'https://github.com/slurmulon/bach-editor'
+        href: 'https://github.com/slurmulon/bach-editor'
       }
     ]
   }),
@@ -145,11 +144,13 @@ export default {
 <style lang="sass">
 // ORIG
 $color: #121212
-// NICE ALT
+// ALT
 // $color: rgb(12, 12, 12)
 
 .v-main
-  background: linear-gradient(360deg, darken($color, 3%), $color)
+  // EXPERIMENTAL: Looks nice, but causes tile flashing sometimes due to GPU painting
+  // background: linear-gradient(360deg, darken($color, 3%), $color)
+  background: darken($color, 3%)
 
 .v-footer
   border-top: 1px solid rgba(255, 255, 255, 0.12) !important

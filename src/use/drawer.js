@@ -1,4 +1,4 @@
 import { ref } from '@vue/composition-api'
 
-export const left = ref(true)
-export const right = ref(true)
+export const left = ref(false)
+export const right = ref(false)

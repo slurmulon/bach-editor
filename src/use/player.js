@@ -138,7 +138,7 @@ export function gain (decibals) {
   const audible = volume > DECIBALS.min
 
   if (audible) {
-    configure({ volume: decibals })
+    configure({ volume: decibals, muted: !audible })
 
     sampler.volume.value = volume
   } else {
@@ -155,8 +155,9 @@ export function loops (yes = true) {
 export function mute (yes = true) {
   configure({ muted: yes })
 
-  // FIXME: This doesn't seem to have an effect on the actual volume (tone.js issue, it seems)
-  sampler.volume.mute = yes
+  // FIXME: Ideal, but this doesn't seem to have an effect on the actual volume (tone.js issue, it seems)
+  // sampler.volume.mute = yes
+  sampler.volume.value = yes ? -1000 : settings.value.volume
 }
 
 export function notesIn (section, part) {

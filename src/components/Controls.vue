@@ -6,7 +6,8 @@
       flat
       color="transparent"
     >
-      <settings class="mr-4" />
+      <settings v-if="!$vuetify.breakpoint.mobile" />
+
       <volume />
       <v-spacer />
 

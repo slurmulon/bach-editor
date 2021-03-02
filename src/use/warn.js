@@ -9,16 +9,21 @@ export const text = ref('')
 export const icon = ref('mdi-alert-box')
 export const ignorable = ref(true)
 
-export const ignored = useStorage('bach-editor-ignored-warns', {
-  'selecting-dirty': false,
-  'removing-dirty': false,
-  'removing-one': false
+export const settings = useStorage('bach-editor-warn-settings', {
+  'selecting-dirty': true,
+  'removing-dirty': true,
+  'removing-one': true
 })
 
-export const ignoring = reactify(problem => ignored.value[problem || prob.value])
+export const ignoring = reactify(problem => !settings.value[problem || prob.value])
+export const concerned = reactify(problem => settings.value[problem || prob.value])
 
 export function ignore (problem) {
-  set(ignored, { ...ignored.value, [problem || prob.value]: true })
+  set(settings, { ...settings.value, [problem || prob.value]: false })
+}
+
+export function configure (opts) {
+  set(settings, { ...settings.value, ...opts })
 }
 
 export function commit (props, show = true) {
@@ -38,11 +43,11 @@ export function warn (props) {
   const scenario = scenarios[problem]
 
   if (typeof scenario === 'object') {
-    const concerned = !ignoring(problem).value
+    const concerning = concerned(problem).value
 
-    commit({ ...scenario, ...props }, concerned)
+    commit({ ...scenario, ...props }, concerning)
 
-    if (scenario.ignorable && !concerned) {
+    if (scenario.ignorable && !concerning) {
       yes()
     }
   } else {
@@ -76,14 +81,17 @@ export function reset () {
 export const scenarios = {
   'selecting-dirty': {
     text: 'You will lose unsaved changes if you change tracks!',
+    label: 'Switching tracks with unsaved changes',
     ignorable: true
   },
   'removing-dirty': {
     text: 'You will lose unsaved changes if you delete this track!',
+    label: 'Deleting a track with unsaved changes',
     ignorable: true
   },
   'removing-one': {
-    text: 'Are you sure you want to delete this track?',
+    text: 'Deleting a track',
+    label: 'Deleting a track (always)',
     ignorable: true
   },
   'nuking-all': {
@@ -91,3 +99,7 @@ export const scenarios = {
     ignorable: false
   }
 }
+
+export const configurable = Object.entries(scenarios)
+  .filter(entry => entry[1].ignorable)
+  .reduce((all, [key, scenario]) => [...all, { ...scenario, key }], [])

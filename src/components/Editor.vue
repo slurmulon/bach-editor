@@ -29,7 +29,23 @@
         <span>Copy code</span>
       </v-tooltip>
 
-      <play />
+      <v-tooltip
+        top
+        open-delay="500"
+      >
+        <template #activator="{ on, attrs }">
+          <v-btn
+            icon
+            :disabled="!dirty"
+            @click="save"
+            v-on="on"
+            v-bind="attrs"
+          >
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
+        </template>
+        <span>Save locally</span>
+      </v-tooltip>
     </v-toolbar>
 
     <v-divider />
@@ -69,13 +85,12 @@
 </template>
 
 <script>
-import { tab, draft, name, dirty, copy } from '@/use/editor'
+import { commit as save, tab, draft, name, dirty, copy } from '@/use/editor'
 import { toggle, playing, settings } from '@/use/player'
 import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
-import Play from './controls/Play'
 import DialogRename from './editor/dialog/Rename'
 import DialogWarn from './dialog/Warn'
 
@@ -89,7 +104,6 @@ export default {
   components: {
     BachCode,
     BachJson,
-    Play,
     DialogRename,
     DialogWarn
   },
@@ -113,6 +127,7 @@ export default {
   },
 
   methods: {
+    save,
     copy,
     toggle
   },

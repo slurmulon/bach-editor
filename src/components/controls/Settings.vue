@@ -51,7 +51,6 @@
           v-bind="attrs"
           @click="coder = !coder"
         >
-          <!-- <v-icon>mdi-home-roof</v-icon> -->
           <v-icon>mdi-code-braces</v-icon>
         </v-btn>
       </template>

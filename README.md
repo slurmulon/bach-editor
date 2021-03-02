@@ -1,8 +1,12 @@
 # bach-editor
-> :musical_score: Web editor for the bach music notation
+> :musical_keyboard: Web editor and player for the bach music notation
 ---
 
-Minimalist web editor for the [`bach` music notation](https://github.com/slurmulon/bach) that allows you to learn and play with `bach`.
+Minimalist web editor for the [`bach` music notation](https://github.com/slurmulon/bach) that allows you to learn and play with `bach`!
+
+`bach` is a semantic music notation that makes it easy to define music or other rhythmic timelines with only text.
+
+Check out the [documentation and guide](https://slurmulon.github.io/bach) for a full introduction to `bach` with supplemental example code.
 
 ## Features
 
@@ -11,7 +15,7 @@ Minimalist web editor for the [`bach` music notation](https://github.com/slurmul
  - Import and export entire track collection archives
  - Validation messages to ensure track can be played musically
  - Useful player and usability preferences
- - Run stand-alone or a-la-carte, using only the components you need (:construction: in prog.)
+ - Run stand-alone or a-la-carte, using only the components you need (:construction: in progress)
 
 ## Limitations
 

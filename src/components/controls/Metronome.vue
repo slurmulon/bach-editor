@@ -1,17 +1,22 @@
 <template>
-  <v-row
-    nowrap
-    no-gutters
+  <v-col
+    cols="5"
+    sm="3"
   >
-    <v-col
-      v-for="beat in beats"
-      :key="beat"
+    <v-row
+      nowrap
+      no-gutters
     >
-      <v-icon :color="color(beat)">
-        mdi-circle-small
-      </v-icon>
-    </v-col>
-  </v-row>
+      <v-col
+        v-for="beat in beats"
+        :key="beat"
+      >
+        <v-icon :color="color(beat)">
+          mdi-circle-small
+        </v-icon>
+      </v-col>
+    </v-row>
+  </v-col>
 </template>
 
 <script>

@@ -22,60 +22,64 @@
             color="transparent"
             class="px-3 pt-3"
           >
-          <v-row
-            justify="center"
-            class="mb-4"
-          >
-            <v-col
-              v-for="(part, key) in section.parts"
-              :key="key"
-              cols="12"
+            <v-row
+              justify="center"
+              class="mb-4"
             >
-              <v-card
-                outlined
-                class="fill-height"
-                :color="active($index) ? 'grey darken-3' : null"
-                :raised="active($index)"
-                :disabled="!active($index)"
+              <v-col
+                v-for="(part, key) in section.parts"
+                :key="key"
+                cols="12"
               >
-                <v-row no-gutters>
-                  <v-col align-content="start">
-                    <v-card-title
-                      :style="{
-                        'color': active($index) ? $vuetify.theme.themes.dark.primary: null,
-                        'word-break': 'break-word'
-                      }"
-                    >
-                      {{ part.value }}
-                    </v-card-title>
-
-                    <v-card-subtitle>
-                      <span class="text-capitalize">
-                        {{ key }}
-                      </span>
-                    </v-card-subtitle>
-                  </v-col>
-
-                  <v-col :cols="($vuetify.breakpoint.mobile || colsOf(section) < 6) ? 12 : null">
-                    <v-card-text
-                      v-if="section"
-                      class="d-block"
-                    >
-                      <v-chip
-                        v-for="note in notesIn(section, key)"
-                        :key="note"
-                        class="elevation-4 mr-2 my-1"
-                        pill
-                        small
+                <v-card
+                  outlined
+                  class="fill-height"
+                  :color="active($index) ? 'grey darken-3' : null"
+                  :raised="active($index)"
+                  :disabled="!active($index)"
+                  :style="{
+                    'background-color': '#131313',
+                    'border': '1px solid rgba(255, 255, 255, 0.12)'
+                  }"
+                >
+                  <v-row no-gutters>
+                    <v-col align-content="start">
+                      <v-card-title
+                        :style="{
+                          'color': active($index) ? $vuetify.theme.themes.dark.primary: null,
+                          'word-break': 'break-word'
+                        }"
                       >
-                        {{ note | numberless }}
-                      </v-chip>
-                    </v-card-text>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-          </v-row>
+                        {{ part.value }}
+                      </v-card-title>
+
+                      <v-card-subtitle>
+                        <span class="text-capitalize">
+                          {{ key }}
+                        </span>
+                      </v-card-subtitle>
+                    </v-col>
+
+                    <v-col :cols="($vuetify.breakpoint.mobile || colsOf(section) < 6) ? 12 : null">
+                      <v-card-text
+                        v-if="section"
+                        class="d-block"
+                      >
+                        <v-chip
+                          v-for="note in notesIn(section, key)"
+                          :key="note"
+                          class="elevation-4 mr-2 my-1"
+                          pill
+                          small
+                        >
+                          {{ note | numberless }}
+                        </v-chip>
+                      </v-card-text>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
           </v-sheet>
         </v-col>
       </v-row>

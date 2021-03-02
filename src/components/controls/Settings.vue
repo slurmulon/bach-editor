@@ -7,6 +7,8 @@
     multiple
   >
     <v-tooltip
+      v-for="item in items"
+      :key="item.key"
       top
       open-delay="250"
     >
@@ -15,46 +17,12 @@
           icon
           v-on="on"
           v-bind="attrs"
-          @click.stop="loop = !loop"
+          @click.stop="toggle(item.key)"
         >
-          <v-icon>mdi-sync</v-icon>
+          <v-icon>{{ item.icon }}</v-icon>
         </v-btn>
       </template>
-      <span>Loop</span>
-    </v-tooltip>
-
-    <v-tooltip
-      top
-      open-delay="250"
-    >
-      <template #activator="{ on, attrs }">
-        <v-btn
-          icon
-          v-on="on"
-          v-bind="attrs"
-          @click="follow = !follow"
-        >
-          <v-icon>mdi-eye-settings</v-icon>
-        </v-btn>
-      </template>
-      <span>Scroll with music</span>
-    </v-tooltip>
-
-    <v-tooltip
-      top
-      open-delay="250"
-    >
-      <template #activator="{ on, attrs }">
-        <v-btn
-          icon
-          v-on="on"
-          v-bind="attrs"
-          @click="coder = !coder"
-        >
-          <v-icon>mdi-code-braces</v-icon>
-        </v-btn>
-      </template>
-      <span>Scroll to code on stop</span>
+      <span>{{ item.tip }}</span>
     </v-tooltip>
   </v-btn-toggle>
 </template>
@@ -81,6 +49,32 @@ export default {
     coder: {
       get: () => settings.value.coder,
       set: (value) => configure({ coder: value })
+    },
+
+    items () {
+      return [
+        {
+          key: 'loop',
+          icon: 'mdi-sync',
+          tip: 'Loop'
+        },
+        {
+          key: 'follow',
+          icon: 'mdi-eye-settings',
+          tip: 'Scroll with music'
+        },
+        {
+          key: 'coder',
+          icon: 'mdi-code-braces',
+          tip: 'Scroll to code on stop'
+        }
+      ]
+    }
+  },
+
+  methods: {
+    toggle (key) {
+      this[key] = !this[key]
     }
   }
 }

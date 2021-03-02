@@ -90,7 +90,7 @@ export const scenarios = {
     ignorable: true
   },
   'removing-one': {
-    text: 'Deleting a track',
+    text: 'You are about to permanently delete this track.',
     label: 'Deleting a track (always)',
     ignorable: true
   },

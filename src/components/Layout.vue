@@ -5,7 +5,6 @@
       dense
       clipped-left
       clipped-right
-      color="grey darken-4"
     >
       <v-app-bar-nav-icon @click="left = !left" />
         <v-app-bar-title>

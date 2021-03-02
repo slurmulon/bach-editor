@@ -46,8 +46,6 @@
         </template>
         <span>Save locally</span>
       </v-tooltip>
-
-      <play />
     </v-toolbar>
 
     <v-divider />
@@ -93,7 +91,6 @@ import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
-import Play from './controls/Play'
 import DialogRename from './editor/dialog/Rename'
 import DialogWarn from './dialog/Warn'
 
@@ -107,7 +104,6 @@ export default {
   components: {
     BachCode,
     BachJson,
-    Play,
     DialogRename,
     DialogWarn
   },

@@ -77,7 +77,7 @@
 
 <script>
 import { configure as plays, settings as player, loops } from '@/use/player'
-import { configurable as scenarios, configure as warns, concerned, ignore, ignored } from '@/use/warn'
+import { configurable as scenarios, configure as warns, concerned } from '@/use/warn'
 
 export default {
   props: {

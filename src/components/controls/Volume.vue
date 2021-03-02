@@ -1,7 +1,6 @@
 <template>
   <v-col
     cols="6"
-    sm="4"
     style="max-width: 250px"
   >
     <v-slider

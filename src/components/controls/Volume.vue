@@ -1,7 +1,7 @@
 <template>
   <v-col
     cols="6"
-    sm="3"
+    sm="4"
   >
     <v-slider
       v-model="volume"

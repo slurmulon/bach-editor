@@ -3,28 +3,14 @@
     v-model="open"
     max-width="600"
   >
-    <template #activator="dialog">
-      <v-tooltip
-        top
-        open-delay="500"
-        v-bind="tip"
+    <template #activator="{ on, attrs }">
+      <v-btn
+        icon
+        v-on="on"
+        v-bind="attrs"
       >
-        <template #activator="tooltip">
-          <div
-            v-on="tooltip.on"
-            v-bind="tooltip.attrs"
-          >
-            <v-btn
-              icon
-              v-on="dialog.on"
-              v-bind="dialog.attrs"
-            >
-              <v-icon>{{ icon }}</v-icon>
-            </v-btn>
-          </div>
-        </template>
-        <span>Change your preferences</span>
-      </v-tooltip>
+        <v-icon>{{ icon }}</v-icon>
+      </v-btn>
     </template>
 
     <v-card>
@@ -99,12 +85,6 @@ export default {
       type: String,
       required: false,
       default: 'mdi-account-cog'
-    },
-
-    tip: {
-      type: Object,
-      required: false,
-      default: () => ({})
     }
   },
 

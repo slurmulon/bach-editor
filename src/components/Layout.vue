@@ -26,7 +26,7 @@
         <span v-else>{{ link.name }}</span>
       </v-btn>
 
-      <preferences :tip="{ disabled: true }" />
+      <preferences />
 
       <v-btn
         icon

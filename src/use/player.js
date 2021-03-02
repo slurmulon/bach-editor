@@ -138,7 +138,7 @@ export function gain (decibals) {
   const audible = volume > DECIBALS.min
 
   if (audible) {
-    configure({ volume: decibals })
+    configure({ volume: decibals, muted: !audible })
 
     sampler.volume.value = volume
   } else {

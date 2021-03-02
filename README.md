@@ -7,16 +7,17 @@ Minimalist web editor for the [`bach` music notation](https://github.com/slurmul
 ## Features
 
  - Write your `bach` tracks with instant audio and visual feedback
- - Run stand-alone or a-la-carte, using only the components you need
  - Easily access resulting `bach.json` data and other useful track information
- - Useful validation messages to ensure track can be played musically
+ - Import and export entire track collection archives
+ - Validation messages to ensure track can be played musically
+ - Useful player and usability preferences
+ - Run stand-alone or a-la-carte, using only the components you need (:construction: in prog.)
 
 ## Limitations
 
  - Piano is currently the only supported instrument and is limited to octave 2, due to complexities with acquiring open-source samples
  - All tracks are stored using browser storage APIs, so there is currently no centralized persistent back-end
  - Syntax highlighting is in the early stages, and all validation happens during save
- - No importing or exporting of entire track collections (yet)
 
 ## Project setup
 ```

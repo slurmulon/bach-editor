@@ -14,12 +14,11 @@
             v-bind="tooltip.attrs"
           >
             <v-btn
-              fab
-              small
+              icon
               v-on="dialog.on"
               v-bind="dialog.attrs"
             >
-              <v-icon>mdi-cogs</v-icon>
+              <v-icon>{{ icon }}</v-icon>
             </v-btn>
           </div>
         </template>
@@ -29,7 +28,12 @@
 
     <v-card>
       <v-toolbar>
-        <v-toolbar-title>Your Preferences</v-toolbar-title>
+        <v-toolbar-title>
+          <v-icon class="mr-3">
+            {{ icon }}
+          </v-icon>
+          <span>Change Your Preferences</span>
+        </v-toolbar-title>
       </v-toolbar>
 
       <v-card-text>
@@ -77,7 +81,7 @@
           text
           @click="open = false"
         >
-          Done
+          Close
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -90,7 +94,8 @@ import { configurable as scenarios, configure as warns, concerned, ignore, ignor
 
 export default {
   data: () => ({
-    open: false
+    open: false,
+    icon: 'mdi-account-cog'
   }),
 
   computed: {

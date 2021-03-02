@@ -26,13 +26,13 @@ export const settings = useStorage('bach-editor-player-settings', {
 })
 
 export const music = computed(() => new Sections(track.value.source))
-export const sections = computed(() => music.value.all || [])
-export const measures = computed(() => music.value.measures || [])
-export const durations = computed(() => music.value.durations || {})
-export const headers = computed(() => music.value.source.headers || {})
+export const sections = computed(() => get(music).all || [])
+export const measures = computed(() => get(music).measures || [])
+export const durations = computed(() => get(music).durations || {})
+export const headers = computed(() => get(music).source.headers || {})
 
-export const playing = computed(() => gig.value.playing)
-export const seconds = reactify(duration => music.value.durations.cast(duration, { as: 'second' }))
+export const playing = computed(() => get(gig).playing)
+export const seconds = reactify(duration => get(durations).cast(duration, { as: 'second' }))
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
 

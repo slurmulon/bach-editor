@@ -144,11 +144,13 @@ export default {
 <style lang="sass">
 // ORIG
 $color: #121212
-// NICE ALT
+// ALT
 // $color: rgb(12, 12, 12)
 
 .v-main
-  background: linear-gradient(360deg, darken($color, 3%), $color)
+  // EXPERIMENTAL: Looks nice, but causes tile flashing sometimes due to GPU painting
+  // background: linear-gradient(360deg, darken($color, 3%), $color)
+  background: darken($color, 3%)
 
 .v-footer
   border-top: 1px solid rgba(255, 255, 255, 0.12) !important

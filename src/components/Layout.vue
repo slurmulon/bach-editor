@@ -24,6 +24,8 @@
         {{ link.name }}
       </v-btn>
 
+      <preferences />
+
       <v-btn
         icon
         @click="right = !right"
@@ -79,6 +81,7 @@
 import Logo from './Logo'
 import Tracks from './drawer/Tracks'
 import Info from './drawer/Info'
+import Preferences from './Preferences'
 import Notify from './Notify'
 
 import { left, right } from '@/use/drawer'
@@ -88,6 +91,7 @@ export default {
     Logo,
     Tracks,
     Info,
+    Preferences,
     Notify
   },
 
@@ -102,28 +106,6 @@ export default {
         name: 'Support',
         target: 'bach-support',
         href: 'https://github.com/slurmulon/bach-editor/issues'
-      }
-    ],
-    controls: [
-      {
-        ref: 'import-all',
-        icon: 'mdi-upload-outline',
-        tip: 'Import entire collection',
-        click: () => {}
-      },
-      {
-        ref: 'export-all',
-        icon: 'mdi-download-outline',
-        // icon: 'mdi-content-save-settings-outline',
-        tip: 'Export entire collection',
-        click: () => {}
-      },
-      {
-        ref: 'github',
-        icon: 'mdi-github',
-        target: 'bach-source',
-        tip: 'Editor source code',
-        link: 'https://github.com/slurmulon/bach-editor'
       }
     ]
   }),

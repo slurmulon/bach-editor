@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { music, sections, index, part, playing, played, settings, notesIn } from '@/use/player'
+import { music, sections, index, playing, played, settings, notesIn } from '@/use/player'
 import { bach } from '@/use/editor'
 
 import { Durations } from 'bach-js'
@@ -99,7 +99,6 @@ export default {
   computed: {
     sections: () => sections.value,
     index: () => index.value,
-    part: () => part.value,
     playing: () => playing.value,
     played: () => played.value,
     settings: () => settings.value,

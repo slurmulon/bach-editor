@@ -2,7 +2,7 @@ import { selected as track } from '@/use/tracks'
 import { bach } from '@/use/editor'
 
 import { Gig } from 'gig'
-import { Sections } from 'bach-js'
+import { Sections, MUSICAL_ELEMENTS } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { note } from '@tonaljs/tonal'
@@ -14,7 +14,6 @@ export const current = ref({})
 export const index = ref(0)
 export const metronome = ref(null)
 export const progress = ref(null)
-export const part = ref('chord')
 export const played = ref(Date.now())
 
 export const settings = useStorage('bach-editor-player-settings', {
@@ -35,6 +34,10 @@ export const playing = computed(() => get(gig).playing)
 export const seconds = reactify(duration => get(durations).cast(duration, { as: 'second' }))
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
+
+export const playable = reactify(section => Object
+  .keys(section.parts)
+  .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
 export const timeline = useRafFn(() => {
   if (playing.value) {
@@ -89,7 +92,7 @@ export function start () {
 }
 
 export function play (section) {
-  const notes = notesIn(section, part.value)
+  const notes = notesIn(section, playable(section).value)
   const duration = seconds(section.duration).value
 
   Tone.loaded().then(() => {

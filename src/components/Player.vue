@@ -144,7 +144,7 @@ export default {
   watch: {
     played (next, prev) {
       if (this.settings.follow && next && next !== prev) {
-        const [target] = this.$refs[`beat-${this.current.id}`]
+        const [target] = this.$refs[`beat-${this.current.index}`]
 
         console.log('played watch!!!', target, this.durations.times)
 

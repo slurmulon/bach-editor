@@ -46,9 +46,12 @@ export const playable = reactify(beat => Object
 
 export const timeline = useRafFn(() => {
   if (playing.value) {
-    const { completion } = gig.value
+    // const { completion } = gig.value
+    // const { progress } = gig.value
+    const completion = gig.value.progress
 
     if (completion <= 1) {
+    // if (progress <= 1) {
       progress.value = completion * 100
       metronome.value = gig.value.metronome
     } else {
@@ -107,7 +110,6 @@ export function play (beat) {
   const notes = notesIn(beat, playable(beat).value)
   console.log(' --- notes', notes)
   const duration = seconds(beat.duration).value
-
 
   Tone.loaded().then(() => {
     sampler.triggerAttackRelease(notes, duration)

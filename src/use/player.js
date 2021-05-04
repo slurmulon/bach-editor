@@ -2,7 +2,8 @@ import { selected as track } from '@/use/tracks'
 import { bach } from '@/use/editor'
 
 import { Gig } from 'gig'
-import { Sections, MUSICAL_ELEMENTS } from 'bach-js'
+// import { Sections, MUSICAL_ELEMENTS } from 'bach-js'
+import { Music, MUSICAL_ELEMENTS } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { note } from '@tonaljs/tonal'
@@ -24,14 +25,18 @@ export const settings = useStorage('bach-editor-player-settings', {
   coder: true
 })
 
-export const music = computed(() => new Sections(track.value.source))
-export const sections = computed(() => get(music).all || [])
-export const measures = computed(() => get(music).measures || [])
+// export const music = computed(() => new Sections(track.value.source))
+// export const sections = computed(() => get(music).all || [])
+export const music = computed(() => new Music(track.value.source))
+export const beats = computed(() => get(music).beats || [])
+// export const measures = computed(() => get(music).measures || [])
 export const durations = computed(() => get(music).durations || {})
-export const headers = computed(() => get(music).source.headers || {})
+export const headers = computed(() => get(music).data.headers || {})
+export const units = computed(() => get(music).units || {})
 
 export const playing = computed(() => get(gig).playing)
-export const seconds = reactify(duration => get(durations).cast(duration, { as: 'second' }))
+// export const seconds = reactify(duration => get(durations).cast(duration, { as: 'second' }))
+export const seconds = reactify(duration => get(durations).time(duration, { as: 'second' }))
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
 
@@ -69,15 +74,20 @@ export async function load (source) {
     loop: settings.value.loop
   })
 
-  gig.value.on('beat:play', () => {
-    const { sections, cursor } = gig.value
-    const section = sections[cursor.section]
+  gig.value.on('beat:play', ({ beat }) => {
+    // const { sections, cursor } = gig.value
+    // const section = sections[cursor.section]
 
-    current.value = section
-    index.value = cursor.section
+    // current.value = section
+    // index.value = cursor.section
+    current.value = beat
+    // TODO: Can probably just remove now!
+    // index.value = beat.index
+    index.value = gig.value.index
     played.value = Date.now()
 
-    play(section)
+    // play(section)
+    play(beat)
     timeline.resume()
   })
 
@@ -91,9 +101,9 @@ export function start () {
   timeline.resume()
 }
 
-export function play (section) {
-  const notes = notesIn(section, playable(section).value)
-  const duration = seconds(section.duration).value
+export function play (beat) {
+  const notes = notesIn(beat, playable(beat).value)
+  const duration = seconds(beat.duration).value
 
   Tone.loaded().then(() => {
     sampler.triggerAttackRelease(notes, duration)
@@ -163,8 +173,9 @@ export function mute (yes = true) {
   sampler.volume.value = yes ? -1000 : settings.value.volume
 }
 
-export function notesIn (section, part) {
-  const group = section.parts[part]
+export function notesIn (beat, part) {
+  // const group = section.parts[part]
+  const group = beat.parts[part]
   const all = group ? group.notes : []
   const notes = Array.isArray(all) ? all : [all]
 

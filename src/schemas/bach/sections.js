@@ -1,18 +1,22 @@
-import { Sections, MUSICAL_ELEMENTS } from 'bach-js'
+// TODO: Rename to bach/music.js
+
+import { Music, MUSICAL_ELEMENTS } from 'bach-js'
 import { fail } from '@/use/notify'
 
 export function validate (bach) {
-  const sections = new Sections(bach)
+  const music = new Music(bach)
 
-  for (const rule of rules) {
-    const valid = rule.validator(sections)
+  console.log('das music!', music)
 
-    if (!valid) {
-      fail({ text: rule.message, timeout: 5000 })
+  // for (const rule of rules) {
+  //   const valid = rule.validator(music)
 
-      return false
-    }
-  }
+  //   if (!valid) {
+  //     fail({ text: rule.message, timeout: 5000 })
+
+  //     return false
+  //   }
+  // }
 
   return true
 }
@@ -25,14 +29,16 @@ export const rules = [
   {
     ref: 'musical',
     message: `Each beat must contain at least one musical element (${required.parts.join(', ')})`,
-    validator: sections => sections.musical
+    validator: bach => bach.musical
   },
   {
     ref: 'usable',
     message: 'Unsupported scale or chord type',
     validator: sections => {
       try {
-        return !!sections.all
+        // TODO: Redo
+        // return !!sections.all
+        return true
       } catch (e) {
         return false
       }

@@ -6,15 +6,15 @@
     <v-container>
       <v-row justify="center">
         <v-col
-          v-for="(section, $index) in sections"
+          v-for="(beat, $index) in beats"
           :key="$index"
-          :ref="`section-${$index}`"
-          :cols="colsOf(section)"
+          :ref="`beat-${$index}`"
+          :cols="colsOf(beat)"
           align-self="center"
         >
           <div class="text-h5 text-center my-4">
             <span :class="active($index) ? 'white--text' : 'grey--text text--lighten-1'">
-              {{ durationOf(section) }}
+              {{ durationOf(beat) }}
             </span>
           </div>
 
@@ -27,7 +27,7 @@
               class="mb-4"
             >
               <v-col
-                v-for="(part, key) in section.parts"
+                v-for="(part, key) in beat.parts"
                 :key="key"
                 cols="12"
               >
@@ -60,13 +60,13 @@
                       </v-card-subtitle>
                     </v-col>
 
-                    <v-col :cols="($vuetify.breakpoint.mobile || colsOf(section) < 6) ? 12 : null">
+                    <v-col :cols="($vuetify.breakpoint.mobile || colsOf(beat) < 6) ? 12 : null">
                       <v-card-text
-                        v-if="section"
+                        v-if="beat"
                         class="d-block"
                       >
                         <v-chip
-                          v-for="note in notesIn(section, key)"
+                          v-for="note in notesIn(beat, key)"
                           :key="note"
                           class="elevation-4 mr-2 my-1"
                           pill
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { music, sections, index, playing, played, settings, notesIn } from '@/use/player'
+import { music, beats, index, playing, played, settings, notesIn } from '@/use/player'
 import { bach } from '@/use/editor'
 
 import { Durations } from 'bach-js'
@@ -97,7 +97,8 @@ const GRID_SIZE = 12
 
 export default {
   computed: {
-    sections: () => sections.value,
+    beats: () => beats.value,
+    // sections: () => sections.value,
     index: () => index.value,
     playing: () => playing.value,
     played: () => played.value,
@@ -110,25 +111,28 @@ export default {
       return this.playing && this.index === index
     },
 
-    notesIn (section, part) {
-      return notesIn(section, part)
+    notesIn (beat, part) {
+      return notesIn(beat, part)
     },
 
-    ratioOf (section) {
-      return music.value.ratio(section.duration)
+    // ratioOf (section) {
+      // return music.value.ratio(section.duration)
+    ratioOf (beat) {
+      return music.value.durations.ratio(beat.duration)
     },
 
-    colsOf (section) {
-      const { longest } = this.durations
+    colsOf (beat) {
+      const { max } = this.durations
       const bar = this.durations.bar.pulse
-      const size = section.duration / Math.max(bar, longest)
+      const size = beat.duration / Math.max(bar, max)
 
       return Math.floor(size * GRID_SIZE)
     },
 
-    durationOf (section) {
-      const beats = this.durations.unitize(section.duration, { as: 'beat' })
-      const bar = this.durations.bar.beat
+    durationOf (beat) {
+      const { durations } = this
+      const beats = durations.cast(beat.duration, { as: 'pulse' })
+      const bar = durations.cast(durations.bar, { as: 'pulse' })
       const kind = beats < bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)
       const pretty = this.$options.filters.fractionize(value)
@@ -140,10 +144,10 @@ export default {
   watch: {
     played (next, prev) {
       if (this.settings.follow && next && next !== prev) {
-        const [target] = this.$refs[`section-${this.index}`]
+        const [target] = this.$refs[`beat-${this.index}`]
 
         this.$vuetify.goTo(target, {
-          duration: this.durations.time.quarter,
+          duration: this.durations.times['4n'],
           easing: 'easeOutQuad'
         })
       }

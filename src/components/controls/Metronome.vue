@@ -20,13 +20,14 @@
 </template>
 
 <script>
-import { metronome, headers, playing } from '@/use/player'
+import { music, metronome, units, playing } from '@/use/player'
 
 export default {
   computed: {
     playing: () => playing.value,
     current: () =>  metronome.value,
-    beats: () => headers.value['beat-units-per-measure']
+    // beats: () => headers.value['beat-units-per-measure']
+    beats: () => units.value.bar && units.value.bar.pulse
   },
 
   methods: {

@@ -12,7 +12,7 @@ import { get, set, reactify, useStorage, useRafFn, useDebounceFn } from '@vueuse
 
 export const gig = ref({})
 export const current = ref({})
-export const index = ref(0)
+// export const index = ref(0)
 export const metronome = ref(null)
 export const progress = ref(null)
 export const played = ref(Date.now())
@@ -40,8 +40,8 @@ export const seconds = reactify(duration => get(durations).time(duration, { as: 
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
 
-export const playable = reactify(section => Object
-  .keys(section.parts)
+export const playable = reactify(beat => Object
+  .keys(beat.parts)
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
 export const timeline = useRafFn(() => {
@@ -74,7 +74,8 @@ export async function load (source) {
     loop: settings.value.loop
   })
 
-  gig.value.on('beat:play', ({ beat }) => {
+  gig.value.on('play:beat', beat => {
+    console.log('beat play!', beat)
     // const { sections, cursor } = gig.value
     // const section = sections[cursor.section]
 
@@ -83,7 +84,7 @@ export async function load (source) {
     current.value = beat
     // TODO: Can probably just remove now!
     // index.value = beat.index
-    index.value = gig.value.index
+    // index.value = gig.value.index
     played.value = Date.now()
 
     // play(section)
@@ -102,8 +103,11 @@ export function start () {
 }
 
 export function play (beat) {
+  console.log('playing beat', beat)
   const notes = notesIn(beat, playable(beat).value)
+  console.log(' --- notes', notes)
   const duration = seconds(beat.duration).value
+
 
   Tone.loaded().then(() => {
     sampler.triggerAttackRelease(notes, duration)
@@ -131,7 +135,7 @@ export function restart () {
 export function reset () {
   gig.value = {}
   current.value = {}
-  index.value = 0
+  // index.value = 0
   progress.value = null
   metronome.value = null
 }

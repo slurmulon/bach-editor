@@ -122,8 +122,7 @@ export default {
     },
 
     colsOf (beat) {
-      const { max } = this.durations
-      const bar = this.durations.bar.pulse
+      const { max, bar } = this.durations
       const size = beat.duration / Math.max(bar, max)
 
       return Math.floor(size * GRID_SIZE)
@@ -146,12 +145,10 @@ export default {
       if (this.settings.follow && next && next !== prev) {
         const [target] = this.$refs[`beat-${this.current.index}`]
 
-        console.log('played watch!!!', target, this.durations.times)
-
-        //this.$vuetify.goTo(target, {
-        //  duration: this.durations.times['4n'],
-        //  easing: 'easeOutQuad'
-        //})
+        this.$vuetify.goTo(target, {
+          duration: this.durations.times['4n'],
+          easing: 'easeOutQuad'
+        })
       }
     }
   }

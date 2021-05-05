@@ -6,8 +6,6 @@ import { fail } from '@/use/notify'
 export function validate (bach) {
   const music = new Music(bach)
 
-  console.log('das music!', music)
-
   // for (const rule of rules) {
   //   const valid = rule.validator(music)
 

@@ -4,6 +4,7 @@ import { validate as inspect } from '@/schemas/bach/sections'
 import { warn } from '@/use/warn'
 import { ok, fail } from '@/use/notify'
 import { compose } from 'bach-js'
+import { compose as composeAsync } from '@/bach/compose'
 import template from '@/bach/template.bach'
 
 import { ref, computed } from '@vue/composition-api'
@@ -18,9 +19,13 @@ export const bach = computed(() => compose(selected.value.source))
 export const json = computed(() => JSON.stringify(bach.value, null, 2))
 export const name = computed(() => selected.value ? selected.value.name : '')
 
-export const validate = (source) => {
+// export const validate = (source) => {
+export const validate = async (source) => {
   try {
-    const bach = compose(source)
+    // const bach = compose(source)
+    const bach = await composeAsync(source)
+
+    console.log('!!! async bach', bach)
 
     return inspect(bach)
   } catch (err) {
@@ -49,8 +54,9 @@ export function load (source) {
   })
 }
 
-export function commit (state = {}) {
-  const valid = validate(draft.value)
+// export function commit (state = {}) {
+export async function commit (state = {}) {
+  const valid = await validate(draft.value)
 
   if (valid) {
     update({ source: draft.value })

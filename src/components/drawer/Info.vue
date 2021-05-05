@@ -28,7 +28,7 @@
       v-model="panel"
     >
       <v-expansion-panel
-        v-for="(group, key) in metrics"
+        v-for="(group, key) in items"
         :key="key"
         style="background: transparent"
       >
@@ -67,11 +67,12 @@
 
 <script>
 import { selected as track } from '@/use/tracks'
-import { durations, headers } from '@/use/player'
+import { music, durations } from '@/use/player'
 import { clipboard } from '@/use/editor'
 import { right as open, mini } from '@/use/drawer'
 
 import { get, set } from '@vueuse/core'
+import dlv from 'dlv'
 
 export default {
   data: () => ({
@@ -80,14 +81,14 @@ export default {
 
   computed: {
     track: () => get(track),
-    headers: () => get(headers),
+    music: () => get(music),
 
     open: {
       get: () => get(open),
       set: (value) => set(open, value)
     },
 
-    metrics () {
+    items () {
       return {
         general: [
           {
@@ -119,109 +120,110 @@ export default {
         ],
         units: [
           {
-            name: 'beat unit',
-            header: 'beat-unit',
-            filter: 'fractionize'
-          },
-          {
             name: 'pulse beat',
-            header: 'pulse-beat',
+            unit: 'beat.pulse',
             filter: 'fractionize'
           },
           {
-            name: 'beat units in bar',
-            header: 'beat-units-per-measure',
-            filter: ''
+            name: 'step beat',
+            unit: 'beat.step',
+            filter: 'fractionize'
           },
           {
             name: 'pulse beats in bar',
-            header: 'pulse-beats-per-measure',
+            unit: 'bar.pulse',
             filter: ''
           },
           {
-            name: 'ms per beat unit',
-            header: 'ms-per-beat-unit',
-            filter: 'numeric'
-          },
-          {
-            name: 'sec. per beat unit',
-            value: get(durations).cast(get(durations).time.beat, { is: 'ms', as: 'second' }),
-            filter: 'numeric'
+            name: 'step beats in bar',
+            unit: 'bar.step',
+            filter: ''
           },
           {
             name: 'ms per pulse beat',
-            header: 'ms-per-pulse-beat',
+            unit: 'time.pulse',
             filter: 'numeric'
           },
           {
             name: 'sec. per pulse beat',
-            value: get(durations).cast(get(durations).time.pulse, { is: 'ms', as: 'second' }),
+            value: get(durations).time(get(durations).times.pulse, { is: 'ms', as: 'second' }),
+            filter: 'numeric'
+          },
+          {
+            name: 'ms per step beat',
+            unit: 'time.step',
+            filter: 'numeric'
+          },
+          {
+            name: 'sec. per pulse beat',
+            value: get(durations).time(get(durations).times.pulse, { is: 'ms', as: 'second' }),
             filter: 'numeric'
           },
           {
             name: 'ms per bar',
-            value: get(durations).cast(get(durations).bar.pulse, { as: 'ms' }),
+            value: get(durations).time(get(durations).bar, { as: 'ms' }),
             filter: 'numeric'
           },
           {
             name: 'seconds per bar',
-            value: get(durations).cast(get(durations).bar.beat, { is: 'beat', as: 'second' }),
+            value: get(durations).time(get(durations).bar, { as: 'second' }),
             filter: 'numeric'
           }
         ],
         totals: [
           {
             name: 'total bars',
-            // TODO: Update name of this header in `bach`, poorly named (or create alias such as `total-measures`
-            header: 'total-beats',
+            value: get(durations).cast(get(durations).total, { as: 'bar' }),
             filter: 'fractionize'
           },
           {
-            name: 'total beat units',
-            header: 'total-beat-units',
+            name: 'total pulse beats',
+            value: get(durations).cast(get(durations).total, { as: 'pulse' }),
             filter: ''
           },
           {
-            name: 'total pulse beats',
-            header: 'total-pulse-beats',
+            name: 'total step beats',
+            metric: 'total',
             filter: ''
           },
           {
             name: 'total ms',
-            value: get(durations).cast(get(durations).total, { as: 'ms' }),
+            value: get(durations).time(get(durations).total, { as: 'ms' }),
             filter: 'numeric'
           },
           {
             name: 'total seconds',
-            value: get(durations).cast(get(durations).total, { as: 'second' }),
+            value: get(durations).time(get(durations).total, { as: 'second' }),
             filter: 'numeric'
           }
-
         ]
       }
     }
   },
 
   methods: {
-    valueOf (metric) {
-      return metric.value || this.headers[metric.header]
+    valueOf (item) {
+      return item.value
+        || dlv(this.music.headers, item.header || '')
+        || dlv(this.music.units, item.unit || '')
+        || dlv(this.music.metrics, item.metric || '')
     },
 
-    pretty (metric) {
-      const value = this.valueOf(metric)
+    pretty (item) {
+      const value = this.valueOf(item)
 
-      if (metric.filter) {
-        return this.$options.filters[metric.filter](value)
+      if (item.filter) {
+        return this.$options.filters[item.filter](value)
       }
 
       return value
     },
 
-    copy (metric) {
+    copy (item) {
       if (clipboard.isSupported) {
-        clipboard.copy(this.valueOf(metric))
+        clipboard.copy(this.valueOf(item))
       }
-    },
+    }
   }
 }
 </script>

@@ -26,8 +26,6 @@ export const settings = useStorage('bach-editor-player-settings', {
 export const music = computed(() => new Music(bach.value))
 export const beats = computed(() => get(music).beats || [])
 export const durations = computed(() => get(music).durations || {})
-export const headers = computed(() => get(music).data.headers || {})
-export const units = computed(() => get(music).units || {})
 
 export const playing = computed(() => get(gig).playing)
 export const seconds = reactify(duration => get(durations).time(duration, { as: 'second' }))

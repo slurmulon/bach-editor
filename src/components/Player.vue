@@ -66,15 +66,15 @@
                         v-if="beat"
                         class="d-block"
                       >
-                        <!-- <v-chip -->
-                        <!--   v-for="note in notesIn(beat, key)" -->
-                        <!--   :key="note" -->
-                        <!--   class="elevation-4 mr-2 my-1" -->
-                        <!--   pill -->
-                        <!--   small -->
-                        <!-- > -->
-                        <!--   {{ note | numberless }} -->
-                        <!-- </v-chip> -->
+                        <v-chip
+                          v-for="note in notesIn(beat, key)"
+                          :key="note"
+                          class="elevation-4 mr-2 my-1"
+                          pill
+                          small
+                        >
+                          {{ note | numberless }}
+                        </v-chip>
                       </v-card-text>
                     </v-col>
                   </v-row>
@@ -99,8 +99,6 @@ const GRID_SIZE = 12
 export default {
   computed: {
     beats: () => beats.value,
-    // sections: () => sections.value,
-    // index: () => index.value,
     current: () => current.value,
     playing: () => playing.value,
     played: () => played.value,
@@ -134,9 +132,9 @@ export default {
       const bar = durations.cast(durations.bar, { as: 'pulse' })
       const kind = beats < bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)
-      const pretty = this.$options.filters.fractionize(value)
+      const fraction = this.$options.filters.fractionize(value)
 
-      return `${pretty} ${kind}` + (value > 1 ? 's' : '')
+      return `${fraction} ${kind}` + (value > 1 ? 's' : '')
     }
   },
 

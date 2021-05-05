@@ -2,7 +2,6 @@ import { selected as track } from '@/use/tracks'
 import { bach } from '@/use/editor'
 
 import { Gig } from 'gig'
-// import { Sections, MUSICAL_ELEMENTS } from 'bach-js'
 import { Music, MUSICAL_ELEMENTS } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
@@ -12,7 +11,6 @@ import { get, set, reactify, useStorage, useRafFn, useDebounceFn } from '@vueuse
 
 export const gig = ref({})
 export const current = ref({})
-// export const index = ref(0)
 export const metronome = ref(null)
 export const progress = ref(null)
 export const played = ref(Date.now())
@@ -25,25 +23,18 @@ export const settings = useStorage('bach-editor-player-settings', {
   coder: true
 })
 
-// export const music = computed(() => new Sections(track.value.source))
-// export const sections = computed(() => get(music).all || [])
-
-// FIXME: This is causing double/redundant compose!!!
-// export const music = computed(() => new Music(track.value.source))
 export const music = computed(() => new Music(bach.value))
 export const beats = computed(() => get(music).beats || [])
-// export const measures = computed(() => get(music).measures || [])
 export const durations = computed(() => get(music).durations || {})
 export const headers = computed(() => get(music).data.headers || {})
 export const units = computed(() => get(music).units || {})
 
 export const playing = computed(() => get(gig).playing)
-// export const seconds = reactify(duration => get(durations).cast(duration, { as: 'second' }))
 export const seconds = reactify(duration => get(durations).time(duration, { as: 'second' }))
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
 
-export const playable = reactify(beat => Object
+export const playables = reactify(beat => Object
   .keys(beat.parts)
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
@@ -75,8 +66,6 @@ watch(track, (next, prev) => {
 export async function load (source) {
   await Tone.loaded()
 
-  console.log('[player] new gig', source)
-
   gig.value = new Gig({
     source,
     loop: settings.value.loop
@@ -101,7 +90,7 @@ export function start () {
 }
 
 export function play (beat) {
-  const notes = notesIn(beat, playable(beat).value)
+  const notes = notesIn(beat, playables(beat).value)
   const duration = seconds(beat.duration).value
 
   Tone.loaded().then(() => {

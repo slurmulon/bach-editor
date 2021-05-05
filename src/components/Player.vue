@@ -3,7 +3,6 @@
     outlined
     class="player mt-3"
   >
-  {{ current.id }}
     <v-container>
       <v-row justify="center">
         <v-col

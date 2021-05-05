@@ -1,9 +1,7 @@
-// TODO: Rename to bach/music.js
-
 import { Music, MUSICAL_ELEMENTS } from 'bach-js'
 import { fail } from '@/use/notify'
 
-export function validate (bach) {
+export function playable (bach) {
   const music = new Music(bach)
 
   // for (const rule of rules) {

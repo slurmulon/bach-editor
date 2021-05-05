@@ -24,7 +24,7 @@
 
 <script>
 import { toggle, playing } from '@/use/player'
-import { commit as save, loading, dirty } from '@/use/editor'
+import { commit as save, compiling as loading, dirty } from '@/use/editor'
 
 export default {
   computed: {

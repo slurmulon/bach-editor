@@ -1,10 +1,10 @@
 import { update } from '@/use/tracks'
 import { selected } from '@/use/tracks'
-import { validate as playable } from '@/schemas/bach/sections'
+import { playable } from '@/bach/validate'
 import { warn } from '@/use/warn'
 import { ok, fail } from '@/use/notify'
 import { compose } from 'bach-js'
-import { compose as composeAsync } from '@/bach/compose'
+import { composer } from '@/bach/compose'
 import template from '@/bach/template.bach'
 
 import { ref, computed } from '@vue/composition-api'
@@ -14,40 +14,30 @@ export const draft = ref('')
 export const parsed = ref(null)
 export const dirty = ref(false)
 export const tab = ref(0)
-export const loading = ref(false)
+export const compiling = ref(false)
 
 export const code = computed(() => draft.value)
-// export const bach = computed(() => compose(selected.value.source))
-export const bach = computed(() => {
-  console.log('--- use/editor bach', parsed.value)
-  return compose(parsed.value || selected.value.source)
-})
+export const bach = computed(() => compose(parsed.value || selected.value.source))
 export const json = computed(() => JSON.stringify(bach.value, null, 2))
 export const name = computed(() => selected.value ? selected.value.name : '')
 
-// export const validate = (source) => {
-export const validate = async (source) => {
-  loading.value = true
+export async function compile (source) {
+  compiling.value = true
 
   try {
-    console.time('c')
-    // const bach = compose(source)
-    const bach = await composeAsync(source)
-    console.timeEnd('c')
+    const bach = await composer(source)
 
     if (playable(bach)) {
       parsed.value = bach
 
-      return true
+      return bach
     }
-
-    return false
   } catch (err) {
     fail({ text: 'Track compilation failed!' })
 
     console.error(err)
   } finally {
-    loading.value = false
+    compiling.value = false
   }
 }
 
@@ -72,15 +62,12 @@ export function load (source) {
   })
 }
 
-// export function commit (state = {}) {
 export async function commit (state = {}) {
-  const valid = await validate(draft.value)
+  const ok = await compile(draft.value)
 
-  if (valid) {
+  if (ok) {
     update({ source: draft.value })
-
-    set(draft, state.source || draft.value)
-    set(dirty, false)
+    input(state.source || draft.value, true)
   } else {
     throw Error('Failed to commit changes, invalid bach')
   }

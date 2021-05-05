@@ -1,6 +1,6 @@
 import { update } from '@/use/tracks'
 import { selected } from '@/use/tracks'
-import { validate as inspect } from '@/schemas/bach/sections'
+import { validate as playable } from '@/schemas/bach/sections'
 import { warn } from '@/use/warn'
 import { ok, fail } from '@/use/notify'
 import { compose } from 'bach-js'
@@ -27,7 +27,6 @@ export const name = computed(() => selected.value ? selected.value.name : '')
 
 // export const validate = (source) => {
 export const validate = async (source) => {
-  console.log('!!!!! VALIDATING')
   loading.value = true
 
   try {
@@ -36,11 +35,8 @@ export const validate = async (source) => {
     const bach = await composeAsync(source)
     console.timeEnd('c')
 
-    // return inspect(bach)
-    if (inspect(bach)) {
+    if (playable(bach)) {
       parsed.value = bach
-
-      console.log('!!!!!!! set parsed bach', bach)
 
       return true
     }

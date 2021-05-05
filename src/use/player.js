@@ -83,19 +83,9 @@ export async function load (source) {
   })
 
   gig.value.on('play:beat', beat => {
-    console.log('beat play!', beat)
-    // const { sections, cursor } = gig.value
-    // const section = sections[cursor.section]
-
-    // current.value = section
-    // index.value = cursor.section
     current.value = beat
-    // TODO: Can probably just remove now!
-    // index.value = beat.index
-    // index.value = gig.value.index
     played.value = Date.now()
 
-    // play(section)
     play(beat)
     timeline.resume()
   })
@@ -111,9 +101,7 @@ export function start () {
 }
 
 export function play (beat) {
-  console.log('playing beat', beat)
   const notes = notesIn(beat, playable(beat).value)
-  console.log(' --- notes', notes)
   const duration = seconds(beat.duration).value
 
   Tone.loaded().then(() => {
@@ -142,7 +130,6 @@ export function restart () {
 export function reset () {
   gig.value = {}
   current.value = {}
-  // index.value = 0
   progress.value = null
   metronome.value = null
 }
@@ -153,7 +140,6 @@ export function toggle () {
   } else if (gig.value.source) {
     restart()
   } else {
-    console.log('loading bach!', bach.value)
     load(bach.value)
   }
 }
@@ -186,7 +172,6 @@ export function mute (yes = true) {
 }
 
 export function notesIn (beat, part) {
-  // const group = section.parts[part]
   const group = beat.parts[part]
   const all = group ? group.notes : []
   const notes = Array.isArray(all) ? all : [all]

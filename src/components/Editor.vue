@@ -37,6 +37,7 @@
           <v-btn
             icon
             :disabled="!dirty"
+            :loading="loading"
             @click="save"
             v-on="on"
             v-bind="attrs"
@@ -85,7 +86,7 @@
 </template>
 
 <script>
-import { commit as save, tab, draft, name, dirty, copy } from '@/use/editor'
+import { commit as save, tab, draft, name, dirty, loading, copy } from '@/use/editor'
 import { toggle, playing, settings } from '@/use/player'
 import { load } from '@/use/tracks'
 
@@ -118,6 +119,7 @@ export default {
   computed: {
     playing: () => playing.value,
     dirty: () => dirty.value,
+    loading: () => loading.value,
     name: () => name.value,
 
     tab: {

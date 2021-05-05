@@ -27,7 +27,10 @@ export const settings = useStorage('bach-editor-player-settings', {
 
 // export const music = computed(() => new Sections(track.value.source))
 // export const sections = computed(() => get(music).all || [])
-export const music = computed(() => new Music(track.value.source))
+
+// FIXME: This is causing double/redundant compose!!!
+// export const music = computed(() => new Music(track.value.source))
+export const music = computed(() => new Music(bach.value))
 export const beats = computed(() => get(music).beats || [])
 // export const measures = computed(() => get(music).measures || [])
 export const durations = computed(() => get(music).durations || {})
@@ -71,6 +74,8 @@ watch(track, (next, prev) => {
 
 export async function load (source) {
   await Tone.loaded()
+
+  console.log('[player] new gig', source)
 
   gig.value = new Gig({
     source,
@@ -148,6 +153,7 @@ export function toggle () {
   } else if (gig.value.source) {
     restart()
   } else {
+    console.log('loading bach!', bach.value)
     load(bach.value)
   }
 }

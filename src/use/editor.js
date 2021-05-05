@@ -11,27 +11,47 @@ import { ref, computed } from '@vue/composition-api'
 import { set, reactify, useStorage, useClipboard } from '@vueuse/core'
 
 export const draft = ref('')
+export const parsed = ref(null)
 export const dirty = ref(false)
 export const tab = ref(0)
+export const loading = ref(false)
 
 export const code = computed(() => draft.value)
-export const bach = computed(() => compose(selected.value.source))
+// export const bach = computed(() => compose(selected.value.source))
+export const bach = computed(() => {
+  console.log('--- use/editor bach', parsed.value)
+  return compose(parsed.value || selected.value.source)
+})
 export const json = computed(() => JSON.stringify(bach.value, null, 2))
 export const name = computed(() => selected.value ? selected.value.name : '')
 
 // export const validate = (source) => {
 export const validate = async (source) => {
+  console.log('!!!!! VALIDATING')
+  loading.value = true
+
   try {
+    console.time('c')
     // const bach = compose(source)
     const bach = await composeAsync(source)
+    console.timeEnd('c')
 
-    console.log('!!! async bach', bach)
+    // return inspect(bach)
+    if (inspect(bach)) {
+      parsed.value = bach
 
-    return inspect(bach)
+      console.log('!!!!!!! set parsed bach', bach)
+
+      return true
+    }
+
+    return false
   } catch (err) {
     fail({ text: 'Track compilation failed!' })
 
     console.error(err)
+  } finally {
+    loading.value = false
   }
 }
 
@@ -41,6 +61,8 @@ export function load (source) {
       input(source, true)
       resolve(source)
     }
+
+    parsed.value = null
 
     if (dirty.value) {
       warn({

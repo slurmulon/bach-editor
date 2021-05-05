@@ -13,7 +13,6 @@ const channel = new PromiseWorker(worker)
 
 export async function compose (bach) {
   if (channel) {
-    console.log('@ async compose', bach)
     return channel.postMessage({
       action: 'compose',
       data: bach

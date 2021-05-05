@@ -103,7 +103,10 @@ export default {
     playing: () => playing.value,
     played: () => played.value,
     settings: () => settings.value,
-    durations: () => new Durations(bach.value)
+    durations: () => {
+      console.log('[player:durations]', bach.value)
+      return new Durations(bach.value)
+    }
   },
 
   methods: {

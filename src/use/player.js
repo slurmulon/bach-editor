@@ -28,7 +28,7 @@ export const beats = computed(() => get(music).beats || [])
 export const durations = computed(() => get(music).durations || {})
 
 export const playing = computed(() => get(gig).playing)
-export const seconds = reactify(duration => get(durations).time(duration, { as: 'second' }))
+export const seconds = reactify(duration => get(durations).cast(duration, { as: 'second' }))
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
 

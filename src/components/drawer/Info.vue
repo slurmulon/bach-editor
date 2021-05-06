@@ -76,7 +76,7 @@ import dlv from 'dlv'
 
 export default {
   data: () => ({
-    panel: [1, 1, 0]
+    panel: [1, 1, 0, 0]
   }),
 
   computed: {
@@ -146,7 +146,7 @@ export default {
           },
           {
             name: 'sec. per pulse beat',
-            value: get(durations).time(get(durations).times.pulse, { is: 'ms', as: 'second' }),
+            value: get(durations).cast(get(durations).times.pulse, { is: 'ms', as: 'second' }),
             filter: 'numeric'
           },
           {
@@ -156,17 +156,17 @@ export default {
           },
           {
             name: 'sec. per pulse beat',
-            value: get(durations).time(get(durations).times.pulse, { is: 'ms', as: 'second' }),
+            value: get(durations).cast(get(durations).times.pulse, { is: 'ms', as: 'second' }),
             filter: 'numeric'
           },
           {
             name: 'ms per bar',
-            value: get(durations).time(get(durations).bar, { as: 'ms' }),
+            value: get(durations).cast(get(durations).bar, { as: 'ms' }),
             filter: 'numeric'
           },
           {
             name: 'seconds per bar',
-            value: get(durations).time(get(durations).bar, { as: 'second' }),
+            value: get(durations).cast(get(durations).bar, { as: 'second' }),
             filter: 'numeric'
           }
         ],
@@ -188,12 +188,12 @@ export default {
           },
           {
             name: 'total ms',
-            value: get(durations).time(get(durations).total, { as: 'ms' }),
+            value: get(durations).cast(get(durations).total, { as: 'ms' }),
             filter: 'numeric'
           },
           {
             name: 'total seconds',
-            value: get(durations).time(get(durations).total, { as: 'second' }),
+            value: get(durations).cast(get(durations).total, { as: 'second' }),
             filter: 'numeric'
           }
         ]

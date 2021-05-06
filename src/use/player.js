@@ -36,14 +36,13 @@ export const playables = reactify(beat => Object
   .keys(beat.parts)
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
-export const timeline = useRafFn(() => {
+// TODO: Either wrap or update Gig (probably latter) to support stateless monotonic cursor
+//  - Since it only uses stateful intervals right now, it will inevitably drift on long tracks
+export const timeline = useRafFn(time => {
   if (playing.value) {
-    // const { completion } = gig.value
-    // const { progress } = gig.value
     const completion = gig.value.progress
 
     if (completion <= 1) {
-    // if (progress <= 1) {
       progress.value = completion * 100
       metronome.value = gig.value.metronome
     } else {

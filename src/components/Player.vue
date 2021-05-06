@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { music, beats, current, playing, played, settings, notesIn } from '@/use/player'
+import { beats, current, playing, played, settings, notesIn } from '@/use/player'
 import { bach } from '@/use/editor'
 
 import { Durations } from 'bach-js'
@@ -102,10 +102,7 @@ export default {
     playing: () => playing.value,
     played: () => played.value,
     settings: () => settings.value,
-    durations: () => {
-      console.log('[player:durations]', bach.value)
-      return new Durations(bach.value)
-    }
+    durations: () => new Durations(bach.value)
   },
 
   methods: {
@@ -122,10 +119,10 @@ export default {
     },
 
     colsOf (beat) {
-      const { max, bar } = this.durations
-      const size = beat.duration / Math.max(bar, max)
+      const { min, max, bar } = this.durations
+      const cols = Math.min(1, beat.duration / Math.min(bar, max))
 
-      return Math.floor(size * GRID_SIZE)
+      return Math.floor(cols * GRID_SIZE)
     },
 
     durationOf (beat) {

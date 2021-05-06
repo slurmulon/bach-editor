@@ -140,10 +140,17 @@ export default {
   watch: {
     played (next, prev) {
       if (this.settings.follow && next && next !== prev) {
-        const [target] = this.$refs[`beat-${this.current.index}`]
+        const [elem] = this.$refs[`beat-${this.current.index}`]
+        const target = this.durations.time(this.durations.min, { as: 'ms' })
+        const duration = this.durations.rhythmic({
+          duration: target,
+          units: ['2n', '4n'],
+          size: 'max',
+          calc: 'ceil'
+        })
 
-        this.$vuetify.goTo(target, {
-          duration: this.durations.times['4n'],
+        this.$vuetify.goTo(elem, {
+          duration: Math.min(target, duration),
           easing: 'easeOutQuad'
         })
       }

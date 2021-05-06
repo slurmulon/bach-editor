@@ -141,9 +141,9 @@ export default {
     played (next, prev) {
       if (this.settings.follow && next && next !== prev) {
         const [elem] = this.$refs[`beat-${this.current.index}`]
-        const target = this.durations.cast(this.durations.min, { as: 'ms' })
-        const duration = this.durations.rhythmic({
-          duration: target,
+        const ideal = Math.min(this.durations.bar / 2, this.durations.min)
+        const target = this.durations.cast(ideal, { as: 'ms' })
+        const duration = this.durations.rhythmic(target, {
           units: ['2n', '4n'],
           size: 'max',
           calc: 'ceil'

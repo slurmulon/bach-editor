@@ -155,8 +155,8 @@ export default {
             filter: 'numeric'
           },
           {
-            name: 'sec. per pulse beat',
-            value: get(durations).cast(get(durations).times.pulse, { is: 'ms', as: 'second' }),
+            name: 'sec. per step beat',
+            value: get(durations).cast(get(durations).times.step, { is: 'ms', as: 'second' }),
             filter: 'numeric'
           },
           {

@@ -47,8 +47,8 @@ export default {
     current: () =>  metronome.value,
     beats: () => dlv(music.value, 'units.bar.pulse') || 0,
     audible: {
-      get: (metronome) => settings.value.metronome,
-      set: (metronome) => { console.log('settttt', metronome); return configure({ metronome }) }
+      get: () => settings.value.metronome,
+      set: (value) => configure({ metronome: value })
     }
   },
 

@@ -27,7 +27,7 @@ export const fail = useDebounceFn((props) => notify({
   ...props,
   color: 'error',
   icon: 'alert-circle',
-  attrs: { vertical: true }
+  attrs: { vertical: true, multiLine: true }
 }), 250)
 
 export function notify (props) {

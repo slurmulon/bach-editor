@@ -1,14 +1,19 @@
-import { Music, MUSICAL_ELEMENTS } from 'bach-js'
+import { compose, Music, MUSICAL_ELEMENTS } from 'bach-js'
 import { fail } from '@/use/notify'
 
 export function playable (bach) {
-  const music = new Music(bach)
+  const track = compose(bach)
+  const music = new Music(track)
+
+  if (!music.parses) console.error('KABOOM', music)
 
   for (const rule of rules) {
     const valid = rule.validator(music)
+    const message = rule.message(music)
 
     if (!valid) {
-      fail({ text: rule.message, timeout: 5000 })
+      fail({ text: message, timeout: -1 })
+      // fail(message)
 
       return false
     }
@@ -23,15 +28,30 @@ export const required = {
 
 export const rules = [
   {
+    ref: 'parses',
+    validator: bach => !bach.fail,
+    message: ({ data }) => {
+      const reasons = data.reason.slice(0, Math.min(3, data.reason.length))
+      const expecting = reasons.map(r => `<li>${r.expecting}</li>`)
+      const text = 
+        `<p><b>Invalid syntax</b></p>
+        Line: ${data.line}<br/>
+        Column: ${data.column}<br/>
+        Expecting: <ul>${expecting.join('')}</ul>`
+
+      return text
+    }
+  },
+  {
     ref: 'musical',
-    message: `Each beat must contain at least one musical element (${required.parts.join(', ')})`,
+    message: () => `Each beat must contain at least one musical element (${required.parts.join(', ')})`,
     // FIXME (in bach-js)
     // validator: bach => bach.musical
     validator: bach => true
   },
   {
     ref: 'usable',
-    message: 'Unsupported scale or chord type',
+    message: () => 'Unsupported scale or chord type',
     validator: bach => {
       try {
         return bach.elements.every(({ notes }) => !!notes.length)

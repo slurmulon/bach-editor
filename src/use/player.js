@@ -45,15 +45,18 @@ function timeline (gig) {
     if (settings.value.metronome && gig.metronome !== metronome.value) {
       const scale = gig.elements.find(({ kind }) => kind === 'scale')
       const note = scale && scale.notes[0]
-      const pitch = (note && `${note}4`) || 440.0
+      const octave = gig.metronome === 0 ? 5 : 4
+      const pitch = (note && `${note}${octave}`) || 440.0
       const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
 
       synth.volume.value = settings.value.volume * .65
       synth.triggerAttackRelease(pitch, duration)
     }
 
+    // setTimeout(() => {
     progress.value = completion * 100
     metronome.value = gig.metronome
+    // }, 0)
   } else {
     progress.value = 0
     metronome.value = 0
@@ -70,13 +73,20 @@ function clock (gig) {
     const place = time - (gig.times.origin || time)
     const step = gig.durations.cast(place, { is: 'ms', as: 'step' })
     const prev = gig.durations.cast(last, { as: 'ms' })
-    const index = Math.round(step)
-    const delta = time - prev
+    const next = gig.durations.cast(last ? last + 1 : 0, { as: 'ms' })
+    const index = Math.floor(step)
+    // const delta = time - prev
 
-    if ((delta >= gig.interval) && last !== index) {
-      last = gig.index = index
+    // if ((delta >= gig.interval) && last !== index) {
+    if ((time >= next) && last !== index) {
+    // if ((delta >= gig.interval) && index !== prev) {
+      console.log('STEP BEAT', time, next, last, index, gig.interval)
+      gig.index = index
 
       gig.step()
+
+      last = index
+      // last = time
     }
   }
 

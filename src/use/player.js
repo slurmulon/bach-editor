@@ -54,6 +54,69 @@ export const timeline = useRafFn(time => {
   }
 }, { immediate: false })
 
+const timer = gig => {
+  let last = null
+  let interval = null
+  let paused = null
+
+  const loop = (time) => {
+    const place = time - (gig.times.origin || time)
+    const step = gig.durations.cast(place, { is: 'ms', as: 'step' })
+    const prev = gig.durations.cast(last, { as: 'ms' })
+    const next = gig.durations.cast(last + 1, { as: 'ms' })
+    const index = Math.round(step)
+    const delta = time - prev
+
+    // if (last !== gig.index) {
+    // FIXME: Close but still results in double-step
+    // if (gig.index >= last) {
+    // if (time >= next && ((next - prev) > (gig.interval)) {
+    // if (delta >= gig.interval) {
+    if ((time - 50) >= next && last !== index) {
+      gig.index = index
+      last = index
+
+      gig.step()
+    }
+
+    // last = gig.index
+    interval = requestAnimationFrame(loop)
+  }
+
+  const cancel = () => {
+    cancelAnimationFrame(interval)
+
+    interval = null
+  }
+
+  const clock = {
+    play () {
+      interval = requestAnimationFrame(loop)
+    },
+
+    pause () {
+      paused = performance.now()
+      cancel()
+    },
+
+    resume () {
+      gig.times.origin = performance.now()
+      gig.times.last = null
+
+      clock.play()
+    },
+
+    stop () {
+      last = null
+      cancel()
+    }
+  }
+
+  clock.play()
+
+  return clock
+}
+
 watch(track, (next, prev) => {
   if (gig.value && next && prev && next.id !== prev.id) {
     stop()
@@ -65,10 +128,16 @@ export async function load (source) {
 
   gig.value = new Gig({
     source,
+    timer,
     loop: settings.value.loop
   })
 
+  // console.log('GIG TIMER CLOCK?', gig.value.clock)
+
+  // if (gig.value.clock) gig.value.clock.play()
+
   gig.value.on('play:beat', beat => {
+    console.log('\n\n=============\nPLAYING BEAT\n============\n\n', beat)
     current.value = beat
     played.value = Date.now()
 

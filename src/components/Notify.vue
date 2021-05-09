@@ -8,7 +8,6 @@
     v-bind="attrs"
   >
     <v-icon>{{ icon }}</v-icon>
-    <!-- <span>{{ text }}</span> -->
     <div v-html="text" />
 
     <template #action="{ attrs }">

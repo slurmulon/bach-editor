@@ -20,7 +20,8 @@ export const settings = useStorage('bach-editor-player-settings', {
   muted: false,
   loop: true,
   follow: true,
-  coder: true
+  coder: true,
+  metronome: true
 })
 
 export const music = computed(() => new Music(bach.value))
@@ -62,11 +63,11 @@ const timer = gig => {
     const completion = gig.progress
 
     if (completion <= 1) {
-      if (gig.metronome !== metronome.value) {
+      if (settings.value.metronome && gig.metronome !== metronome.value) {
         const beep = gig.durations.cast(1, { is: '32n', as: 'second' })
 
-        synth.volume.value = settings.value.volume / 2
-        synth.triggerAttackRelease(220.0, beep)
+        synth.volume.value = settings.value.volume * .65
+        synth.triggerAttackRelease(440.0, beep)
       }
 
       progress.value = completion * 100

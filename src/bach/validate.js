@@ -2,16 +2,14 @@ import { compose, Music, MUSICAL_ELEMENTS } from 'bach-js'
 import { fail } from '@/use/notify'
 
 export function playable (bach) {
-  const track = compose(bach)
-  const music = new Music(track)
-
-  if (!music.parses) console.error('KABOOM', music)
+  const music = new Music(bach)
 
   for (const rule of rules) {
     const valid = rule.validator(music)
-    const message = rule.message(music)
 
     if (!valid) {
+      const message = rule.message(music)
+
       fail({ text: message, timeout: -1 })
       // fail(message)
 

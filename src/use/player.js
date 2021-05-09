@@ -36,50 +36,51 @@ export const playables = reactify(beat => Object
   .keys(beat.parts)
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
-// TODO: Either wrap or update Gig (probably latter) to support stateless monotonic cursor
-//  - Since it only uses stateful intervals right now, it will inevitably drift on long tracks
-export const timeline = useRafFn(time => {
-  if (playing.value) {
-    const completion = gig.value.progress
-
-    if (completion <= 1) {
-      progress.value = completion * 100
-      metronome.value = gig.value.metronome
-    } else {
-      progress.value = 0
-      metronome.value = 0
-
-      timeline.pause()
-    }
-  }
-}, { immediate: false })
-
+// TODO: Consider pushing into Gig, common enough use case
 const timer = gig => {
   let last = null
   let interval = null
   let paused = null
+  const synth = new Tone.Synth().toDestination()
 
-  const loop = (time) => {
+  const steps = (time) => {
     const place = time - (gig.times.origin || time)
     const step = gig.durations.cast(place, { is: 'ms', as: 'step' })
     const prev = gig.durations.cast(last, { as: 'ms' })
-    const next = gig.durations.cast(last + 1, { as: 'ms' })
     const index = Math.round(step)
     const delta = time - prev
 
-    // if (last !== gig.index) {
-    // FIXME: Close but still results in double-step
-    // if (gig.index >= last) {
-    // if (time >= next && ((next - prev) > (gig.interval)) {
-    // if (delta >= gig.interval) {
-    if ((time - 50) >= next && last !== index) {
+    if ((delta >= gig.interval) && last !== index) {
       gig.index = index
       last = index
 
       gig.step()
     }
+  }
 
-    // last = gig.index
+  const timeline = () => {
+    const completion = gig.progress
+
+    if (completion <= 1) {
+      if (gig.metronome !== metronome.value) {
+        const beep = gig.durations.cast(1, { is: '32n', as: 'second' })
+
+        synth.volume.value = settings.value.volume / 2
+        synth.triggerAttackRelease(220.0, beep)
+      }
+
+      progress.value = completion * 100
+      metronome.value = gig.metronome
+    } else {
+      progress.value = 0
+      metronome.value = 0
+    }
+  }
+
+  const loop = (time) => {
+    steps(time)
+    timeline()
+
     interval = requestAnimationFrame(loop)
   }
 
@@ -132,17 +133,12 @@ export async function load (source) {
     loop: settings.value.loop
   })
 
-  // console.log('GIG TIMER CLOCK?', gig.value.clock)
-
-  // if (gig.value.clock) gig.value.clock.play()
-
   gig.value.on('play:beat', beat => {
-    console.log('\n\n=============\nPLAYING BEAT\n============\n\n', beat)
     current.value = beat
     played.value = Date.now()
 
     play(beat)
-    timeline.resume()
+    // timeline.resume()
   })
 
   gig.value.on('stop', () => reset())
@@ -152,7 +148,7 @@ export async function load (source) {
 
 export function start () {
   gig.value.play()
-  timeline.resume()
+  // timeline.resume()
 }
 
 export function play (beat) {
@@ -171,7 +167,7 @@ export function stop () {
     gig.value.kill()
   }
 
-  timeline.pause()
+  // timeline.pause()
   reset()
 }
 

@@ -14,6 +14,7 @@ export const current = ref({})
 export const metronome = ref(null)
 export const progress = ref(null)
 export const played = ref(Date.now())
+const synth = new Tone.Synth().toDestination()
 
 export const settings = useStorage('bach-editor-player-settings', {
   volume: 0,
@@ -37,12 +38,34 @@ export const playables = reactify(beat => Object
   .keys(beat.parts)
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
+function timeline () {
+  const completion = gig.value.progress
+
+  if (completion <= 1) {
+    if (settings.value.metronome && gig.value.metronome !== metronome.value) {
+      const scale = gig.value.elements.find(({ kind }) => kind === 'scale')
+      const note = scale && scale.notes[0]
+      const pitch = (note && `${note}4`) || 440.0
+      const duration = gig.value.durations.cast(1, { is: '32n', as: 'second' })
+
+      synth.volume.value = settings.value.volume * .65
+      synth.triggerAttackRelease(pitch, duration)
+    }
+
+    progress.value = completion * 100
+    metronome.value = gig.value.metronome
+  } else {
+    progress.value = 0
+    metronome.value = 0
+  }
+}
+
+
 // TODO: Consider pushing into Gig, common enough use case
-const timer = gig => {
+function clock (gig) {
   let last = null
   let interval = null
   let paused = null
-  const synth = new Tone.Synth().toDestination()
 
   const steps = (time) => {
     const place = time - (gig.times.origin || time)
@@ -59,28 +82,6 @@ const timer = gig => {
     }
   }
 
-  const timeline = () => {
-    const completion = gig.progress
-
-    if (completion <= 1) {
-      if (settings.value.metronome && gig.metronome !== metronome.value) {
-        const scale = gig.elements.find(({ kind }) => kind === 'scale')
-        const note = scale && scale.notes[0]
-        const pitch = (note && `${note}4`) || 440.0
-        const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
-
-        synth.volume.value = settings.value.volume * .65
-        synth.triggerAttackRelease(pitch, duration)
-      }
-
-      progress.value = completion * 100
-      metronome.value = gig.metronome
-    } else {
-      progress.value = 0
-      metronome.value = 0
-    }
-  }
-
   const loop = (time) => {
     steps(time)
     timeline()
@@ -94,7 +95,7 @@ const timer = gig => {
     interval = null
   }
 
-  const clock = {
+  const timer = {
     play () {
       interval = requestAnimationFrame(loop)
     },
@@ -108,7 +109,7 @@ const timer = gig => {
       gig.times.origin = performance.now()
       gig.times.last = null
 
-      clock.play()
+      timer.play()
     },
 
     stop () {
@@ -117,9 +118,9 @@ const timer = gig => {
     }
   }
 
-  clock.play()
+  timer.play()
 
-  return clock
+  return timer
 }
 
 watch(track, (next, prev) => {
@@ -133,7 +134,7 @@ export async function load (source) {
 
   gig.value = new Gig({
     source,
-    timer,
+    timer: clock,
     loop: settings.value.loop
   })
 
@@ -142,17 +143,11 @@ export async function load (source) {
     played.value = Date.now()
 
     play(beat)
-    // timeline.resume()
   })
 
   gig.value.on('stop', () => reset())
 
-  start()
-}
-
-export function start () {
   gig.value.play()
-  // timeline.resume()
 }
 
 export function play (beat) {
@@ -171,7 +166,6 @@ export function stop () {
     gig.value.kill()
   }
 
-  // timeline.pause()
   reset()
 }
 

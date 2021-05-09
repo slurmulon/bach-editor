@@ -131,7 +131,11 @@ export default {
   methods: {
     save,
     copy,
-    toggle
+    toggle,
+    leaving (event) {
+      event.preventDefault()
+      event.returnValue = ''
+    }
   },
 
   mounted () {
@@ -142,6 +146,14 @@ export default {
     playing (next, prev) {
       if (!next && prev && settings.value.coder) {
         this.$vuetify.goTo(0, { duration: 750, easing: 'easeOutQuad' })
+      }
+    },
+
+    dirty (next) {
+      if (next) {
+        window.addEventListener('beforeunload', this.leaving)
+      } else {
+        window.removeEventListener('beforeunload', this.leaving)
       }
     }
   }

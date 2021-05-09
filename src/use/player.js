@@ -38,28 +38,27 @@ export const playables = reactify(beat => Object
   .keys(beat.parts)
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
-function timeline () {
-  const completion = gig.value.progress
+function timeline (gig) {
+  const completion = gig.progress
 
   if (completion <= 1) {
-    if (settings.value.metronome && gig.value.metronome !== metronome.value) {
-      const scale = gig.value.elements.find(({ kind }) => kind === 'scale')
+    if (settings.value.metronome && gig.metronome !== metronome.value) {
+      const scale = gig.elements.find(({ kind }) => kind === 'scale')
       const note = scale && scale.notes[0]
       const pitch = (note && `${note}4`) || 440.0
-      const duration = gig.value.durations.cast(1, { is: '32n', as: 'second' })
+      const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
 
       synth.volume.value = settings.value.volume * .65
       synth.triggerAttackRelease(pitch, duration)
     }
 
     progress.value = completion * 100
-    metronome.value = gig.value.metronome
+    metronome.value = gig.metronome
   } else {
     progress.value = 0
     metronome.value = 0
   }
 }
-
 
 // TODO: Consider pushing into Gig, common enough use case
 function clock (gig) {
@@ -75,8 +74,7 @@ function clock (gig) {
     const delta = time - prev
 
     if ((delta >= gig.interval) && last !== index) {
-      gig.index = index
-      last = index
+      last = gig.index = index
 
       gig.step()
     }
@@ -84,7 +82,7 @@ function clock (gig) {
 
   const loop = (time) => {
     steps(time)
-    timeline()
+    timeline(gig)
 
     interval = requestAnimationFrame(loop)
   }
@@ -97,16 +95,17 @@ function clock (gig) {
 
   const timer = {
     play () {
+      gig.times.origin = Date.now()
       interval = requestAnimationFrame(loop)
     },
 
     pause () {
-      paused = performance.now()
+      paused = Date.now()
       cancel()
     },
 
     resume () {
-      gig.times.origin = performance.now()
+      gig.times.origin = Date.now()
       gig.times.last = null
 
       timer.play()

@@ -64,10 +64,13 @@ const timer = gig => {
 
     if (completion <= 1) {
       if (settings.value.metronome && gig.metronome !== metronome.value) {
-        const beep = gig.durations.cast(1, { is: '32n', as: 'second' })
+        const scale = gig.elements.find(({ kind }) => kind === 'scale')
+        const note = scale && scale.notes[0]
+        const pitch = (note && `${note}4`) || 440.0
+        const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
 
         synth.volume.value = settings.value.volume * .65
-        synth.triggerAttackRelease(440.0, beep)
+        synth.triggerAttackRelease(pitch, duration)
       }
 
       progress.value = completion * 100

@@ -9,12 +9,14 @@ import { note } from '@tonaljs/tonal'
 import { ref, computed, watch } from '@vue/composition-api'
 import { get, set, reactify, useStorage, useRafFn, useDebounceFn } from '@vueuse/core'
 
+const synth = new Tone.Synth().toDestination()
+let transport = null
+
 export const gig = ref({})
 export const current = ref({})
 export const metronome = ref(null)
 export const progress = ref(null)
 export const played = ref(Date.now())
-const synth = new Tone.Synth().toDestination()
 
 export const settings = useStorage('bach-editor-player-settings', {
   volume: 0,
@@ -49,6 +51,8 @@ function timeline (gig) {
       const pitch = (note && `${note}${octave}`) || 440.0
       const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
 
+      console.log('metronome ATTACK!', Date.now())
+
       synth.volume.value = settings.value.volume * .65
       synth.triggerAttackRelease(pitch, duration)
     }
@@ -72,15 +76,10 @@ function clock (gig) {
   const steps = (time) => {
     const place = time - (gig.times.origin || time)
     const step = gig.durations.cast(place, { is: 'ms', as: 'step' })
-    const prev = gig.durations.cast(last, { as: 'ms' })
     const next = gig.durations.cast(last ? last + 1 : 0, { as: 'ms' })
     const index = Math.floor(step)
-    // const delta = time - prev
 
-    // if ((delta >= gig.interval) && last !== index) {
     if ((time >= next) && last !== index) {
-    // if ((delta >= gig.interval) && index !== prev) {
-      console.log('STEP BEAT', time, next, last, index, gig.interval)
       gig.index = index
 
       gig.step()
@@ -156,16 +155,27 @@ export async function load (source) {
 
   gig.value.on('stop', () => reset())
 
+  // transport = new Tone.Transport({
+  //   bpm: gig.value.headers.tempo,
+  //   timeSignature: gig.value.headers.meter[1]
+  // })
+
   gig.value.play()
 }
 
 export function play (beat) {
   const notes = notesIn(beat, playables(beat).value)
   const duration = seconds(beat.duration).value
+  // const unit = durations.value.cast(gig.value.units.beat.pulse, { is: 'pulse', as: '4n' }) * 4
+  const unit = durations.value.cast(gig.value.units.beat.pulse, { is: 'bar', as: 'pulse' }) * 4
 
-  Tone.loaded().then(() => {
+  console.log('das unit!', unit)
+
+  //Tone.loaded().then(() => {
+    console.log('beat ATTACK!', Date.now())
     sampler.triggerAttackRelease(notes, duration)
-  })
+    // sampler.triggerAttackRelease(notes, duration, `@${unit}n`)
+  //})
 
   return sampler
 }

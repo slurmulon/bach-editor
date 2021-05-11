@@ -10,7 +10,6 @@ import { ref, computed, watch } from '@vue/composition-api'
 import { get, set, reactify, useStorage, useRafFn, useDebounceFn } from '@vueuse/core'
 
 const synth = new Tone.Synth().toDestination()
-let transport = null
 
 export const gig = ref({})
 export const current = ref({})
@@ -36,7 +35,7 @@ export const seconds = reactify(duration => get(durations).cast(duration, { as: 
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
 
-export const playables = reactify(beat => Object
+export const playable = reactify(beat => Object
   .keys(beat.parts)
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
@@ -45,9 +44,10 @@ function tick (gig) {
 
   const beat = gig.metronome
   const completion = gig.progress
+  const beep = settings.value.metronome && beat !== metronome.value
 
   if (completion <= 1) {
-    if (settings.value.metronome && beat !== metronome.value) {
+    if (beep) {
       const scale = gig.elements.find(({ kind }) => kind === 'scale')
       const note = scale && scale.notes[0]
       const octave = beat === 0 ? 5 : 4
@@ -152,7 +152,7 @@ export async function load (source) {
 }
 
 export function play (beat) {
-  const notes = notesIn(beat, playables(beat).value)
+  const notes = notesIn(beat, playable(beat).value)
   const duration = seconds(beat.duration).value
 
   current.value = beat

@@ -124,7 +124,7 @@ export default {
       // const cols = Math.min(1, beat.duration / Math.min(bar, max))
       const ratio = Math.min(1, beat.duration / bar)
       const cols = Math.floor(ratio * GRID_SIZE)
-      const desktop = !this.$vuetify.breakpoint.mobile
+      const desktop = this.$vuetify.breakpoint.smAndUp
 
       return desktop ? cols : 12
     },

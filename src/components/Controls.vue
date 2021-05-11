@@ -6,7 +6,9 @@
       flat
       color="transparent"
     >
-      <settings v-if="!$vuetify.breakpoint.mobile" />
+      <v-slide-x-transition>
+        <settings v-if="$vuetify.breakpoint.smAndUp" />
+      </v-slide-x-transition>
 
       <volume />
       <v-spacer />

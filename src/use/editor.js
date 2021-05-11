@@ -34,7 +34,7 @@ export async function compile (source) {
       return bach
     }
   } catch (err) {
-    fail({ text: 'Track compilation failed!' })
+    fail({ text: `<p><b>Track compilation failed!</b><p>${err}`, timeout: 5000 })
 
     console.error(err)
   } finally {

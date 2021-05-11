@@ -134,6 +134,8 @@ export async function restore (file) {
     set(store, archive.store)
     set(context, archive.context)
 
+    load()
+
     return archive
   } else {
     throw Error('Invalid or missing archive file')

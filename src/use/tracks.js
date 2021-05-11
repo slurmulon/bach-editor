@@ -45,6 +45,14 @@ export function resolve (ref) {
   return ref
 }
 
+export function upgrade (source) {
+  if (typeof source === 'string') {
+    return source.replace(/!play/i, 'play!')
+  }
+
+  throw TypeError('Version upgrade requires bach source as UTF-8 string')
+}
+
 // TODO: Determine if major version change, if so clear out the user's data after offering a way to export everything
 export function load () {
   const track = get(current)
@@ -53,7 +61,11 @@ export function load () {
     return create(starter())
   }
 
-  edit(track.source)
+  author(track.source)
+}
+
+export function author (source) {
+  return edit(upgrade(source))
 }
 
 export async function open (ref) {
@@ -61,9 +73,10 @@ export async function open (ref) {
 
   if (track) {
     try {
-       select(track)
+      select(track)
 
-       return edit(track.source)
+       // return edit(track.source)
+      return author(track.source)
     } catch (_) {}
   } else {
     console.error('Track not found', ref)

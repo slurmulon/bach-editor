@@ -52,18 +52,12 @@ function tick (gig) {
       const pitch = (note && `${note}${octave}`) || 440.0
       const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
 
-      console.log('-----------metro', beat, metronome.value)
       metronome.value = gig.metronome
-
-      // if (gig.active) {
-      // if (gig.elapsed <= gig.limit) {
       synth.volume.value = settings.value.volume * .65
       synth.triggerAttackRelease(pitch, duration)
-      // }
     }
 
     progress.value = completion * 100
-    // metronome.value = gig.metronome
   } else {
     progress.value = 0
     metronome.value = 0
@@ -78,55 +72,24 @@ function clock (gig) {
 
   const step = (time) => {
     const place = gig.elapsed
-    // const states = gig.durations.steps
-    // console.log('states', gig.next.beat.index)
-    // FIXME: Causes double-step on loop
-    // const place = time - (gig.times.origin || time)
-    // const place = time - gig.times.origin
-    // const step = gig.durations.cast(gig.elapsed, { is: 'ms', as: 'step' })
-    // ORIG
     const step = gig.durations.cast(place, { is: 'ms', as: 'step' })
     const next = gig.durations.cast(last ? last + 1 : 0, { as: 'ms' })
-    // const next = gig.durations.cast(states.beat[step + 1].index, { as: 'ms' })
-    // const target = gig.durations.cast(gig.next.beat.index)
-    // WRONG (want index of next beat, not the step (should rename .index to .step, probably)
-    // const next = gig.durations.cast(gig.next.beat.index, { as: 'ms' })
     const index = Math.floor(step)
 
-    // console.log('~~~~ place, next, step', place, next, step, place >= next)
-
-    // if (index !== last) {
-    // if ((time >= next) && last !== index) {
     if ((place >= next) && last !== index) {
-    // if ((place >= next)) {// && step == next) {
-    // if ((place >= step) && last !== index) {
-      // if (last === index) {
-      //   console.warn('last == index???', index)
-      // } else {
-      //   console.log('diff last index', last, index)
-      // }
-
       gig.index = index
-      // ALT
       last = index
 
-      console.log('clock step!', place, next, step, index, last)
-
       gig.step()
-
-      // ORIG
-      // last = index
     }
   }
 
   const loop = (time) => {
-    step(time)
-
-    // if (gig.check('killed') || (gig.elapsed >= gig.limit)) {
-    if (gig.check('killed') && gig.first) {
+    if (gig.check('killed')) {
       return cancel()
     }
 
+    step(time)
     tick(gig)
 
     interval = requestAnimationFrame(loop)

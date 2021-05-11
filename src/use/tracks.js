@@ -1,4 +1,4 @@
-import { load as edit, dirty } from '@/use/editor'
+import { load as edit, compile, dirty } from '@/use/editor'
 import template from '@/bach/template.bach'
 import lib from '../../package'
 
@@ -61,9 +61,9 @@ export async function open (ref) {
 
   if (track) {
     try {
-      await edit(track.source)
+       select(track)
 
-      select(track)
+       await edit(track.source)
     } catch (_) {}
   } else {
     console.error('Track not found', ref)

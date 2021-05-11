@@ -17,6 +17,7 @@ export const tab = ref(0)
 export const compiling = ref(false)
 
 export const code = computed(() => draft.value)
+// TODO: Use computedAsync instead, that way we don't have to || selected.value and complicate reactivity
 export const bach = computed(() => compose(parsed.value || selected.value.source))
 export const json = computed(() => JSON.stringify(bach.value, null, 2))
 export const name = computed(() => selected.value ? selected.value.name : '')
@@ -41,14 +42,15 @@ export async function compile (source) {
   }
 }
 
-export function load (source) {
+export async function load (source) {
   return new Promise((resolve, reject) => {
-    const action = () => {
+    const action = async () => {
       input(source, true)
+
+      await compile(source)
+
       resolve(source)
     }
-
-    parsed.value = null
 
     if (dirty.value) {
       warn({

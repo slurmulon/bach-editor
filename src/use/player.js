@@ -41,7 +41,7 @@ export const playables = reactify(beat => Object
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
 function tick (gig) {
-  if (gig.check('killed')) return
+  if (gig.expired) return
 
   const beat = gig.metronome
   const completion = gig.progress
@@ -88,7 +88,7 @@ function clock (gig) {
   }
 
   const loop = (time) => {
-    if (gig.check('killed')) return cancel()
+    if (gig.expired) return cancel()
 
     step()
     tick(gig)

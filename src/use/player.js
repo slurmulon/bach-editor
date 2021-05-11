@@ -41,6 +41,8 @@ export const playables = reactify(beat => Object
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
 function tick (gig) {
+  if (gig.check('killed')) return
+
   const beat = gig.metronome
   const completion = gig.progress
 

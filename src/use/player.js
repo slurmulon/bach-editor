@@ -41,26 +41,24 @@ export const playables = reactify(beat => Object
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
 function timeline (gig) {
+  const beat = gig.metronome
   const completion = gig.progress
 
   if (completion <= 1) {
-    if (settings.value.metronome && gig.metronome !== metronome.value) {
+    if (settings.value.metronome && beat !== metronome.value) {
+      console.log('metronome!', beat, metronome.value, gig.elapsed)
       const scale = gig.elements.find(({ kind }) => kind === 'scale')
       const note = scale && scale.notes[0]
-      const octave = gig.metronome === 0 ? 5 : 4
+      const octave = beat === 0 ? 5 : 4
       const pitch = (note && `${note}${octave}`) || 440.0
       const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
-
-      console.log('metronome ATTACK!', Date.now())
 
       synth.volume.value = settings.value.volume * .65
       synth.triggerAttackRelease(pitch, duration)
     }
 
-    // setTimeout(() => {
     progress.value = completion * 100
     metronome.value = gig.metronome
-    // }, 0)
   } else {
     progress.value = 0
     metronome.value = 0
@@ -74,7 +72,7 @@ function clock (gig) {
   let paused = null
 
   const steps = (time) => {
-    const place = time - (gig.times.origin || time)
+    const place = gig.elapsed
     const step = gig.durations.cast(place, { is: 'ms', as: 'step' })
     const next = gig.durations.cast(last ? last + 1 : 0, { as: 'ms' })
     const index = Math.floor(step)
@@ -85,13 +83,12 @@ function clock (gig) {
       gig.step()
 
       last = index
-      // last = time
     }
   }
 
   const loop = (time) => {
-    steps(time)
     timeline(gig)
+    steps(time)
 
     interval = requestAnimationFrame(loop)
   }
@@ -104,8 +101,8 @@ function clock (gig) {
 
   const timer = {
     play () {
-      gig.times.origin = Date.now()
-      interval = requestAnimationFrame(loop)
+      // interval = requestAnimationFrame(loop)
+      loop(Date.now())
     },
 
     pause () {
@@ -155,11 +152,6 @@ export async function load (source) {
 
   gig.value.on('stop', () => reset())
 
-  // transport = new Tone.Transport({
-  //   bpm: gig.value.headers.tempo,
-  //   timeSignature: gig.value.headers.meter[1]
-  // })
-
   gig.value.play()
 }
 
@@ -169,10 +161,8 @@ export function play (beat) {
   // const unit = durations.value.cast(gig.value.units.beat.pulse, { is: 'pulse', as: '4n' }) * 4
   const unit = durations.value.cast(gig.value.units.beat.pulse, { is: 'bar', as: 'pulse' }) * 4
 
-  console.log('das unit!', unit)
-
   //Tone.loaded().then(() => {
-    console.log('beat ATTACK!', Date.now())
+    console.log('beat ATTACK!', Date.now(), gig.value.elapsed)
     sampler.triggerAttackRelease(notes, duration)
     // sampler.triggerAttackRelease(notes, duration, `@${unit}n`)
   //})

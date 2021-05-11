@@ -52,12 +52,18 @@ function tick (gig) {
       const pitch = (note && `${note}${octave}`) || 440.0
       const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
 
+      console.log('-----------metro', beat, metronome.value)
+      metronome.value = gig.metronome
+
+      // if (gig.active) {
+      // if (gig.elapsed <= gig.limit) {
       synth.volume.value = settings.value.volume * .65
       synth.triggerAttackRelease(pitch, duration)
+      // }
     }
 
     progress.value = completion * 100
-    metronome.value = gig.metronome
+    // metronome.value = gig.metronome
   } else {
     progress.value = 0
     metronome.value = 0
@@ -87,7 +93,7 @@ function clock (gig) {
     // const next = gig.durations.cast(gig.next.beat.index, { as: 'ms' })
     const index = Math.floor(step)
 
-    console.log('~~~~ place, next, step', place, next, step, place >= next)
+    // console.log('~~~~ place, next, step', place, next, step, place >= next)
 
     // if (index !== last) {
     // if ((time >= next) && last !== index) {
@@ -114,8 +120,14 @@ function clock (gig) {
   }
 
   const loop = (time) => {
-    tick(gig)
     step(time)
+
+    // if (gig.check('killed') || (gig.elapsed >= gig.limit)) {
+    if (gig.check('killed') && gig.first) {
+      return cancel()
+    }
+
+    tick(gig)
 
     interval = requestAnimationFrame(loop)
   }
@@ -162,8 +174,6 @@ watch(track, (next, prev) => {
 
 export async function load (source) {
   await Tone.loaded()
-
-  console.log('loop?', settings.value.loop)
 
   gig.value = new Gig({
     source,

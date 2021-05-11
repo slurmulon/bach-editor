@@ -54,12 +54,11 @@ function tick (gig) {
       const pitch = (note && `${note}${octave}`) || 440.0
       const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
 
-      metronome.value = gig.metronome
-
       synth.volume.value = settings.value.volume * .65
       synth.triggerAttackRelease(pitch, duration)
     }
 
+    metronome.value = gig.metronome
     progress.value = completion * 100
   } else {
     progress.value = 0
@@ -88,9 +87,7 @@ function clock (gig) {
   }
 
   const loop = (time) => {
-    if (gig.check('killed')) {
-      return cancel()
-    }
+    if (gig.check('killed')) return cancel()
 
     step()
     tick(gig)

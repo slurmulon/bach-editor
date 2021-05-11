@@ -53,6 +53,7 @@ function tick (gig) {
       const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
 
       metronome.value = gig.metronome
+
       synth.volume.value = settings.value.volume * .65
       synth.triggerAttackRelease(pitch, duration)
     }
@@ -70,13 +71,13 @@ function clock (gig) {
   let interval = null
   let paused = null
 
-  const step = (time) => {
+  const step = () => {
     const place = gig.elapsed
     const step = gig.durations.cast(place, { is: 'ms', as: 'step' })
-    const next = gig.durations.cast(last ? last + 1 : 0, { as: 'ms' })
+    const target = gig.durations.cast(last ? last + 1 : 0, { as: 'ms' })
     const index = Math.floor(step)
 
-    if ((place >= next) && last !== index) {
+    if ((place >= target) && index !== last) {
       gig.index = index
       last = index
 
@@ -89,7 +90,7 @@ function clock (gig) {
       return cancel()
     }
 
-    step(time)
+    step()
     tick(gig)
 
     interval = requestAnimationFrame(loop)
@@ -145,7 +146,6 @@ export async function load (source) {
   })
 
   gig.value.on('play:beat', beat => {
-    console.log('PLAYING BEAT!!!', beat)
     current.value = beat
     played.value = Date.now()
 

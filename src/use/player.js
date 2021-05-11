@@ -66,6 +66,7 @@ function tick (gig) {
   }
 }
 
+// TODO: Replace this raf impl with a Tone based clock since it comes with state management already and is generally more pragmatic
 // TODO: Consider pushing into Gig, common enough use case
 function clock (gig) {
   let last = null
@@ -144,13 +145,7 @@ export async function load (source) {
     loop: settings.value.loop
   })
 
-  gig.value.on('play:beat', beat => {
-    current.value = beat
-    played.value = Date.now()
-
-    play(beat)
-  })
-
+  gig.value.on('play:beat', beat => play(beat))
   gig.value.on('stop', () => reset())
 
   gig.value.play()
@@ -159,6 +154,9 @@ export async function load (source) {
 export function play (beat) {
   const notes = notesIn(beat, playables(beat).value)
   const duration = seconds(beat.duration).value
+
+  current.value = beat
+  played.value = Date.now()
 
   sampler.triggerAttackRelease(notes, duration)
 }

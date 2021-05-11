@@ -60,7 +60,7 @@
                       </v-card-subtitle>
                     </v-col>
 
-                    <v-col :cols="($vuetify.breakpoint.mobile || colsOf(beat) < 6) ? 12 : null">
+                    <v-col :cols="($vuetify.breakpoint.mobile && colsOf(beat) < 6) ? 12 : null">
                       <v-card-text
                         v-if="beat"
                         class="d-block"
@@ -91,7 +91,7 @@
 import { beats, current, playing, played, settings, notesIn } from '@/use/player'
 import { bach } from '@/use/editor'
 
-import { Durations } from 'bach-js'
+import { Durations, clamp } from 'bach-js'
 
 const GRID_SIZE = 12
 
@@ -120,9 +120,12 @@ export default {
 
     colsOf (beat) {
       const { min, max, bar } = this.durations
-      const cols = Math.min(1, beat.duration / Math.min(bar, max))
+      // const cols = Math.min(1, beat.duration / Math.min(bar, max))
+      const ratio = Math.min(1, beat.duration / bar)
+      const cols = Math.floor(ratio * GRID_SIZE)
+      const desktop = !this.$vuetify.breakpoint.mobile
 
-      return Math.floor(cols * GRID_SIZE)
+      return desktop ? cols : 12
     },
 
     durationOf (beat) {

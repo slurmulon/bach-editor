@@ -1,9 +1,12 @@
 <template>
   <v-col
-    cols="6"
+    cols="5"
     sm="4"
   >
-    <v-row nowrap no-gutters>
+    <v-row
+      nowrap
+      no-gutters
+    >
       <v-col class="grow">
         <v-row
           nowrap
@@ -22,7 +25,11 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col class="shrink pr-2">
+
+      <v-col
+        v-if="!$vuetify.breakpoint.mobile"
+        class="shrink pr-2"
+      >
         <!-- <v-btn-toggle -->
         <!--   :value="[audible ? 0 : null]" -->
         <!--   borderless -->

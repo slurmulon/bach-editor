@@ -40,13 +40,12 @@ export const playables = reactify(beat => Object
   .keys(beat.parts)
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
-function timeline (gig) {
+function tick (gig) {
   const beat = gig.metronome
   const completion = gig.progress
 
   if (completion <= 1) {
     if (settings.value.metronome && beat !== metronome.value) {
-      console.log('metronome!', beat, metronome.value, gig.elapsed)
       const scale = gig.elements.find(({ kind }) => kind === 'scale')
       const note = scale && scale.notes[0]
       const octave = beat === 0 ? 5 : 4
@@ -71,24 +70,52 @@ function clock (gig) {
   let interval = null
   let paused = null
 
-  const steps = (time) => {
+  const step = (time) => {
     const place = gig.elapsed
+    // const states = gig.durations.steps
+    // console.log('states', gig.next.beat.index)
+    // FIXME: Causes double-step on loop
+    // const place = time - (gig.times.origin || time)
+    // const place = time - gig.times.origin
+    // const step = gig.durations.cast(gig.elapsed, { is: 'ms', as: 'step' })
+    // ORIG
     const step = gig.durations.cast(place, { is: 'ms', as: 'step' })
     const next = gig.durations.cast(last ? last + 1 : 0, { as: 'ms' })
+    // const next = gig.durations.cast(states.beat[step + 1].index, { as: 'ms' })
+    // const target = gig.durations.cast(gig.next.beat.index)
+    // WRONG (want index of next beat, not the step (should rename .index to .step, probably)
+    // const next = gig.durations.cast(gig.next.beat.index, { as: 'ms' })
     const index = Math.floor(step)
 
-    if ((time >= next) && last !== index) {
+    console.log('~~~~ place, next, step', place, next, step, place >= next)
+
+    // if (index !== last) {
+    // if ((time >= next) && last !== index) {
+    if ((place >= next) && last !== index) {
+    // if ((place >= next)) {// && step == next) {
+    // if ((place >= step) && last !== index) {
+      // if (last === index) {
+      //   console.warn('last == index???', index)
+      // } else {
+      //   console.log('diff last index', last, index)
+      // }
+
       gig.index = index
+      // ALT
+      last = index
+
+      console.log('clock step!', place, next, step, index, last)
 
       gig.step()
 
-      last = index
+      // ORIG
+      // last = index
     }
   }
 
   const loop = (time) => {
-    timeline(gig)
-    steps(time)
+    tick(gig)
+    step(time)
 
     interval = requestAnimationFrame(loop)
   }
@@ -101,7 +128,6 @@ function clock (gig) {
 
   const timer = {
     play () {
-      // interval = requestAnimationFrame(loop)
       loop(Date.now())
     },
 
@@ -137,6 +163,8 @@ watch(track, (next, prev) => {
 export async function load (source) {
   await Tone.loaded()
 
+  console.log('loop?', settings.value.loop)
+
   gig.value = new Gig({
     source,
     timer: clock,
@@ -144,6 +172,7 @@ export async function load (source) {
   })
 
   gig.value.on('play:beat', beat => {
+    console.log('PLAYING BEAT!!!', beat)
     current.value = beat
     played.value = Date.now()
 
@@ -158,16 +187,8 @@ export async function load (source) {
 export function play (beat) {
   const notes = notesIn(beat, playables(beat).value)
   const duration = seconds(beat.duration).value
-  // const unit = durations.value.cast(gig.value.units.beat.pulse, { is: 'pulse', as: '4n' }) * 4
-  const unit = durations.value.cast(gig.value.units.beat.pulse, { is: 'bar', as: 'pulse' }) * 4
 
-  //Tone.loaded().then(() => {
-    console.log('beat ATTACK!', Date.now(), gig.value.elapsed)
-    sampler.triggerAttackRelease(notes, duration)
-    // sampler.triggerAttackRelease(notes, duration, `@${unit}n`)
-  //})
-
-  return sampler
+  sampler.triggerAttackRelease(notes, duration)
 }
 
 export function stop () {

@@ -63,7 +63,7 @@ export async function open (ref) {
     try {
        select(track)
 
-       await edit(track.source)
+       return edit(track.source)
     } catch (_) {}
   } else {
     console.error('Track not found', ref)

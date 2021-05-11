@@ -46,9 +46,7 @@ export async function load (source) {
   return new Promise((resolve, reject) => {
     const action = async () => {
       input(source, true)
-
       await compile(source)
-
       resolve(source)
     }
 

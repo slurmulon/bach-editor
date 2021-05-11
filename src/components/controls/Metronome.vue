@@ -30,12 +30,12 @@
         v-if="!$vuetify.breakpoint.mobile"
         class="shrink pr-2"
       >
-        <!-- <v-btn-toggle -->
-        <!--   :value="[audible ? 0 : null]" -->
-        <!--   borderless -->
-        <!--   dense -->
-        <!-- > -->
-          <v-btn small icon :input-value="audible || null" @click.stop="audible = !audible">
+          <v-btn
+            small
+            icon
+            :input-value="audible || null"
+            @click.stop="audible = !audible"
+          >
             <v-icon small>mdi-ear-hearing</v-icon>
           </v-btn>
         </v-btn-toggle>

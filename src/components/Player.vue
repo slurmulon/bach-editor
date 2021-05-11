@@ -1,7 +1,7 @@
 <template>
   <v-sheet
     outlined
-    class="player mt-3"
+    :class="['player mt-3', { compiling }]"
   >
     <v-container>
       <v-row justify="center">
@@ -89,7 +89,7 @@
 
 <script>
 import { beats, current, playing, played, settings, notesIn } from '@/use/player'
-import { bach } from '@/use/editor'
+import { bach, compiling } from '@/use/editor'
 
 import { Durations, clamp } from 'bach-js'
 
@@ -100,6 +100,7 @@ export default {
     beats: () => beats.value,
     current: () => current.value,
     playing: () => playing.value,
+    compiling: () => compiling.value,
     played: () => played.value,
     settings: () => settings.value,
     durations: () => new Durations(bach.value)
@@ -171,4 +172,10 @@ export default {
 
 .player
   background-color: transparent !important
+  opacity: 1
+  transition: opacity .5s ease, filter .25s ease
+
+  &.compiling
+    opacity: 0.75
+    filter: blur(2px)
 </style>

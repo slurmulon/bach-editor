@@ -173,9 +173,9 @@ export default {
 .player
   background-color: transparent !important
   opacity: 1
-  transition: opacity .5s ease, filter .25s ease
+  // transition: opacity .5s ease, filter .25s ease
 
-  &.compiling
-    opacity: 0.75
-    filter: blur(2px)
+  //&.compiling
+  //  opacity: 0.75
+  //  filter: blur(2px)
 </style>

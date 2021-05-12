@@ -73,24 +73,16 @@ function clock (gig) {
   let interval = null
   let paused = null
 
-  const step = () => {
-    const place = gig.elapsed
-    const step = gig.durations.cast(place, { is: 'ms', as: 'step' })
-    const target = gig.durations.cast(last ? last + 1 : 0, { as: 'ms' })
-    const index = Math.floor(step)
+  const loop = (time) => {
+    const { cursor, expired } = gig
 
-    if ((place >= target) && index !== last) {
-      gig.index = index
-      last = index
+    if (expired) return cancel()
+    if (cursor !== last) {
+      last = cursor
 
       gig.step()
     }
-  }
 
-  const loop = (time) => {
-    if (gig.expired) return cancel()
-
-    step()
     tick(gig)
 
     interval = requestAnimationFrame(loop)
@@ -142,7 +134,8 @@ export async function load (source) {
   gig.value = new Gig({
     source,
     timer: clock,
-    loop: settings.value.loop
+    loop: settings.value.loop,
+    stateless: true
   })
 
   gig.value.on('play:beat', beat => play(beat))

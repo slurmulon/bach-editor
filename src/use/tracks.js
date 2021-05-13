@@ -53,6 +53,10 @@ export function upgrade (source) {
   throw TypeError('Version upgrade requires bach source as UTF-8 string')
 }
 
+export function author (source) {
+  return edit(upgrade(source))
+}
+
 // TODO: Determine if major version change, if so clear out the user's data after offering a way to export everything
 export function load () {
   const track = get(current)
@@ -62,10 +66,6 @@ export function load () {
   }
 
   author(track.source)
-}
-
-export function author (source) {
-  return edit(upgrade(source))
 }
 
 export async function open (ref) {

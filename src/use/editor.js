@@ -26,7 +26,9 @@ export async function compile (source) {
   compiling.value = true
 
   try {
+    console.time('compile')
     const bach = await composer(source)
+    console.timeEnd('compile')
 
     if (playable(bach)) {
       parsed.value = bach

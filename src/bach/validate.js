@@ -27,7 +27,7 @@ export const required = {
 export const rules = [
   {
     ref: 'parses',
-    validator: bach => !bach.fail,
+    validator: bach => bach.parses,
     message: ({ data }) => {
       const reasons = data.reason.slice(0, Math.min(3, data.reason.length))
       const expecting = reasons.map(r => `<li>${r.expecting}</li>`)

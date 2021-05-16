@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "dev": "npm link gig bach-js bach-cljs",
     "test:unit": "vue-cli-service test:unit",
-    "serve:audio": "npx http-server -p 8086 --cors ./public/audio/piano/",
+    "serve:audio": "cd ./public/audio/piano && npx http-server -p 8086 --cors .",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

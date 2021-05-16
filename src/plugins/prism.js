@@ -55,6 +55,7 @@ Prism.languages.bach = {
     alias: 'operator'
   },
   'comment': {
-    pattern: /#{2}(.*?)(\n|\r)/
+    pattern: /#{2}(.+)/,
+    greedy: true
   }
 }

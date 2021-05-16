@@ -15,6 +15,7 @@ Check out the [documentation and guide](https://slurmulon.github.io/bach) for a 
  - Import and export entire track collection archives
  - Validation messages to ensure track can be played musically
  - Useful player and usability preferences
+ - Musical metronome
  - Run stand-alone or a-la-carte, using only the components you need (:construction: in progress)
 
 ## Limitations

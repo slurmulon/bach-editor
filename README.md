@@ -24,6 +24,15 @@ Check out the [documentation and guide](https://slurmulon.github.io/bach) for a 
  - Syntax highlighting is in the early stages, and all validation happens during save
 
 ## Project setup
+
+First make sure you have Node and NPM installed using at least these versions:
+
+```
+node v15.12.0 (npm v7.6.3)
+```
+
+Then install the package:
+
 ```
 npm install
 ```

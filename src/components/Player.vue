@@ -27,8 +27,8 @@
               class="mb-4"
             >
               <v-col
-                v-for="(part, key) in beat.parts"
-                :key="key"
+                v-for="elem in beat.elements"
+                :key="elem.id"
                 cols="12"
               >
                 <v-card
@@ -50,12 +50,12 @@
                           'word-break': 'break-word'
                         }"
                       >
-                        {{ part.value }}
+                        {{ elem.value }}
                       </v-card-title>
 
                       <v-card-subtitle>
                         <span class="text-capitalize">
-                          {{ key }}
+                          {{ elem.kind }}
                         </span>
                       </v-card-subtitle>
                     </v-col>
@@ -65,8 +65,9 @@
                         v-if="beat"
                         class="d-block"
                       >
+                          <!-- v-for="note in notesIn(beat, key)" -->
                         <v-chip
-                          v-for="note in notesIn(beat, key)"
+                          v-for="note in elem.notes"
                           :key="note"
                           class="elevation-4 mr-2 my-1"
                           pill
@@ -122,7 +123,8 @@ export default {
     colsOf (beat) {
       const { min, max, bar } = this.durations
       // const cols = Math.min(1, beat.duration / Math.min(bar, max))
-      const ratio = Math.min(1, beat.duration / bar)
+      // const ratio = Math.min(1, beat.duration / bar)
+      const ratio = Math.max(.25, Math.min(1, beat.duration / bar))
       const cols = Math.floor(ratio * GRID_SIZE)
       const desktop = this.$vuetify.breakpoint.smAndUp
 
@@ -131,8 +133,10 @@ export default {
 
     durationOf (beat) {
       const { durations } = this
-      const beats = durations.cast(beat.duration, { as: 'pulse' })
-      const bar = durations.cast(durations.bar, { as: 'pulse' })
+      // const beats = durations.cast(beat.duration, { as: 'pulse' })
+      // const bar = durations.cast(durations.bar, { as: 'pulse' })
+      const beats = durations.cast(beat.duration, { as: 'bar' })
+      const bar = durations.cast(durations.bar, { as: 'bar' })
       const kind = beats < bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)
       const fraction = this.$options.filters.fractionize(value)

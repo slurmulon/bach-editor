@@ -1,14 +1,16 @@
 import { selected as track } from '@/use/tracks'
 import { bach } from '@/use/editor'
+import * as audio  from '@/use/audio'
 
 import { Gig } from 'gig'
-import { Music, MUSICAL_ELEMENTS } from 'bach-js'
+import { Music, Note, MUSICAL_ELEMENTS } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { note } from '@tonaljs/tonal'
 import { ref, computed, watch } from '@vue/composition-api'
 import { get, set, reactify, useStorage, useRafFn, useDebounceFn } from '@vueuse/core'
 
+// const device = new Tone.Player({ url: 'http://localhost:8087/aj31-psych-vamp.wav' }).toMaster()
 const synth = new Tone.Synth().toDestination()
 
 export const gig = ref({})
@@ -49,9 +51,9 @@ function tick (gig) {
   if (completion <= 1) {
     if (beep) {
       const scale = gig.elements.find(({ kind }) => kind === 'scale')
-      const note = scale && scale.notes[0]
+      const note = (scale && scale.notes[0]) || 'a'
       const octave = beat === 0 ? 5 : 4
-      const pitch = (note && `${note}${octave}`) || 440.0
+      const pitch = (note && `${note}${octave}`)// || 440.0
       const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
 
       synth.volume.value = settings.value.volume * .65
@@ -141,23 +143,70 @@ export async function load (source) {
   gig.value.on('play:beat', beat => play(beat))
   gig.value.on('stop', () => reset())
 
+  await audio.play()
+
   gig.value.play()
+
+  // TEST
+  // device.start()
 }
 
 export function play (beat) {
-  const notes = notesIn(beat, playable(beat).value)
-  const duration = seconds(beat.duration).value
+  // const notes = notesIn(beat, playable(beat).value)
+  // const duration = seconds(beat.duration).value
+
+  // current.value = beat
+  // played.value = Date.now()
+
+  // sampler.triggerAttackRelease(notes, duration)
+
+
+  // console.log('playing beat', beat)
 
   current.value = beat
   played.value = Date.now()
 
-  sampler.triggerAttackRelease(notes, duration)
+  // LAST
+  beat.items.forEach(item => {
+    // console.log('item elemens', item.elements)
+
+    const elems = item.elements.find(({ kind }) => kind === 'chord')
+      || item.elements.find(({ kind }) => kind === 'scale')
+      || item.elements.filter(({ kind }) => kind === 'note')//.flatMap(elem => elem.notes)
+
+    const notes = Array.isArray(elems) ? elems.flatMap(elem => elem.notes) : elems.notes
+
+    // FIXME: Works but if both items have the same notes it will play them twice, which causes fuzz/static
+    sampler.triggerAttackRelease(
+      Note.unite(notes).map(note => `${note}2`),
+      item.duration
+    )
+  })
+
+  return ;;;;;;;;;;
+
+  beat.items.forEach(item => {
+    // console.log('item!', item, beat.elements)
+    // console.log('  -- notes', beat.elements.flatMap(elem => beat.store.resolve(elem).notes.filter(n => typeof n === 'string')))
+    // const notes = item.elements.reduce((all, { notes }) => Note.unite([...all, ...notes]))
+    const notes = Note
+      .unite(item.elements.flatMap(elem => beat.store.resolve(elem).notes.filter(n => typeof n === 'string')))
+      .map(note => `${note}2`)
+
+    // console.log(' --- all notes!', notes)
+
+    sampler.triggerAttackRelease(notes, item.duration)
+  })
 }
 
 export function stop () {
   if (gig.value.source) {
     gig.value.kill()
   }
+
+  // TEST
+  // device.stop()
+  audio.stop()
 
   reset()
 }
@@ -214,9 +263,11 @@ export function mute (yes = true) {
 }
 
 export function notesIn (beat, part) {
-  const group = beat.parts[part]
-  const all = group ? group.notes : []
-  const notes = Array.isArray(all) ? all : [all]
+  // console.log('beat', beat)
+  // const group = beat.parts[part]
+  // const all = group ? group.notes : []
+  // const notes = Array.isArray(all) ? all : [all]
+  const notes  = beat.notes || []
 
   return notes.map(note => `${note}2`)
 }

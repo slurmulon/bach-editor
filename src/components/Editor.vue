@@ -92,6 +92,7 @@ import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
+import BachAudio from './editor/Audio'
 import DialogRename from './editor/dialog/Rename'
 import DialogWarn from './dialog/Warn'
 
@@ -105,12 +106,13 @@ export default {
   components: {
     BachCode,
     BachJson,
+    BachAudio,
     DialogRename,
     DialogWarn
   },
 
   data: () => ({
-    items: ['code', 'json'],
+    items: ['code', 'json', 'audio'],
     dialog: {
       rename: false
     }

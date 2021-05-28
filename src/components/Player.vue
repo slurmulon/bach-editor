@@ -133,10 +133,10 @@ export default {
 
     durationOf (beat) {
       const { durations } = this
-      // const beats = durations.cast(beat.duration, { as: 'pulse' })
-      // const bar = durations.cast(durations.bar, { as: 'pulse' })
-      const beats = durations.cast(beat.duration, { as: 'bar' })
-      const bar = durations.cast(durations.bar, { as: 'bar' })
+      const beats = durations.cast(beat.duration, { as: 'pulse' })
+      const bar = durations.cast(durations.bar, { as: 'pulse' })
+      // const beats = durations.cast(beat.duration, { as: 'bar' })
+      // const bar = durations.cast(durations.bar, { as: 'bar' })
       const kind = beats < bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)
       const fraction = this.$options.filters.fractionize(value)

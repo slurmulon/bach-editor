@@ -122,6 +122,10 @@ export function update (track) {
   save({ id: get(current).id, ...track })
 }
 
+export function upsert (track) {
+  save ({ ...get(current), ...track })
+}
+
 export function shift (ref) {
   const track = resolve(ref)
   const next = Object.values(get(all))

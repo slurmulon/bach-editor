@@ -1,5 +1,4 @@
-import { update } from '@/use/tracks'
-import { selected } from '@/use/tracks'
+import { selected, update } from '@/use/tracks'
 import { playable } from '@/bach/validate'
 import { warn } from '@/use/warn'
 import { ok, fail } from '@/use/notify'

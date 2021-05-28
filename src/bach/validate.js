@@ -52,7 +52,8 @@ export const rules = [
     message: () => 'Unsupported scale or chord type',
     validator: bach => {
       try {
-        return bach.elements.every(({ notes }) => !!notes.length)
+        // return bach.elements.every(({ notes }) => !!notes.length)
+        return bach.elements.every(elem => elem.kind === 'rest' || !!elem.notes.length)
       } catch (e) {
         return false
       }

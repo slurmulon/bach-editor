@@ -1,41 +1,52 @@
 <template>
   <div :style="{ filter: disabled ? 'grayscale(1)' : null }">
-    <v-text-field
-      v-model="current"
-      label="Audio URL"
-    />
+    <v-row align="center" justify="center" class="pa-4">
+      <v-col cols="10">
+        <v-text-field
+          v-model="draft"
+          outlined
+          hide-details
+          full-width
+          label="Audio URL"
+        />
+      </v-col>
 
-    <v-btn
-      @click="save(current)"
-      text
-    >
-      Save
-    </v-btn>
+      <v-col cols="2">
+        <v-btn
+          @click="save(draft)"
+        >
+          Save
+        </v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
 import { selected as track } from '@/use/tracks'
-import { current, save } from '@/use/audio'
+import { player, current, save } from '@/use/audio'
 import { compiling } from '@/use/editor'
-import { playing } from '@/use/player'
+import { music, playing } from '@/use/player'
 
 export default {
   data: () => ({
-    draft: current.value
+    draft: current.value,
+    stats: null
   }),
 
   computed: {
-    current: {
-      get: () => current.value,
-      set: (current) => save(current)
-    },
-
+    current: () => current.value,
     disabled: () => playing.value || compiling.value
   },
 
   methods: {
     save
+  },
+
+  watch: {
+    current (next, prev) {
+      this.draft = next
+    }
   }
 }
 </script>

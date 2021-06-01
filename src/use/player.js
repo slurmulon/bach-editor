@@ -156,13 +156,7 @@ export function play (beat) {
   played.value = Date.now()
 
   beat.items.forEach(item => {
-    // const elems = item.elements.find(({ kind }) => kind === 'chord')
-    //   || item.elements.find(({ kind }) => kind === 'scale')
-    //   || item.elements.filter(({ kind }) => kind === 'note')
-
-    // const notes = Array.isArray(elems) ? elems.flatMap(elem => elem.notes) : elems.notes
-
-    const elems = beat.either(['chord', 'scale', 'note']) // item.elements
+    const elems = beat.either(['chord', 'scale', 'note'])
     const notes = beat.notesOf(elems)
 
     // FIXME: Works but if both items have the same notes it will play them twice, which causes fuzz/static
@@ -170,21 +164,6 @@ export function play (beat) {
       Note.unite(notes).map(note => `${note}2`),
       item.duration
     )
-  })
-
-  return ;;;;;;;;;;
-
-  beat.items.forEach(item => {
-    // console.log('item!', item, beat.elements)
-    // console.log('  -- notes', beat.elements.flatMap(elem => beat.store.resolve(elem).notes.filter(n => typeof n === 'string')))
-    // const notes = item.elements.reduce((all, { notes }) => Note.unite([...all, ...notes]))
-    const notes = Note
-      .unite(item.elements.flatMap(elem => beat.store.resolve(elem).notes.filter(n => typeof n === 'string')))
-      .map(note => `${note}2`)
-
-    // console.log(' --- all notes!', notes)
-
-    sampler.triggerAttackRelease(notes, item.duration)
   })
 }
 
@@ -194,7 +173,6 @@ export function stop () {
   }
 
   // TEST
-  // device.stop()
   audio.stop()
 
   reset()
@@ -205,6 +183,9 @@ export function restart () {
 
   gig.value.kill()
   gig.value.play()
+
+  // TODO: Restart Tone.Player audio
+  audio.restart()
 }
 
 export function reset () {

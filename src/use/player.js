@@ -152,29 +152,18 @@ export async function load (source) {
 }
 
 export function play (beat) {
-  // const notes = notesIn(beat, playable(beat).value)
-  // const duration = seconds(beat.duration).value
-
-  // current.value = beat
-  // played.value = Date.now()
-
-  // sampler.triggerAttackRelease(notes, duration)
-
-
-  // console.log('playing beat', beat)
-
   current.value = beat
   played.value = Date.now()
 
-  // LAST
   beat.items.forEach(item => {
-    // console.log('item elemens', item.elements)
+    // const elems = item.elements.find(({ kind }) => kind === 'chord')
+    //   || item.elements.find(({ kind }) => kind === 'scale')
+    //   || item.elements.filter(({ kind }) => kind === 'note')
 
-    const elems = item.elements.find(({ kind }) => kind === 'chord')
-      || item.elements.find(({ kind }) => kind === 'scale')
-      || item.elements.filter(({ kind }) => kind === 'note')//.flatMap(elem => elem.notes)
+    // const notes = Array.isArray(elems) ? elems.flatMap(elem => elem.notes) : elems.notes
 
-    const notes = Array.isArray(elems) ? elems.flatMap(elem => elem.notes) : elems.notes
+    const elems = beat.either(['chord', 'scale', 'note']) // item.elements
+    const notes = beat.notesOf(elems)
 
     // FIXME: Works but if both items have the same notes it will play them twice, which causes fuzz/static
     sampler.triggerAttackRelease(

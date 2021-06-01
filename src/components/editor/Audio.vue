@@ -1,6 +1,9 @@
 <template>
   <div :style="{ filter: disabled ? 'grayscale(1)' : null }">
-    <v-row align="center" justify="center" class="pa-4">
+    <v-row
+      align="center"
+      class="pa-4"
+    >
       <v-col cols="10">
         <v-text-field
           v-model="draft"

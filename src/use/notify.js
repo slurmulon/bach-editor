@@ -5,7 +5,8 @@ export const init = {
   open: false,
   text: '',
   color: 'primary accent-4',
-  icon: 'mdi-tick-circle',
+  // icon: 'mdi-tick-circle',
+  icon: '',
   timeout: 2500,
   attrs: null
 }
@@ -18,16 +19,16 @@ export const timeout = ref(init.timeout)
 export const attrs = ref(init.attrs)
 
 export const ok = useDebounceFn((props) => notify({
-  ...props,
   color: 'success',
-  attrs: { multiLine: true }
+  attrs: { multiLine: true },
+  ...props,
 }), 250)
 
 export const fail = useDebounceFn((props) => notify({
-  ...props,
   color: 'error',
   icon: 'alert-circle',
-  attrs: { vertical: true, multiLine: true }
+  attrs: { vertical: true, multiLine: true },
+  ...props,
 }), 250)
 
 export function notify (props) {

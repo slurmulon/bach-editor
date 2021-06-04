@@ -13,5 +13,8 @@ module.exports = {
       .use('raw-loader')
         .loader('raw-loader')
         .end()
+
+    config.output
+      .globalObject('this')
   }
 }

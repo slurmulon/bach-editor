@@ -7,8 +7,10 @@
     bottom
     v-bind="attrs"
   >
-    <v-icon>{{ icon }}</v-icon>
-    <span>{{ text }}</span>
+    <template #default>
+      <v-icon v-if="icon">{{ icon }}</v-icon>
+      <div v-html="text" />
+    </template>
 
     <template #action="{ attrs }">
       <v-btn

@@ -1,4 +1,4 @@
-import { load as edit, dirty } from '@/use/editor'
+import { load as edit, compile, dirty } from '@/use/editor'
 import template from '@/bach/template.bach'
 import lib from '../../package'
 
@@ -45,6 +45,18 @@ export function resolve (ref) {
   return ref
 }
 
+export function upgrade (source) {
+  if (typeof source === 'string') {
+    return source.replace(/!play/i, 'play!')
+  }
+
+  throw TypeError('Version upgrade requires bach source as UTF-8 string')
+}
+
+export function author (source) {
+  return edit(upgrade(source))
+}
+
 // TODO: Determine if major version change, if so clear out the user's data after offering a way to export everything
 export function load () {
   const track = get(current)
@@ -53,7 +65,7 @@ export function load () {
     return create(starter())
   }
 
-  edit(track.source)
+  author(track.source)
 }
 
 export async function open (ref) {
@@ -61,9 +73,10 @@ export async function open (ref) {
 
   if (track) {
     try {
-      await edit(track.source)
-
       select(track)
+
+       // return edit(track.source)
+      return author(track.source)
     } catch (_) {}
   } else {
     console.error('Track not found', ref)
@@ -109,6 +122,10 @@ export function update (track) {
   save({ id: get(current).id, ...track })
 }
 
+export function upsert (track) {
+  save ({ ...get(current), ...track })
+}
+
 export function shift (ref) {
   const track = resolve(ref)
   const next = Object.values(get(all))
@@ -133,6 +150,8 @@ export async function restore (file) {
     // TODO: check version, warn if minor/patch, error if major diff
     set(store, archive.store)
     set(context, archive.context)
+
+    load()
 
     return archive
   } else {

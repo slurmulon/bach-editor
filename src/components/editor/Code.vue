@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { code, input } from '@/use/editor'
+import { code, input, compiling } from '@/use/editor'
 import { playing } from '@/use/player'
 import Prism from 'prismjs'
 import { PrismEditor } from 'vue-prism-editor'
@@ -30,7 +30,7 @@ export default {
       set: (source) => input(source)
     },
 
-    disabled: () => playing.value
+    disabled: () => playing.value || compiling.value
   },
 
   methods: {

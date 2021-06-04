@@ -6,15 +6,19 @@ Minimalist web editor for the [`bach` music notation](https://github.com/slurmul
 
 `bach` is a semantic music notation that makes it easy to define music or other rhythmic timelines with only text.
 
-Check out the [documentation and guide](https://slurmulon.github.io/bach) for a full introduction to `bach` with supplemental example code.
+Check out the [documentation and guide](https://codebach.tech) for a full introduction to `bach` with supplemental example code.
+
+https://editor.codebach.tech
 
 ## Features
 
  - Write your `bach` tracks with instant audio and visual feedback
  - Easily access resulting `bach.json` data and other useful track information
  - Import and export entire track collection archives
+ - Optionally play over custom audio files
  - Validation messages to ensure track can be played musically
  - Useful player and usability preferences
+ - Musical metronome
  - Run stand-alone or a-la-carte, using only the components you need (:construction: in progress)
 
 ## Limitations
@@ -24,6 +28,15 @@ Check out the [documentation and guide](https://slurmulon.github.io/bach) for a 
  - Syntax highlighting is in the early stages, and all validation happens during save
 
 ## Project setup
+
+First make sure you have Node and NPM installed using at least these versions:
+
+```
+node v15.12.0 (npm v7.6.3)
+```
+
+Then install the package:
+
 ```
 npm install
 ```

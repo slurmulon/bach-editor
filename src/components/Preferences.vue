@@ -45,6 +45,12 @@
               label="Scroll to code on stop"
               hide-details
             />
+
+            <v-switch
+              v-model="metronome"
+              label="Audible metronome"
+              hide-details
+            />
           </v-col>
           <v-col>
             <span class="text-subtitle-1">Warnings</span>
@@ -108,6 +114,11 @@ export default {
     coder: {
       get: () => player.value.coder,
       set: (value) => plays({ coder: value })
+    },
+
+    metronome: {
+      get: () => player.value.metronome,
+      set: (value) => plays({ metronome: value })
     }
   },
 

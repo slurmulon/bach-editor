@@ -1,20 +1,20 @@
 <template>
   <v-sheet
     outlined
-    class="player mt-3"
+    :class="['player mt-3', { compiling }]"
   >
     <v-container>
       <v-row justify="center">
         <v-col
-          v-for="(section, $index) in sections"
-          :key="$index"
-          :ref="`section-${$index}`"
-          :cols="colsOf(section)"
+          v-for="beat in beats"
+          :key="beat.index"
+          :ref="`beat-${beat.index}`"
+          :cols="colsOf(beat)"
           align-self="center"
         >
           <div class="text-h5 text-center my-4">
-            <span :class="active($index) ? 'white--text' : 'grey--text text--lighten-1'">
-              {{ durationOf(section) }}
+            <span :class="active(beat) ? 'white--text' : 'grey--text text--lighten-1'">
+              {{ durationOf(beat) }}
             </span>
           </div>
 
@@ -27,16 +27,16 @@
               class="mb-4"
             >
               <v-col
-                v-for="(part, key) in section.parts"
-                :key="key"
+                v-for="elem in beat.elements"
+                :key="elem.id"
                 cols="12"
               >
                 <v-card
                   outlined
                   class="fill-height"
-                  :color="active($index) ? 'grey darken-3' : null"
-                  :raised="active($index)"
-                  :disabled="!active($index)"
+                  :color="active(beat) ? 'grey darken-3' : null"
+                  :raised="active(beat)"
+                  :disabled="!active(beat)"
                   :style="{
                     'background-color': '#131313',
                     'border': '1px solid rgba(255, 255, 255, 0.12)'
@@ -46,27 +46,27 @@
                     <v-col align-content="start">
                       <v-card-title
                         :style="{
-                          'color': active($index) ? $vuetify.theme.themes.dark.primary: null,
+                          'color': active(beat) ? $vuetify.theme.themes.dark.primary: null,
                           'word-break': 'break-word'
                         }"
                       >
-                        {{ part.value }}
+                        {{ elem.value }}
                       </v-card-title>
 
                       <v-card-subtitle>
                         <span class="text-capitalize">
-                          {{ key }}
+                          {{ elem.kind }}
                         </span>
                       </v-card-subtitle>
                     </v-col>
 
-                    <v-col :cols="($vuetify.breakpoint.mobile || colsOf(section) < 6) ? 12 : null">
+                    <v-col :cols="($vuetify.breakpoint.mobile && colsOf(beat) < 6) ? 12 : null">
                       <v-card-text
-                        v-if="section"
+                        v-if="beat"
                         class="d-block"
                       >
                         <v-chip
-                          v-for="note in notesIn(section, key)"
+                          v-for="note in elem.notes"
                           :key="note"
                           class="elevation-4 mr-2 my-1"
                           pill
@@ -88,62 +88,72 @@
 </template>
 
 <script>
-import { music, sections, index, playing, played, settings, notesIn } from '@/use/player'
-import { bach } from '@/use/editor'
+import { beats, current, playing, played, settings, notesIn } from '@/use/player'
+import { bach, compiling } from '@/use/editor'
 
-import { Durations } from 'bach-js'
+import { Durations, clamp } from 'bach-js'
 
 const GRID_SIZE = 12
 
 export default {
   computed: {
-    sections: () => sections.value,
-    index: () => index.value,
+    beats: () => beats.value,
+    current: () => current.value,
     playing: () => playing.value,
+    compiling: () => compiling.value,
     played: () => played.value,
     settings: () => settings.value,
     durations: () => new Durations(bach.value)
   },
 
   methods: {
-    active (index) {
-      return this.playing && this.index === index
+    active (beat) {
+      return this.playing && this.current.index === beat.index
     },
 
-    notesIn (section, part) {
-      return notesIn(section, part)
+    notesIn (beat, part) {
+      return notesIn(beat, part)
     },
 
-    ratioOf (section) {
-      return music.value.ratio(section.duration)
+    ratioOf (beat) {
+      return this.durations.ratio(beat.duration)
     },
 
-    colsOf (section) {
-      const { longest } = this.durations
-      const bar = this.durations.bar.pulse
-      const size = section.duration / Math.max(bar, longest)
+    colsOf (beat) {
+      const { min, max, bar } = this.durations
+      const ratio = Math.max(.25, Math.min(1, beat.duration / bar))
+      const cols = Math.floor(ratio * GRID_SIZE)
+      const desktop = this.$vuetify.breakpoint.smAndUp
 
-      return Math.floor(size * GRID_SIZE)
+      return desktop ? cols : 12
     },
 
-    durationOf (section) {
-      const beats = this.durations.unitize(section.duration, { as: 'beat' })
-      const bar = this.durations.bar.beat
+    durationOf (beat) {
+      const { durations } = this
+      const beats = durations.cast(beat.duration, { as: 'pulse' })
+      const bar = durations.cast(durations.bar, { as: 'pulse' })
       const kind = beats < bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)
-      const pretty = this.$options.filters.fractionize(value)
+      const fraction = this.$options.filters.fractionize(value)
 
-      return `${pretty} ${kind}` + (value > 1 ? 's' : '')
+      return `${fraction} ${kind}` + (value > 1 ? 's' : '')
     }
   },
 
   watch: {
     played (next, prev) {
       if (this.settings.follow && next && next !== prev) {
-        const [target] = this.$refs[`section-${this.index}`]
+        const [elem] = this.$refs[`beat-${this.current.index}`]
+        const ideal = Math.min(this.durations.bar / 2, this.durations.min)
+        const target = this.durations.cast(ideal, { as: 'ms' })
+        const duration = this.durations.rhythmic(target, {
+          units: ['2n', '4n'],
+          size: 'max',
+          calc: 'ceil'
+        })
 
-        this.$vuetify.goTo(target, {
-          duration: this.durations.time.quarter,
+        this.$vuetify.goTo(elem, {
+          duration: Math.min(target, duration),
           easing: 'easeOutQuad'
         })
       }
@@ -161,4 +171,10 @@ export default {
 
 .player
   background-color: transparent !important
+  opacity: 1
+  // transition: opacity .5s ease, filter .25s ease
+
+  //&.compiling
+  //  opacity: 0.75
+  //  filter: blur(2px)
 </style>

@@ -1,17 +1,19 @@
 import { selected as track } from '@/use/tracks'
 import { bach } from '@/use/editor'
+import * as audio  from '@/use/audio'
 
 import { Gig } from 'gig'
-import { Sections, MUSICAL_ELEMENTS } from 'bach-js'
+import { Music, Note, MUSICAL_ELEMENTS } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { note } from '@tonaljs/tonal'
 import { ref, computed, watch } from '@vue/composition-api'
 import { get, set, reactify, useStorage, useRafFn, useDebounceFn } from '@vueuse/core'
 
+const synth = new Tone.Synth().toDestination()
+
 export const gig = ref({})
 export const current = ref({})
-export const index = ref(0)
 export const metronome = ref(null)
 export const progress = ref(null)
 export const played = ref(Date.now())
@@ -21,39 +23,105 @@ export const settings = useStorage('bach-editor-player-settings', {
   muted: false,
   loop: true,
   follow: true,
-  coder: true
+  coder: true,
+  metronome: true
 })
 
-export const music = computed(() => new Sections(track.value.source))
-export const sections = computed(() => get(music).all || [])
-export const measures = computed(() => get(music).measures || [])
+export const music = computed(() => new Music(bach.value))
+export const beats = computed(() => get(music).beats || [])
 export const durations = computed(() => get(music).durations || {})
-export const headers = computed(() => get(music).source.headers || {})
 
 export const playing = computed(() => get(gig).playing)
 export const seconds = reactify(duration => get(durations).cast(duration, { as: 'second' }))
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
 
-export const playable = reactify(section => Object
-  .keys(section.parts)
+export const playable = reactify(beat => Object
+  .keys(beat.parts)
   .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
 
-export const timeline = useRafFn(() => {
-  if (playing.value) {
-    const { completion } = gig.value
+function tick (gig) {
+  if (gig.expired) return
 
-    if (completion <= 1) {
-      progress.value = completion * 100
-      metronome.value = gig.value.metronome
-    } else {
-      progress.value = 0
-      metronome.value = 0
+  const beat = gig.metronome
+  const completion = gig.progress
+  const beep = settings.value.metronome && beat !== metronome.value
 
-      timeline.pause()
+  if (completion <= 1) {
+    if (beep) {
+      const scale = gig.elements.find(({ kind }) => kind === 'scale')
+      const note = (scale && scale.notes[0]) || 'a'
+      const octave = beat === 0 ? 5 : 4
+      const pitch = (note && `${note}${octave}`)// || 440.0
+      const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
+
+      synth.volume.value = settings.value.volume * .65
+      synth.triggerAttackRelease(pitch, duration)
+    }
+
+    metronome.value = gig.metronome
+    progress.value = completion * 100
+  } else {
+    progress.value = 0
+    metronome.value = 0
+  }
+}
+
+// TODO: Replace this raf impl with a Tone based clock since it comes with state management already and is generally more pragmatic
+// TODO: Consider pushing into Gig, common enough use case
+function clock (gig) {
+  let last = null
+  let interval = null
+  let paused = null
+
+  const loop = (time) => {
+    const { cursor, expired } = gig
+
+    if (expired) return cancel()
+    if (cursor !== last) {
+      last = cursor
+
+      gig.step()
+    }
+
+    tick(gig)
+
+    interval = requestAnimationFrame(loop)
+  }
+
+  const cancel = () => {
+    cancelAnimationFrame(interval)
+
+    interval = null
+  }
+
+  const timer = {
+    play () {
+      loop(Date.now())
+    },
+
+    pause () {
+      paused = Date.now()
+      cancel()
+    },
+
+    resume () {
+      gig.times.origin = Date.now()
+      gig.times.last = null
+
+      timer.play()
+    },
+
+    stop () {
+      last = null
+      cancel()
     }
   }
-}, { immediate: false })
+
+  timer.play()
+
+  return timer
+}
 
 watch(track, (next, prev) => {
   if (gig.value && next && prev && next.id !== prev.id) {
@@ -66,40 +134,33 @@ export async function load (source) {
 
   gig.value = new Gig({
     source,
-    loop: settings.value.loop
+    timer: clock,
+    loop: settings.value.loop,
+    stateless: true
   })
 
-  gig.value.on('beat:play', () => {
-    const { sections, cursor } = gig.value
-    const section = sections[cursor.section]
-
-    current.value = section
-    index.value = cursor.section
-    played.value = Date.now()
-
-    play(section)
-    timeline.resume()
-  })
-
+  gig.value.on('play:beat', beat => play(beat))
   gig.value.on('stop', () => reset())
 
-  start()
-}
+  await audio.play()
 
-export function start () {
   gig.value.play()
-  timeline.resume()
 }
 
-export function play (section) {
-  const notes = notesIn(section, playable(section).value)
-  const duration = seconds(section.duration).value
+export function play (beat) {
+  current.value = beat
+  played.value = Date.now()
 
-  Tone.loaded().then(() => {
-    sampler.triggerAttackRelease(notes, duration)
+  beat.items.forEach(item => {
+    const elems = beat.either(['chord', 'scale', 'note'])
+    const notes = beat.notesOf(elems)
+
+    // FIXME: Works but if both items have the same notes it will play them twice, which causes fuzz/static
+    sampler.triggerAttackRelease(
+      Note.unite(notes).map(note => `${note}2`),
+      item.duration
+    )
   })
-
-  return sampler
 }
 
 export function stop () {
@@ -107,7 +168,7 @@ export function stop () {
     gig.value.kill()
   }
 
-  timeline.pause()
+  audio.stop()
   reset()
 }
 
@@ -116,12 +177,13 @@ export function restart () {
 
   gig.value.kill()
   gig.value.play()
+
+  audio.restart()
 }
 
 export function reset () {
   gig.value = {}
   current.value = {}
-  index.value = 0
   progress.value = null
   metronome.value = null
 }
@@ -163,12 +225,8 @@ export function mute (yes = true) {
   sampler.volume.value = yes ? -1000 : settings.value.volume
 }
 
-export function notesIn (section, part) {
-  const group = section.parts[part]
-  const all = group ? group.notes : []
-  const notes = Array.isArray(all) ? all : [all]
-
-  return notes.map(note => `${note}2`)
+export function notesIn (beat, part) {
+  return beat.notes.map(note => `${note}2`)
 }
 
 export function sampleOf (note) {

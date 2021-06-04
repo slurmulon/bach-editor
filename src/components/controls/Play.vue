@@ -8,6 +8,8 @@
         icon
         x-large
         :color="playing ? 'primary' : 'secondary'"
+        :loading="loading"
+        :disabled="loading"
         v-on="on"
         v-bind="attrs"
         @click="click"
@@ -22,18 +24,18 @@
 
 <script>
 import { toggle, playing } from '@/use/player'
-import { commit as save } from '@/use/editor'
-import { dirty } from '@/use/editor'
+import { commit as save, compiling as loading, dirty } from '@/use/editor'
 
 export default {
   computed: {
     playing: () => playing.value,
-    dirty: () => dirty.value
+    dirty: () => dirty.value,
+    loading: () => loading.value
   },
 
   methods: {
-    click () {
-      if (this.dirty) save()
+    async click () {
+      if (this.dirty) await save()
 
       toggle()
     }

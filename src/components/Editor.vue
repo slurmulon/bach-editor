@@ -37,6 +37,7 @@
           <v-btn
             icon
             :disabled="!dirty"
+            :loading="compiling"
             @click="save"
             v-on="on"
             v-bind="attrs"
@@ -85,12 +86,13 @@
 </template>
 
 <script>
-import { commit as save, tab, draft, name, dirty, copy } from '@/use/editor'
+import { commit as save, tab, draft, name, dirty, compiling, copy } from '@/use/editor'
 import { toggle, playing, settings } from '@/use/player'
 import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
 import BachJson from './editor/Json'
+import BachAudio from './editor/Audio'
 import DialogRename from './editor/dialog/Rename'
 import DialogWarn from './dialog/Warn'
 
@@ -104,12 +106,13 @@ export default {
   components: {
     BachCode,
     BachJson,
+    BachAudio,
     DialogRename,
     DialogWarn
   },
 
   data: () => ({
-    items: ['code', 'json'],
+    items: ['code', 'json', 'audio'],
     dialog: {
       rename: false
     }
@@ -118,6 +121,7 @@ export default {
   computed: {
     playing: () => playing.value,
     dirty: () => dirty.value,
+    compiling: () => compiling.value,
     name: () => name.value,
 
     tab: {
@@ -129,7 +133,11 @@ export default {
   methods: {
     save,
     copy,
-    toggle
+    toggle,
+    leaving (event) {
+      event.preventDefault()
+      event.returnValue = ''
+    }
   },
 
   mounted () {
@@ -140,6 +148,14 @@ export default {
     playing (next, prev) {
       if (!next && prev && settings.value.coder) {
         this.$vuetify.goTo(0, { duration: 750, easing: 'easeOutQuad' })
+      }
+    },
+
+    dirty (next) {
+      if (next) {
+        window.addEventListener('beforeunload', this.leaving)
+      } else {
+        window.removeEventListener('beforeunload', this.leaving)
       }
     }
   }

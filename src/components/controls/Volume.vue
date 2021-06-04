@@ -1,7 +1,7 @@
 <template>
   <v-col
     cols="6"
-    style="max-width: 250px"
+    style="max-width: 200px"
   >
     <v-slider
       v-model="volume"

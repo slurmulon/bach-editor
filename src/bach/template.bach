@@ -1,11 +1,11 @@
-@Meter = 4|4
-@Tempo = 130
+@meter = 4|4
+@tempo = 130
 
-!Play [
+play! [
   1 -> {
-    Scale('E lydian')
-    Chord('E')
+    scale('E lydian')
+    chord('E')
   }
-  1/2 -> Chord('G#min')
-  1/2 -> Chord('B')
+  1/2 -> chord('G#min')
+  1/2 -> chord('B')
 ]

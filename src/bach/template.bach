@@ -1,5 +1,5 @@
-@Meter = 4|4
-@Tempo = 130
+@meter = 4|4
+@tempo = 130
 
 play! [
   1 -> {

@@ -101,7 +101,7 @@ export default {
       {
         name: 'Learn',
         target: 'bach-learn',
-        href: 'https://slurmulon.github.io/bach/#/guide',
+        href: 'https://editor.codebach.tech/#/guide',
         classes: 'hidden-xs-only'
       },
       {

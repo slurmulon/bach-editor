@@ -65,7 +65,6 @@
                         v-if="beat"
                         class="d-block"
                       >
-                          <!-- v-for="note in notesIn(beat, key)" -->
                         <v-chip
                           v-for="note in elem.notes"
                           :key="note"
@@ -122,8 +121,6 @@ export default {
 
     colsOf (beat) {
       const { min, max, bar } = this.durations
-      // const cols = Math.min(1, beat.duration / Math.min(bar, max))
-      // const ratio = Math.min(1, beat.duration / bar)
       const ratio = Math.max(.25, Math.min(1, beat.duration / bar))
       const cols = Math.floor(ratio * GRID_SIZE)
       const desktop = this.$vuetify.breakpoint.smAndUp
@@ -135,8 +132,6 @@ export default {
       const { durations } = this
       const beats = durations.cast(beat.duration, { as: 'pulse' })
       const bar = durations.cast(durations.bar, { as: 'pulse' })
-      // const beats = durations.cast(beat.duration, { as: 'bar' })
-      // const bar = durations.cast(durations.bar, { as: 'bar' })
       const kind = beats < bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)
       const fraction = this.$options.filters.fractionize(value)

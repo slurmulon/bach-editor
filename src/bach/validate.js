@@ -11,7 +11,6 @@ export function playable (bach) {
       const message = rule.message(music)
 
       fail({ text: message, timeout: -1 })
-      // fail(message)
 
       return false
     }

@@ -10,7 +10,6 @@ import { note } from '@tonaljs/tonal'
 import { ref, computed, watch } from '@vue/composition-api'
 import { get, set, reactify, useStorage, useRafFn, useDebounceFn } from '@vueuse/core'
 
-// const device = new Tone.Player({ url: 'http://localhost:8087/aj31-psych-vamp.wav' }).toMaster()
 const synth = new Tone.Synth().toDestination()
 
 export const gig = ref({})
@@ -146,9 +145,6 @@ export async function load (source) {
   await audio.play()
 
   gig.value.play()
-
-  // TEST
-  // device.start()
 }
 
 export function play (beat) {
@@ -172,9 +168,7 @@ export function stop () {
     gig.value.kill()
   }
 
-  // TEST
   audio.stop()
-
   reset()
 }
 
@@ -184,7 +178,6 @@ export function restart () {
   gig.value.kill()
   gig.value.play()
 
-  // TODO: Restart Tone.Player audio
   audio.restart()
 }
 
@@ -233,13 +226,7 @@ export function mute (yes = true) {
 }
 
 export function notesIn (beat, part) {
-  // console.log('beat', beat)
-  // const group = beat.parts[part]
-  // const all = group ? group.notes : []
-  // const notes = Array.isArray(all) ? all : [all]
-  const notes  = beat.notes || []
-
-  return notes.map(note => `${note}2`)
+  return beat.notes.map(note => `${note}2`)
 }
 
 export function sampleOf (note) {

@@ -1,5 +1,4 @@
 import { selected as track, upsert } from '@/use/tracks'
-// import { settings } from '@/use/player'
 import { ok, fail } from '@/use/notify'
 
 import { ref, computed } from '@vue/composition-api'

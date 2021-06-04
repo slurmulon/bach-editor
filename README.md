@@ -6,13 +6,16 @@ Minimalist web editor for the [`bach` music notation](https://github.com/slurmul
 
 `bach` is a semantic music notation that makes it easy to define music or other rhythmic timelines with only text.
 
-Check out the [documentation and guide](https://slurmulon.github.io/bach) for a full introduction to `bach` with supplemental example code.
+Check out the [documentation and guide](https://codebach.tech) for a full introduction to `bach` with supplemental example code.
+
+https://editor.codebach.tech
 
 ## Features
 
  - Write your `bach` tracks with instant audio and visual feedback
  - Easily access resulting `bach.json` data and other useful track information
  - Import and export entire track collection archives
+ - Optionally play over custom audio files
  - Validation messages to ensure track can be played musically
  - Useful player and usability preferences
  - Musical metronome

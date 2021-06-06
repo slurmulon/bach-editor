@@ -2,8 +2,8 @@ import { selected as track } from '@/use/tracks'
 import { bach } from '@/use/editor'
 import * as audio  from '@/use/audio'
 
-import { Gig } from 'gig'
-import { Music, Note, MUSICAL_ELEMENTS } from 'bach-js'
+import { Gig, clock } from 'gig'
+import { Music, Note } from 'bach-js'
 import * as Tone from 'tone'
 import { Sampler } from 'tone'
 import { note } from '@tonaljs/tonal'
@@ -36,10 +36,6 @@ export const seconds = reactify(duration => get(durations).cast(duration, { as: 
 
 export const configure = useDebounceFn(opts => set(settings, { ...get(settings), ...opts }), 8)
 
-export const playable = reactify(beat => Object
-  .keys(beat.parts)
-  .sort((a, b) => MUSICAL_ELEMENTS.indexOf(a) - MUSICAL_ELEMENTS.indexOf(b))[0])
-
 function tick (gig) {
   if (gig.expired) return
 
@@ -67,62 +63,6 @@ function tick (gig) {
   }
 }
 
-// TODO: Replace this raf impl with a Tone based clock since it comes with state management already and is generally more pragmatic
-// TODO: Consider pushing into Gig, common enough use case
-function clock (gig) {
-  let last = null
-  let interval = null
-  let paused = null
-
-  const loop = (time) => {
-    const { cursor, expired } = gig
-
-    if (expired) return cancel()
-    if (cursor !== last) {
-      last = cursor
-
-      gig.step()
-    }
-
-    tick(gig)
-
-    interval = requestAnimationFrame(loop)
-  }
-
-  const cancel = () => {
-    cancelAnimationFrame(interval)
-
-    interval = null
-  }
-
-  const timer = {
-    play () {
-      loop(Date.now())
-    },
-
-    pause () {
-      paused = Date.now()
-      cancel()
-    },
-
-    resume () {
-      gig.times.origin = Date.now()
-      gig.times.last = null
-
-      timer.play()
-    },
-
-    stop () {
-      last = null
-      cancel()
-    }
-  }
-
-  timer.play()
-
-  return timer
-}
-
 watch(track, (next, prev) => {
   if (gig.value && next && prev && next.id !== prev.id) {
     stop()
@@ -134,13 +74,15 @@ export async function load (source) {
 
   gig.value = new Gig({
     source,
-    timer: clock,
-    loop: settings.value.loop,
-    stateless: true
+    timer: gig => clock(gig, tick),
+    loop: settings.value.loop
   })
 
-  gig.value.on('play:beat', beat => play(beat))
-  gig.value.on('stop', () => reset())
+  gig.value.on('play:beat', play)
+  gig.value.on('stop', () => {
+    audio.stop()
+    reset()
+  })
 
   await audio.play()
 

@@ -17,6 +17,9 @@ import Editor from '@/components/Editor'
 import Player from '@/components/Player'
 import Controls from '@/components/Controls'
 
+import { runtime } from '@/use/app'
+import { piano } from '@/runtimes'
+
 export default {
   name: 'Home',
   components: {
@@ -24,6 +27,9 @@ export default {
     Editor,
     Player,
     Controls
+  },
+  created () {
+    runtime(piano)
   }
 }
 </script>

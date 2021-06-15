@@ -45,6 +45,7 @@ function tick (gig) {
 
   if (completion <= 1) {
     if (beep) {
+      // app.emit('play:metronome', beat, gig)
       const scale = gig.elements.find(({ kind }) => kind === 'scale')
       const note = (scale && scale.notes[0]) || 'a'
       const octave = beat === 0 ? 5 : 4
@@ -79,6 +80,7 @@ export async function load (source) {
   })
 
   gig.value.on('play:beat', play)
+  // gig.value.on('stop', stop)
   gig.value.on('stop', () => {
     audio.stop()
     reset()
@@ -147,6 +149,7 @@ export function gain (decibals) {
   if (audible) {
     configure({ volume: decibals, muted: !audible })
 
+    // app.emit('gain', volume)
     sampler.volume.value = volume
   } else {
     mute()

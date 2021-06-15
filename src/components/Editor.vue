@@ -23,10 +23,15 @@
             v-on="on"
             v-bind="attrs"
           >
-            <v-icon>mdi-clipboard-text-play</v-icon>
+            <slot name="icon-copy">
+              <v-icon>mdi-clipboard-text-play</v-icon>
+            </slot>
           </v-btn>
         </template>
-        <span>Copy code</span>
+
+        <slot name="tooltip-copy">
+          <span>Copy code</span>
+        </slot>
       </v-tooltip>
 
       <v-tooltip
@@ -42,10 +47,15 @@
             v-on="on"
             v-bind="attrs"
           >
-            <v-icon>mdi-content-save</v-icon>
+            <slot name="icon-save">
+              <v-icon>mdi-content-save</v-icon>
+            </slot>
           </v-btn>
         </template>
-        <span>Save locally</span>
+
+        <slot name="tooltip-save">
+          <span>Save locally</span>
+        </slot>
       </v-tooltip>
     </v-toolbar>
 
@@ -58,7 +68,7 @@
       <v-tabs-slider color="primary" />
 
       <v-tab
-        v-for="item in items"
+        v-for="item in tabs"
         :key="item"
       >
         {{ item }}
@@ -70,7 +80,7 @@
         background-color="transparent"
       >
         <v-tab-item
-          v-for="item in items"
+          v-for="item in tabs"
           :key="item"
         >
           <component
@@ -86,8 +96,10 @@
 </template>
 
 <script>
-import { commit as save, tab, draft, name, dirty, compiling, copy } from '@/use/editor'
-import { toggle, playing, settings } from '@/use/player'
+// TODO: Make src/hoc/Editor which wraps this and provides a custom list of dynamic components
+
+import { commit as save, tab, name, dirty, compiling, copy } from '@/use/editor'
+import { playing, settings } from '@/use/player'
 import { load } from '@/use/tracks'
 
 import BachCode from './editor/Code'
@@ -111,8 +123,17 @@ export default {
     DialogWarn
   },
 
+  props: {
+    tabs: {
+      type: Array,
+      required: false,
+      default: () => ['code', 'json', 'audio']
+    }
+  },
+
   data: () => ({
-    items: ['code', 'json', 'audio'],
+    // TODO: Change to props for HOC
+    // items: ['code', 'json', 'audio'],
     dialog: {
       rename: false
     }
@@ -133,7 +154,6 @@ export default {
   methods: {
     save,
     copy,
-    toggle,
     leaving (event) {
       event.preventDefault()
       event.returnValue = ''

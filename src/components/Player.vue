@@ -91,7 +91,7 @@
 import { beats, current, playing, played, settings, notesIn } from '@/use/player'
 import { bach, compiling } from '@/use/editor'
 
-import { Durations, clamp } from 'bach-js'
+import { Durations } from 'bach-js'
 
 const GRID_SIZE = 12
 

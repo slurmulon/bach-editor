@@ -8,7 +8,9 @@
     >
       <v-app-bar-nav-icon @click="left = !left" />
         <v-app-bar-title>
-          <logo />
+          <slot name="title">
+            <logo />
+          </slot>
         </v-app-bar-title>
       <v-spacer />
 

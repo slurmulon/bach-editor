@@ -116,6 +116,8 @@ export function save (track) {
   const changes = { id, ...stored, ...track, updated: Date.now() }
 
   set(store, { ...get(all), [id]: changes })
+
+  // app.action('save:track', changes)
 }
 
 export function update (track) {

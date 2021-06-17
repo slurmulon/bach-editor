@@ -9,7 +9,6 @@ export default function piano (app, options = {}) {
     'D2', 'Eb2', 'E2', 'F2', 'Gb2', 'G2'
   ].map(tonal.note)
 
-  // const sampleOf = options.sampleOf || note => {
   const sampleOf = note => {
     const pitch = note.name.replace(/#/, 's')
     const url = `${pitch}.mp3`
@@ -29,11 +28,12 @@ export default function piano (app, options = {}) {
     const playing = []
 
     beat.items.forEach(item => {
-      const elems = item.elements.filter(({ kind }) => ['chord', 'scale', 'note'].includes(kind))
+      const elems = item.elements.filter(({ kind }) => ['chord', 'note'].includes(kind))
       const notes = beat.notesOf(elems).filter(note => !playing.includes(note))
 
       playing.push(...notes)
 
+      sampler.volume.value = settings.value.volume
       sampler.triggerAttackRelease(
         Note.unite(notes).map(note => `${note}2`),
         item.duration

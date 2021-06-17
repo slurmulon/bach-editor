@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { beats, current, playing, played, settings, notesIn } from '@/use/player'
+import { beats, current, playing, played, settings } from '@/use/player'
 import { bach, compiling } from '@/use/editor'
 
 import { Durations } from 'bach-js'
@@ -109,10 +109,6 @@ export default {
   methods: {
     active (beat) {
       return this.playing && this.current.index === beat.index
-    },
-
-    notesIn (beat, part) {
-      return notesIn(beat, part)
     },
 
     ratioOf (beat) {

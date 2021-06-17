@@ -1,11 +1,9 @@
-// TODO: Consider renaming `runtimes` to `editors`
-
-// import * as Tone from 'tone'
 import { Note } from 'bach-js'
 import { Sampler, Synth } from 'tone'
 import * as tonal  from '@tonaljs/tonal'
 
-export default function piano (editor, options = {}) {
+export default function piano (app, options = {}) {
+  const { settings } = app.use.player
   const notes = options.notes || [
     'Ab2', 'A2', 'Bb2', 'B2', 'C2', 'Db2',
     'D2', 'Eb2', 'E2', 'F2', 'Gb2', 'G2'
@@ -19,17 +17,15 @@ export default function piano (editor, options = {}) {
     return url
   }
 
-  const samples = notes.reduce((map, note) => ({ ...map, [note.name]: sampleOf(note) }), {})
-
   const sampler = new Sampler({
     release: 1,
-    urls: samples,
+    urls: notes.reduce((map, note) => ({ ...map, [note.name]: sampleOf(note) }), {}),
     baseUrl: options.baseUrl || process.env.VUE_APP_AUDIO_SERVER_BASE_URL
   }).toDestination()
 
   const synth = new Synth().toDestination()
 
-  editor.on('play:beat', beat => {
+  app.on('play:beat', beat => {
     beat.items.forEach(item => {
       const elems = beat.either(['chord', 'scale', 'note'])
       const notes = beat.notesOf(elems)
@@ -42,8 +38,7 @@ export default function piano (editor, options = {}) {
     })
   })
 
-  editor.on('play:metronome', (beat, gig) => {
-    const { settings } = editor.use.player
+  app.on('play:metronome', (beat, gig) => {
     const scale = gig.elements.find(({ kind }) => kind === 'scale')
     const note = (scale && scale.notes[0]) || 'a'
     const octave = beat === 0 ? 5 : 4
@@ -51,12 +46,20 @@ export default function piano (editor, options = {}) {
     const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
 
     synth.volume.value = settings.value.volume * .65
-    synth.triggerattackrelease(pitch, duration)
+    synth.triggerAttackRelease(pitch, duration)
   })
 
-  // channel.$on('stop', options.player.actions.stop)
-  // channel.$on('gain:volume', options.player.actions.gain)
-  // channel.$on('mute:volume', options.player.actions.gain)
+  app.on('gain:volume', volume => {
+    sampler.volume.value = volume
+  })
+
+  app.on('mute:volume', muted => {
+    // FIXME: Ideal, but this doesn't seem to have an effect on the actual volume (tone.js issue, it seems)
+    // sampler.volume.mute = yes
+    sampler.volume.value = muted ? -1000 : settings.value.volume
+  })
+
+  return app
 }
 
 

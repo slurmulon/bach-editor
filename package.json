@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:lib": "vue-cli-service build --target lib src/lib/index.js",
     "dev": "npm link gig bach-js bach-cljs",
     "test:unit": "vue-cli-service test:unit",
     "serve:audio": "cd ./public/audio/piano && npx http-server -p 8086 --cors .",
@@ -23,6 +24,7 @@
     "numeral": "^2.0.6",
     "prism-themes": "^1.5.0",
     "prismjs": "^1.23.0",
+    "tiny-emitter": "^2.1.0",
     "tone": "^14.7.77",
     "vue": "^2.6.11",
     "vue-prism-editor": "^1.2.2",

@@ -1,3 +1,4 @@
+import { emit } from '@/use/app'
 import { selected as track } from '@/use/tracks'
 import { bach } from '@/use/editor'
 import * as audio  from '@/use/audio'
@@ -41,22 +42,14 @@ function tick (gig) {
 
   const beat = gig.metronome
   const completion = gig.progress
-  const beep = settings.value.metronome && beat !== metronome.value
+  const play = settings.value.metronome && beat !== metronome.value
 
   if (completion <= 1) {
-    if (beep) {
-      // app.emit('play:metronome', beat, gig)
-      const scale = gig.elements.find(({ kind }) => kind === 'scale')
-      const note = (scale && scale.notes[0]) || 'a'
-      const octave = beat === 0 ? 5 : 4
-      const pitch = (note && `${note}${octave}`)// || 440.0
-      const duration = gig.durations.cast(1, { is: '32n', as: 'second' })
-
-      synth.volume.value = settings.value.volume * .65
-      synth.triggerAttackRelease(pitch, duration)
+    if (play) {
+      emit('play:metronome', beat, gig)
     }
 
-    metronome.value = gig.metronome
+    metronome.value = beat
     progress.value = completion * 100
   } else {
     progress.value = 0
@@ -80,11 +73,7 @@ export async function load (source) {
   })
 
   gig.value.on('play:beat', play)
-  // gig.value.on('stop', stop)
-  gig.value.on('stop', () => {
-    audio.stop()
-    reset()
-  })
+  gig.value.on('stop', () => stop(false))
 
   await audio.play()
 
@@ -95,23 +84,15 @@ export function play (beat) {
   current.value = beat
   played.value = Date.now()
 
-  beat.items.forEach(item => {
-    const elems = beat.either(['chord', 'scale', 'note'])
-    const notes = beat.notesOf(elems)
-
-    // FIXME: Works but if both items have the same notes it will play them twice, which causes fuzz/static
-    sampler.triggerAttackRelease(
-      Note.unite(notes).map(note => `${note}2`),
-      item.duration
-    )
-  })
+  emit('play:beat', beat)
 }
 
-export function stop () {
-  if (gig.value.source) {
+export function stop (kill = true) {
+  if (kill && gig.value.source) {
     gig.value.kill()
   }
 
+  emit('stop')
   audio.stop()
   reset()
 }
@@ -148,9 +129,7 @@ export function gain (decibals) {
 
   if (audible) {
     configure({ volume: decibals, muted: !audible })
-
-    // app.emit('gain', volume)
-    sampler.volume.value = volume
+    emit('gain:volume', volume)
   } else {
     mute()
   }
@@ -164,32 +143,11 @@ export function loops (yes = true) {
 
 export function mute (yes = true) {
   configure({ muted: yes })
-
-  // FIXME: Ideal, but this doesn't seem to have an effect on the actual volume (tone.js issue, it seems)
-  // sampler.volume.mute = yes
-  sampler.volume.value = yes ? -1000 : settings.value.volume
+  emit('mute:volume', yes)
 }
 
 export function notesIn (beat, part) {
   return beat.notes.map(note => `${note}2`)
 }
-
-export function sampleOf (note) {
-  const pitch = note.name.replace(/#/, 's')
-  const url = `${pitch}.mp3`
-
-  return url
-}
-
-export const notes = ['Ab2', 'A2', 'Bb2', 'B2', 'C2', 'Db2', 'D2', 'Eb2', 'E2', 'F2', 'Gb2', 'G2'].map(note)
-
-export const samples = notes.reduce((map, note) => ({ ...map, [note.name]: sampleOf(note) }), {})
-
-// @see: https://github.com/sustained/sforzando/blob/master/src/library/instruments.js
-export const sampler = new Sampler({
-  release: 1,
-  urls: samples,
-  baseUrl: process.env.VUE_APP_AUDIO_SERVER_BASE_URL
-}).toDestination()
 
 export const DECIBALS = { min: -24, max: 4 }

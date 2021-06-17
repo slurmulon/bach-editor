@@ -146,8 +146,4 @@ export function mute (yes = true) {
   emit('mute:volume', yes)
 }
 
-export function notesIn (beat, part) {
-  return beat.notes.map(note => `${note}2`)
-}
-
 export const DECIBALS = { min: -24, max: 4 }

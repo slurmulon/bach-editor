@@ -26,11 +26,14 @@ export default function piano (app, options = {}) {
   const synth = new Synth().toDestination()
 
   app.on('play:beat', beat => {
-    beat.items.forEach(item => {
-      const elems = beat.either(['chord', 'scale', 'note'])
-      const notes = beat.notesOf(elems)
+    const playing = []
 
-      // FIXME: Works but if both items have the same notes it will play them twice, which causes fuzz/static
+    beat.items.forEach(item => {
+      const elems = item.elements.filter(({ kind }) => ['chord', 'scale', 'note'].includes(kind))
+      const notes = beat.notesOf(elems).filter(note => !playing.includes(note))
+
+      playing.push(...notes)
+
       sampler.triggerAttackRelease(
         Note.unite(notes).map(note => `${note}2`),
         item.duration

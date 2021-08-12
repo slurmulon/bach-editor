@@ -141,22 +141,22 @@ export default {
           },
           {
             name: 'ms per pulse beat',
-            unit: 'time.pulse',
+            value: get(durations).cast(get(durations).units.pulse, { is: 'pulse', as: 'ms' }),
             filter: 'numeric'
           },
           {
             name: 'sec. per pulse beat',
-            value: get(durations).cast(get(durations).times.pulse, { is: 'ms', as: 'second' }),
+            value: get(durations).cast(get(durations).units.pulse, { is: 'pulse', as: 'second' }),
             filter: 'numeric'
           },
           {
             name: 'ms per step beat',
-            unit: 'time.step',
+            value: get(durations).cast(get(durations).units.step, { is: 'step', as: 'ms' }),
             filter: 'numeric'
           },
           {
             name: 'sec. per step beat',
-            value: get(durations).cast(get(durations).times.step, { is: 'ms', as: 'second' }),
+            value: get(durations).cast(get(durations).units.step, { is: 'step', as: 'second' }),
             filter: 'numeric'
           },
           {

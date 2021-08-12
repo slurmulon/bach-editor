@@ -115,23 +115,19 @@ export default {
       return notesIn(beat, part)
     },
 
-    ratioOf (beat) {
-      return this.durations.ratio(beat.duration)
-    },
-
     colsOf (beat) {
       const { min, max, bar } = this.durations
-      const ratio = Math.max(.25, Math.min(1, beat.duration / bar))
+      const ratio = Math.max(.25, Math.min(1, beat.duration / bar.step))
       const cols = Math.floor(ratio * GRID_SIZE)
       const desktop = this.$vuetify.breakpoint.smAndUp
 
-      return desktop ? cols : 12
+      return desktop ? cols : GRID_SIZE
     },
 
     durationOf (beat) {
       const { durations } = this
       const beats = durations.cast(beat.duration, { as: 'pulse' })
-      const bar = durations.cast(durations.bar, { as: 'pulse' })
+      const bar = durations.bar.pulse
       const kind = beats < bar ? 'beat' : 'bar'
       const value = beats < bar ? beats : (beats / bar)
       const fraction = this.$options.filters.fractionize(value)
@@ -144,7 +140,7 @@ export default {
     played (next, prev) {
       if (this.settings.follow && next && next !== prev) {
         const [elem] = this.$refs[`beat-${this.current.index}`]
-        const ideal = Math.min(this.durations.bar / 2, this.durations.min)
+        const ideal = Math.min(this.durations.bar.step / 2, this.durations.min)
         const target = this.durations.cast(ideal, { as: 'ms' })
         const duration = this.durations.rhythmic(target, {
           units: ['2n', '4n'],

@@ -161,12 +161,12 @@ export default {
           },
           {
             name: 'ms per bar',
-            value: get(durations).cast(get(durations).bar, { as: 'ms' }),
+            value: get(durations).cast(1, { is: 'bar', as: 'ms' }),
             filter: 'numeric'
           },
           {
             name: 'seconds per bar',
-            value: get(durations).cast(get(durations).bar, { as: 'second' }),
+            value: get(durations).cast(1, { is: 'bar', as: 'second' }),
             filter: 'numeric'
           }
         ],
